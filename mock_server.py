@@ -116,12 +116,11 @@ def collect_data():
     return "", 200
 
 
-# --- WebSocket Handlers (More robust) ---
+# --- WebSocket Handlers ---
 
 @socketio.on('connect')
 def handle_connect():
     print(f'--- WebSocket: Client connected (sid: {request.sid}) ---')
-    # Don't associate user yet. Wait for login event.
     emit('login_ready')
 
 @socketio.on('disconnect')
@@ -221,7 +220,7 @@ def reference_new_news():
 
 @app.route('/socket.io/<path:remaining>', methods=['GET', 'POST'])
 def catch_socketio(remaining):
-    print(f"🔥 RAW /socket.io" , flush=True)
+    print(f"RAW /socket.io" , flush=True)
 
 
 if __name__ == "__main__":
