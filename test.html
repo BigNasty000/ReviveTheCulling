@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Test</title>
+</head>
+<body>
+  <h1>Socket.IO Connection Test</h1>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    const socket = io("wss://clientweb2.us-east-1.production.theculling.net", {
+      transports: ["websocket"],
+      path: "/socket.io",
+      secure: true,
+      reconnection: false,
+      timeout: 5000,
+      forceNew: true
+    });
+
+    socket.on("connect", () => console.log("✅ Connected"));
+    socket.on("connect_error", (e) => console.error("❌ Connect error", e));
+    socket.on("login_ready", () => console.log("🎉 login_ready"));
+  </script>
+</body>
+</html>
