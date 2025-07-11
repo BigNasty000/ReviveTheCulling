@@ -4,7 +4,7 @@ This project is a mock backend server for **The Culling**, designed to intercept
 
 ---
 
-## ✅ Current Progress
+## Current Progress
 
 - **HTTPS Flask server** successfully responds to all critical HTTP endpoints:
   - `/api`
@@ -43,6 +43,40 @@ This project is a mock backend server for **The Culling**, designed to intercept
 - The game **does connect to the spoofed server** via HTTPS.
 - The mock server **successfully returns spoofed player data**.
 - The WebSocket client (likely using `socket.io`) does **not initiate a connection**, even when WSS URL is returned.
+
+---
+
+## How To unpak and repak .pak
+
+The game paks are found at:
+\SteamLibrary\steamapps\common\TheCulling\Victory\Content\Paks
+
+- To unpak them, you will need UnrealEngine 4.15.3 (highly reccommend using this verision) or higher.
+- To pak, you will most likely need 4.15.3 specifically as that is what the game used originally.
+
+- Notes: The re-paking seems to have issues. I don't work or have ever worked on game developement, so I don't
+have a concrete answer on this one. But modifying the .pak files and then re paking seems to cause game crash. 
+My best guess is this happens from Unreal Engine checking the expecting bytes/bit length of the cooked in files, 
+sees they are different, and reject/boots you out. 
+
+To download UE4-4.15.3:
+
+- Open Epic Games Launcher
+- Click Unreal Engine Tab on the left
+- Click Library Tab at the top (between Fab and Twinmotion)
+- Click the '+' next to "Engine Versions" 
+- Click the dropdown for the version just above the Install button
+- Select '4.15.3'
+- Click and choose where to install
+
+
+Once you have UE4-4.15.3 Installed from Epic Games.
+- Either add the UnrealPak.exe to your %PATH% OR navigate to "\UE\UE_4.15\Engine\Binaries\Win64"
+- For EXTRACTING: 
+    - UnrealPak.exe \SteamLibrary\steamapps\common\TheCulling\Victory\Content\Paks\[NAME OF PAK TO EXTRACT FROM, ex/pakchunk0-WindowsClient].pak -Extract \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\[NAME OF FOLDER WHERE YOU WANT EVERYTHING]
+
+- For PAKING:
+    - UnrealPak.exe [LOCATION WHERE YOU WANT PAK STORED, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\UE-4.15] -Create=[FOLDER TO PAK, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\[NAME OF FOLDER WHERE YOU WANT EVERYTHING] (from above)]
 
 ---
 
