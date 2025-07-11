@@ -74,7 +74,7 @@ Once you have UE4-4.15.3 Installed from Epic Games.
     - UnrealPak.exe \SteamLibrary\steamapps\common\TheCulling\Victory\Content\Paks\ [NAME OF PAK TO EXTRACT FROM, ex/pakchunk0-WindowsClient].pak -Extract \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\ [NAME OF FOLDER WHERE YOU WANT EVERYTHING]
 
 - For PAKING:
-    - UnrealPak.exe \location\you\want\the\new\pake\file -Create=\folder\you\want\to\create\the\pak\with
+    - UnrealPak.exe \location\you\want\the\new\pak\file -Create=\folder\you\want\to\create\the\pak\with
  
 ---
 
