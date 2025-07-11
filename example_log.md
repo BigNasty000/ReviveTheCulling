@@ -1,3 +1,4 @@
+```bash
 G:\Programming Projects\TCXAV>python mock_server.py
 Server initialized for eventlet.
 INFO:engineio.server:Server initialized for eventlet.
@@ -52,3 +53,4 @@ User-Agent: Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, 
 {}
 Hit: Authenticated Root (/api/authenticated_root). Client should now have all data.
 Sending back: {'authenticated': True, 'userID': 'steam:76561197960287930', 'build': '20240521', 'avatarUrl': 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b5/b5bd56c1527ab04f4523a26a38614561b620bd38_full.jpg', 'redeemSystemOnline': True, 'player': {'cullCredits': 25700, 'premiumCurrency': 1250, 'migrated': True}, 'stats': {'level': '999', 'wins': 78, 'kills': 856, 'gamesPlayed': 621}, 'challenges': {'challengeMap': {}}}
+```
