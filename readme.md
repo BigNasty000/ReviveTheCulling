@@ -71,10 +71,10 @@ To download UE4-4.15.3:
 Once you have UE4-4.15.3 Installed from Epic Games.
 - Either add the UnrealPak.exe to your %PATH% OR navigate to "\UE\UE_4.15\Engine\Binaries\Win64"
 - For EXTRACTING: 
-    - UnrealPak.exe \SteamLibrary\steamapps\common\TheCulling\Victory\Content\Paks\[NAME OF PAK TO EXTRACT FROM, ex/pakchunk0-WindowsClient].pak -Extract \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\[NAME OF FOLDER WHERE YOU WANT EVERYTHING]
+    - UnrealPak.exe \SteamLibrary\steamapps\common\TheCulling\Victory\Content\Paks\ [NAME OF PAK TO EXTRACT FROM, ex/pakchunk0-WindowsClient].pak -Extract \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\ [NAME OF FOLDER WHERE YOU WANT EVERYTHING]
 
 - For PAKING:
-    - UnrealPak.exe [LOCATION WHERE YOU WANT PAK STORED, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\UE-4.15] -Create=[FOLDER TO PAK, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\[NAME OF FOLDER WHERE YOU WANT EVERYTHING] (from above)]
+    - UnrealPak.exe [LOCATION WHERE YOU WANT PAK STORED, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\UE-4.15] -Create=[FOLDER TO PAK, in ex/ \SteamLibrary\steamapps\common\TheCulling\Victory\Content\MODPaks\ [NAME OF FOLDER WHERE YOU WANT EVERYTHING] (from above)]
 
 ---
 
