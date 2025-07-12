@@ -81,12 +81,21 @@ Once you have UE4-4.15.3 Installed from Epic Games.
 
 
 ## How to Run
-I was using 3.10 in a VENV to investigate some potential websocket version missmatch but no luck.. 
-Anything in the 310 requirements is good for 3.11 with upto date install..
 
-python 3.11 or 3.10 works fine
+python 3.11 is what this project is running
 
 
+---
+# FIRST TIME SETUP
+
+py -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+---
+
+
+venv\Scripts\activate
 python mock_server.py
 
 Run the game after you've made changes to your hosts file and have the mock_server.py running. You should see the current out puts for logging in.
