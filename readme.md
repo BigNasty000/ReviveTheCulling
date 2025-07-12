@@ -86,11 +86,11 @@ python 3.11 is what this project is running
 
 
 ---
-# FIRST TIME SETUP
+FIRST TIME SETUP
 
-py -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
+- py -m venv venv
+- venv\Scripts\activate
+- pip install -r requirements.txt
 
 ---
 
