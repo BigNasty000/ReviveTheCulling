@@ -28,12 +28,13 @@ This project is a mock backend server for **The Culling**, designed to intercept
 
 ## Outstanding Issues
 
-- ~~WebSocket connection **is not being established**.~~
-- ~~No `Upgrade: websocket` requests are seen in the logs.~~
-- ~~No evidence of `/socket.io/` requests reaching the server.~~
-- ~~Downgrading `python-socketio` and `python-engineio` **did not resolve** the issue.~~
-- ~~Port changes to 8080 or 80 **break communication completely** — only 443 works.~~
-- Ran into an internal engine call for matchmaking. We will need to pivot to use an overlay to perform a UI hijack of the buttons.
+- ~~WebSocket connection **is not being established**.~~ Solved.
+- ~~No `Upgrade: websocket` requests are seen in the logs.~~ Solved.
+- ~~No evidence of `/socket.io/` requests reaching the server.~~ Solved.
+- ~~Downgrading `python-socketio` and `python-engineio` **did not resolve** the issue.~~ Solved.
+- ~~Port changes to 8080 or 80 **break communication completely** — only 443 works.~~ Solved.
+- ~~Ran into an internal engine call for matchmaking. We will need to pivot to use an overlay to perform a UI hijack of the buttons.~~ Solved.
+- Not really an issue but currently working on the gameserver logic. This is what you actually connect to when joining a match.
 
 ---
 
@@ -42,7 +43,7 @@ This project is a mock backend server for **The Culling**, designed to intercept
 - The game **does connect to the spoofed server** via HTTPS.
 - The mock server **successfully returns spoofed player data**.
 - ~~The WebSocket client (likely using `socket.io`) does **not initiate a connection**, even when WSS URL is returned.~~
-- The game relies on some internal coherent engine calls that silently fail. Matchmaking will need to be done differently.
+- ~~The game relies on some internal coherent engine calls that silently fail. Matchmaking will need to be done differently.~~
 ---
 
 ## How To unpak and repak .pak
