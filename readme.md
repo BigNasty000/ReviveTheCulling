@@ -98,4 +98,5 @@ FIRST TIME SETUP
 - venv\Scripts\activate
 - python mock_server.py
 
+
 Run the game after you've made changes to your hosts file and have the mock_server.py running. You should see the current out puts for logging in.

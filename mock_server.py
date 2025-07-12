@@ -50,7 +50,7 @@ class MatchmakingService:
             'ffa_jungle_coop2': []
         }
         self.lock = Lock()
-        self.MATCH_SIZE = 2 # Set to 2 for easy testing
+        self.MATCH_SIZE = 1 # Set to 1 for easy testing
         self.ticker_task = None
 
     def start(self):

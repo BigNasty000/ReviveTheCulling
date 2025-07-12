@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Culling Launcher Overlay</title>
+    <style>
+      /* Basic setup to make the page transparent */
+      body {
+        background: transparent;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      /* The base style for our invisible buttons */
+      .mask-button {
+        position: absolute;
+        /* Make buttons transparent but still clickable. Set to 0.3 for debugging. */
+        background-color: rgba(0, 255, 0, 0);
+        border: 1px dashed rgba(255, 255, 255, 0); /* Set to 1.0 for debugging */
+        cursor: pointer;
+      }
+      .mask-button:hover {
+        background-color: rgba(0, 255, 0, 0.3); /* Green highlight on hover */
+      }
+
+      /* --- BUTTON POSITIONING --- */
+      /* These are estimates based on a 1280x720 window. You will need to fine-tune them. */
+
+      #solo-play-mask {
+        top: 290px;
+        left: 270px;
+        width: 250px;
+        height: 310px;
+      }
+      #duo-play-mask {
+        top: 290px;
+        left: 525px;
+        width: 250px;
+        height: 310px;
+      }
+      #custom-mask {
+        top: 290px;
+        left: 780px;
+        width: 250px;
+        height: 310px;
+      }
+
+      /* --- QUEUE OVERLAY --- */
+      #queue-status-overlay {
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.85);
+        padding: 15px 30px;
+        border-radius: 5px;
+        border: 2px solid #ff0000;
+        color: white;
+        font-family: sans-serif;
+        text-align: center;
+        display: none; /* Hidden by default */
+      }
+      #queue-status-overlay h2 {
+        margin: 0 0 10px 0;
+        color: #ff0000;
+        text-transform: uppercase;
+      }
+      #queue-status-overlay p {
+        margin: 0 0 15px 0;
+        font-size: 14px;
+      }
+      #cancel-queue-button {
+        padding: 8px 16px;
+        background-color: #555;
+        border: 1px solid #999;
+        color: white;
+        cursor: pointer;
+      }
+      #cancel-queue-button:hover {
+        background-color: #777;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- The invisible buttons that will sit over the game's UI -->
+    <button id="solo-play-mask" class="mask-button"></button>
+    <button id="duo-play-mask" class="mask-button"></button>
+    <button id="custom-mask" class="mask-button"></button>
+
+    <!-- This is the UI element that will appear when you are in a queue -->
+    <div id="queue-status-overlay">
+      <h2>SEARCHING FOR MATCH</h2>
+      <p>Elapsed Time: <span id="queue-timer">00:00</span></p>
+      <button id="cancel-queue-button">CANCEL SEARCH</button>
+    </div>
+
+    <script>
+      const { ipcRenderer } = require("electron");
+
+      // Get references to all our UI elements
+      const soloButton = document.getElementById("solo-play-mask");
+      const duoButton = document.getElementById("duo-play-mask");
+      const customButton = document.getElementById("custom-mask");
+      const queueOverlay = document.getElementById("queue-status-overlay");
+      const cancelQueueButton = document.getElementById("cancel-queue-button");
+      const timerSpan = document.getElementById("queue-timer");
+      let isBackendConnected = false;
+
+      let queueTimerInterval;
+
+      // --- Event Listeners from Buttons ---
+
+      soloButton.addEventListener("click", () => {
+        // Only do something if we are connected
+        if (isBackendConnected) {
+          console.log("[UI] Solo Play button clicked!");
+          ipcRenderer.send("start-matchmaking", { queue: "ffa_jungle" });
+        } else {
+          console.warn("[UI] Backend not ready, click ignored.");
+        }
+      });
+
+      duoButton.addEventListener("click", () => {
+        if (isBackendConnected) {
+          console.log("[UI] Duo Play button clicked!");
+          ipcRenderer.send("start-matchmaking", { queue: "ffa_jungle_coop2" });
+        } else {
+          console.warn("[UI] Backend not ready, click ignored.");
+        }
+      });
+
+      cancelQueueButton.addEventListener("click", () => {
+        console.log("[UI] Cancel Search button clicked!");
+        ipcRenderer.send("cancel-matchmaking");
+      });
+
+      // --- Listeners for Events from main.js ---
+
+      ipcRenderer.on("game-found", () => {
+        console.log("[UI] Game found! Enabling overlay interaction.");
+        // Make the entire overlay window accept mouse clicks now.
+        ipcRenderer.send("set-clickable", true);
+      });
+
+      ipcRenderer.on("show-queue-status", () => {
+        console.log("[UI] Showing queue status overlay.");
+        queueOverlay.style.display = "block";
+        ipcRenderer.send("set-clickable", true); // Keep it clickable for the cancel button
+
+        // Start the timer
+        let seconds = 0;
+        queueTimerInterval = setInterval(() => {
+          seconds++;
+          const min = String(Math.floor(seconds / 60)).padStart(2, "0");
+          const sec = String(seconds % 60).padStart(2, "0");
+          timerSpan.textContent = `${min}:${sec}`;
+        }, 1000);
+      });
+
+      ipcRenderer.on("queue-cancelled", () => {
+        console.log("[UI] Queue was cancelled. Resetting UI.");
+        queueOverlay.style.display = "none";
+        clearInterval(queueTimerInterval); // Make sure to stop the timer
+        timerSpan.textContent = "00:00";
+
+        // Show the main play buttons again
+        soloButton.style.display = "block";
+        duoButton.style.display = "block";
+        customButton.style.display = "block";
+      });
+
+      ipcRenderer.on("hide-queue-status", () => {
+        console.log("[UI] Hiding queue status overlay.");
+        queueOverlay.style.display = "none";
+        clearInterval(queueTimerInterval);
+        timerSpan.textContent = "00:00";
+      });
+
+      ipcRenderer.on("backend-connected", () => {
+        console.log(
+          "[UI] Received backend-connected signal! Enabling buttons."
+        );
+        isBackendConnected = true;
+        // Optionally change the style of the buttons to show they are active
+        soloButton.style.cursor = "pointer";
+        duoButton.style.cursor = "pointer";
+        customButton.style.cursor = "pointer";
+      });
+
+      // Buttons start in a "not ready" state
+      soloButton.style.cursor = "wait";
+      duoButton.style.cursor = "wait";
+      customButton.style.cursor = "wait";
+    </script>
+  </body>
+</html>
