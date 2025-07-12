@@ -491,8 +491,8 @@ if __name__ == "__main__":
     print("Starting server with DEFAULT WebSocket path and SSL...")
     matchmaking_service.start()
 
-    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+5.pem'
-    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+5-key.pem'
+    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+4.pem'
+    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+4-key.pem'
 
     listener = eventlet.listen(('0.0.0.0', 443))
     ssl_listener = eventlet.wrap_ssl(
