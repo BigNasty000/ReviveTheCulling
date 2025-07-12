@@ -5,6 +5,8 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from socketio import WSGIApp          # ← comes from python-socketio, NOT your instance
 import logging
+from threading import Lock
+
 logging.basicConfig(level=logging.DEBUG)
 
 # Initialize
@@ -35,6 +37,133 @@ AUTHENTICATED_PLAYER_DATA = {
     "stats": { "level": "999", "wins": 78, "kills": 856, "gamesPlayed": 621},
     "challenges": {"challengeMap": {}}
 }
+
+# ===================================================================
+#                      MATCHMAKING SERVICE
+# ===================================================================
+
+class MatchmakingService:
+    def __init__(self, socketio_instance):
+        self.socketio = socketio_instance
+        self.queues = {
+            'ffa_jungle': [],
+            'ffa_jungle_coop2': []
+        }
+        self.lock = Lock()
+        self.MATCH_SIZE = 2 # Set to 2 for easy testing
+        self.ticker_task = None
+
+    def start(self):
+        if self.ticker_task is None:
+            self.ticker_task = self.socketio.start_background_task(target=self._ticker)
+            logging.info("Matchmaking service started with a 5-second ticker.")
+
+    def add_player_to_queue(self, user_id, queue_name):
+        with self.lock:
+            player_info = connected_players.get(user_id)
+            if not player_info or not player_info.get('sid'):
+                logging.error(f"Cannot queue user {user_id}: not fully connected.")
+                return False
+
+            player_entry = {'user_id': user_id, 'sid': player_info['sid']}
+            if queue_name in self.queues:
+                if any(p['user_id'] == user_id for p in self.queues[queue_name]):
+                    logging.warning(f"User {user_id} already in queue '{queue_name}'.")
+                    return True # Still acknowledge as success
+                
+                self.queues[queue_name].append(player_entry)
+                logging.info(f"User {user_id} added to queue '{queue_name}'. Queue size: {len(self.queues[queue_name])}")
+                
+                # Immediately acknowledge the join to update the UI
+                self.socketio.emit('join-mm-ack', room=player_info['sid'])
+                return True
+            return False
+
+    # --- ADD THIS NEW FUNCTION ---
+    def remove_player_from_all_queues(self, user_id):
+        """Removes a player from any queue they might be in."""
+        with self.lock:
+            player_info = connected_players.get(user_id)
+            if not player_info or not player_info.get('sid'):
+                logging.error(f"Cannot dequeue user {user_id}: not fully connected.")
+                return
+
+            was_removed = False
+            for queue_name, player_list in self.queues.items():
+                # Find the player in the list and remove them
+                original_length = len(player_list)
+                self.queues[queue_name] = [p for p in player_list if p['user_id'] != user_id]
+                if len(self.queues[queue_name]) < original_length:
+                    logging.info(f"User {user_id} removed from queue '{queue_name}'.")
+                    was_removed = True
+            
+            if was_removed:
+                # Acknowledge that the player has left the queue.
+                self.socketio.emit('leave-mm-ack', room=player_info['sid'])
+            else:
+                logging.warning(f"User {user_id} tried to leave queue but was not found in any.")
+
+                
+    def _ticker(self):
+        """The main loop that runs every few seconds to process queues."""
+        while True:
+            self.socketio.sleep(5)
+            with self.lock:
+                self._broadcast_queue_updates()
+                for queue_name in list(self.queues.keys()):
+                    if len(self.queues[queue_name]) >= self.MATCH_SIZE:
+                        self._create_match(queue_name)
+
+    def _broadcast_queue_updates(self):
+        """Sends updates about player counts to everyone in a queue."""
+        for queue_name, player_list in self.queues.items():
+            if player_list:
+                logging.info(f"Broadcasting update for queue '{queue_name}': {len(player_list)} player(s).")
+                queue_update = {'count': len(player_list)}
+                for player in player_list:
+                    self.socketio.emit('players-in-queue', queue_update, room=player['sid'])
+                    self.socketio.emit('update-average-queue-time', 30000, room=player['sid']) # Fake 30s
+
+    def _create_match(self, queue_name):
+        """Forms a match and sends the match-ready event."""
+        match_players = self.queues[queue_name][:self.MATCH_SIZE]
+        self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
+        
+        player_ids = [p['user_id'] for p in match_players]
+        logging.info(f"MATCH FOUND for queue '{queue_name}'! Players: {player_ids}")
+        
+        match_data = {
+            "gameServer": "127.0.0.1:7777",
+            "nonce": f"nonce-client-{uuid.uuid4()}",
+            "serverNonce": f"nonce-server-{uuid.uuid4()}"
+        }
+        for player in match_players:
+            self.socketio.emit('match-ready', match_data, room=player['sid'])
+
+# --- Initialize the Matchmaking Service ---
+matchmaking_service = MatchmakingService(socketio)
+
+
+
+# ===================================================================
+#                      API ENDPOINTS - LOGIN/MATCHMAKE
+# ===================================================================
+
+@app.route("/api/matchqueue", methods=["POST"])
+def api_matchqueue():
+    """HTTP endpoint to request joining a queue."""
+    print("--- HTTP: Received 'MatchQueueWithTicket' request ---")
+    user_id = request.form.get("userid")
+    queue_name = request.form.get("queuename")
+    
+    if not user_id or not queue_name:
+        return jsonify({"error": "Missing userid or queuename"}), 400
+
+    # Delegate the logic to our service
+    matchmaking_service.add_player_to_queue(user_id, queue_name)
+    
+    # Immediately return a successful HTTP response
+    return jsonify({"status": "QUEUED", "message": "Queue request received."}), 200
 
 
 @app.before_request
@@ -119,7 +248,10 @@ def collect_data():
     return "", 200
 
 
-# --- WebSocket Handlers ---
+
+# ===================================================================
+#                      WEBSOCKET HANDLERS
+# ===================================================================
 
 @socketio.on('connect')
 def handle_connect():
@@ -156,6 +288,20 @@ def handle_socket_login(data):
     print("-> Replied with 'auth-response'.")
     emit('update-queue-status', {"ffa": {"isActive": True}, "coop2": {"isActive": True}})
 
+@socketio.on('leave-mm')
+def handle_leave_matchmaking(data):
+    """Handles the client's request to leave the matchmaking queue."""
+    # Find the user ID associated with the current session
+    sid = request.sid
+    user_id = next((uid for uid, p_info in connected_players.items() if p_info.get('sid') == sid), None)
+
+    if user_id:
+        queue_name = data.get('queueName', 'unknown') # The client sends this, but we don't need it
+        logging.info(f"--- WebSocket: Received 'leave-mm' from {user_id} ---")
+        matchmaking_service.remove_player_from_all_queues(user_id)
+    else:
+        logging.warning(f"Received 'leave-mm' from an unknown session ID: {sid}")
+
 # --- PARTY SYSTEM PLACEHOLDERS ---
 @socketio.on('group-invite')
 def handle_group_invite(data):
@@ -169,47 +315,24 @@ def handle_leave_group():
     # Acknowledge that the player "left" the group
     emit('left-group', {'groupID': 'some_fake_group_id'})
 
-@app.route("/api/matchqueue", methods=["POST"])
-def api_matchqueue():
+@socketio.on('message')
+def handle_message(data):
+    logging.warning(f"Received uncaught WebSocket 'message' event: {data}")
+
+@socketio.on('json')
+def handle_unnamed_json(data):
     """
-    This is the legacy HTTP endpoint. Let's provide a structured success response
-    that won't cause parsing errors on the client side.
+    Catches any JSON-based event sent without a specific event name.
     """
-    print("--- HTTP: Received 'MatchQueueWithTicket' request ---")
-    user_id = request.form.get("userid")
-    queue_name = request.form.get("queuename")
-    print(f"User '{user_id}' is queuing for '{queue_name}'")
+    logging.warning(f"Received uncaught 'json' event with data: {data}")
 
-    if not user_id or user_id not in connected_players:
-        print(f"Error: User '{user_id}' not found or socket not ready. Current list: {connected_players}")
-        return jsonify({"error": "Player not authenticated", "errorCode": "auth_failed"}), 403
+@socketio.on_error_default
+def default_error_handler(e):
+    """
+    This catches errors within the Socket.IO server itself.
+    """
+    logging.error(f"A WebSocket error occurred: {e}")
 
-    player_sid = connected_players[user_id]
-    
-    socketio.start_background_task(target=process_matchmaking_for_player, sid=player_sid)
-    
-    success_response = {
-        "status": "QUEUED",
-        "message": "Player successfully entered the queue.",
-        "ticketId": f"q_ticket_{uuid.uuid4()}",
-        "redirect": None, # Safe null for login parsers
-        "token": None,    # Safe null for login parsers
-        "estimatedWaitTime": 30
-    }
-
-    print(f"-> Responding to /api/matchqueue with: {success_response}")
-    return jsonify(success_response), 200
-
-def process_matchmaking_for_player(sid):
-    print(f"[BG Task for {sid}]: Processing matchmaking...")
-    socketio.emit('join-mm-ack', room=sid)
-    socketio.sleep(5)
-    match_data = {
-        "gameServer": "127.0.0.1:7777",
-        "nonce": "nonce-client-123",
-        "serverNonce": "nonce-server-456"
-    }
-    socketio.emit('match-ready', match_data, room=sid)
 
 @app.route("/ReferenceServerNews.html", methods=["GET"])
 def reference_old_news():
@@ -228,6 +351,7 @@ def catch_socketio(remaining):
 
 if __name__ == "__main__":
     print("Starting server with DEFAULT WebSocket path and SSL...")
+    matchmaking_service.start()
 
     cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+4.pem'
     key_file = 'certs/clientweb2.us-east-1.production.theculling.net+4-key.pem'

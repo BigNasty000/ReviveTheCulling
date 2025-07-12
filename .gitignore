@@ -1,4 +1,4 @@
-/venv310/
+/venv/
 
 certs/cert.pem
 certs/key.pem
@@ -6,3 +6,5 @@ certs/clientweb2.us-east-1.production.theculling.net+3-key.pem
 certs/clientweb2.us-east-1.production.theculling.net+3.pem 
 certs/clientweb2.us-east-1.production.theculling.net+4-key.pem 
 certs/clientweb2.us-east-1.production.theculling.net+4.pem
+
+MaskClient/node_modules
