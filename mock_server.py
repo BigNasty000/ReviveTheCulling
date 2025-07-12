@@ -99,6 +99,9 @@ def api_root_authenticated():
     final_data = AUTHENTICATED_PLAYER_DATA.copy()
     # final_data['connectionStatus'] = 6
     final_data['authenticated'] = True
+    # Add the socket URL to the authenticated response
+    socket_url = f"wss://{request.host}/"
+    final_data['socket'] = socket_url
 
     print(f"Sending back: {final_data}", flush=True)
     return jsonify(final_data)
@@ -225,21 +228,20 @@ def catch_socketio(remaining):
 
 if __name__ == "__main__":
     print("Starting server with DEFAULT WebSocket path and SSL...")
-    from eventlet import wrap_ssl
 
     cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+4.pem'
     key_file = 'certs/clientweb2.us-east-1.production.theculling.net+4-key.pem'
 
     listener = eventlet.listen(('0.0.0.0', 443))
-    ssl_listener = wrap_ssl(
+    ssl_listener = eventlet.wrap_ssl(
         listener,
         certfile=cert_file,
         keyfile=key_file,
         server_side=True
     )
 
-    wsgi_app = WSGIApp(socketio, app)
-    eventlet.wsgi.server(ssl_listener, wsgi_app)
+    # ✅ Pass the Flask app to eventlet.wsgi.server directly
+    eventlet.wsgi.server(ssl_listener, app)
 
 
 
