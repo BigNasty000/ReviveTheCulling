@@ -1,0 +1,149 @@
+#pause-recipes-menu .pause-recipes-menu-content {
+  height: 95%;
+  width: 100%;
+  box-sizing: border-box;
+  /* background-color: salmon; */
+  overflow: hidden;
+  overflow-y: scroll;
+  /* border: 1px solid red; */
+}
+
+.pause-recipes-menu-content h1 {
+  color: white;
+  margin: 1.5vw 0 0.5vw 0;
+  padding: 0;
+  /* border: 1px solid blue; */
+}
+.pause-recipes-menu-content ul {
+  list-style-type: none;
+  color: white;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin: 0;
+  /* border: 1px solid lime; */
+}
+
+.pause-recipes-menu-content ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.25vw;
+  box-sizing: border-box;
+  width: 97.5%;
+  /* border: 1px solid yellow; */
+}
+
+.pause-recipes-menu-content ul li:focus .recipe-component,
+.pause-recipes-menu-content ul li:hover .recipe-component,
+.pause-recipes-menu-content ul li:focus .recipe-result,
+.pause-recipes-menu-content ul li:hover .recipe-result{
+  /* outline: 2px solid rgba(204,0,0,1);
+  outline-offset: -2px; */
+  background-color: rgba(240,0,0,0.5);
+}
+
+.pause-recipes-menu-content ul li .recipe-component {
+  background-color: rgba(255,255,255,0.1);
+  /* border: 2px solid rgba(255,255,255,0.75); */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font: 1.5vw ForgottenFuturist;
+  box-sizing: content-box;
+  margin-right: 1vw;
+  width: 12vw;
+  height: 3vw;
+  text-indent: 0.5vw;
+}
+
+.pause-recipes-menu-content ul li .recipe-component:last-child {
+  margin-right: 0;
+}
+
+.pause-recipes-menu-content ul li .recipe-title {
+  width: 24vw;
+  height: 3vw;
+}
+
+.pause-recipes-menu-content ul li .recipe-decorator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font: 1.5vw ForgottenFuturist;
+  box-sizing: content-box;
+  margin-right: 1vw;
+  min-width: 2vw;
+  height: 3vw;
+  text-align: center;
+}
+
+.pause-recipes-menu-content ul li .recipe-decorator span {
+  margin: 0;
+  padding: 0;
+  font: 2vw ForgottenFuturist;
+  margin-left: 0.35vw;
+}
+
+.pause-recipes-menu-content ul li .recipe-component span {
+  margin-left: 0.5vw;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.pause-recipes-menu-content ul li .recipe-component img, .pause-recipes-menu-content ul li .recipe-result img {
+  height: 3vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pause-recipes-menu-content ul li .recipe-component .recipe-cost{
+  width: 5vw;
+  height: 1.5vw;
+  padding: 0 1.5vw 0 0.5vw;
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.pause-recipes-menu-content ul li .recipe-result{
+  background-color: rgba(255,255,255,0.1);
+  /* border: 2px solid rgba(255,255,255,0.75); */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font: 1.5vw ForgottenFuturist;
+  box-sizing: content-box;
+  margin-right: 1vw;
+  width: 10vw;
+  height: 3vw;
+  text-indent: 0.5vw;
+}
+
+.pause-recipes-menu-content ul li .recipe-items{
+  width: 20vw;
+}
+.pause-recipes-menu-content ul li .recipe-component .recipe-cost div{
+  display: flex;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+  margin-left:auto;
+  height: 1.5vw;
+  padding: 0;
+  margin: 0;
+}
+
+.pause-recipes-menu-content ul li .recipe-component .recipe-cost .func-icon{
+  background-image: url('../../images/funcsymbol.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 1vw;
+  width: 1vw;
+  padding: .25vw 0;
+  margin: 0;
+  margin-left: auto;
+}

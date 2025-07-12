@@ -1,0 +1,11 @@
+.survial-basic-bg {
+  background-image: url("../../images/Basic_Survival.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.survival-advanced-bg {
+  background-image: url("../../images/Advanced_Survival.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}

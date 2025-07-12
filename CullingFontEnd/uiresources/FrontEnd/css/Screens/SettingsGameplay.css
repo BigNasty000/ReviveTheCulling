@@ -1,0 +1,82 @@
+.settings-general-menu-container{
+  height: 75%;
+  width: 100%;
+  color: rgba(255,255,255,1);
+}
+
+.settings-general-menu-container h2 {
+  padding: 0;
+  margin: 0;
+  font: 2vw Sucrose-Two;
+  background: linear-gradient(45deg, rgba(13,13,13,1) 0%, rgba(13,13,13,0) 40%);
+}
+
+.settings-general-menu-container .vertical-list-menu{
+  width: 60%;
+  height: 30vw;
+  padding: 0;
+  margin: 0;
+}
+
+.settings-general-menu-container h3 {
+  font: 1.5vw Sucrose-Two;
+  padding: 0;
+  margin: 0;
+  width: 45%;
+}
+
+.settings-general-menu-container ul li {
+  width: 100%;
+  margin-top: .4vw;
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 2vw;
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item h3 {
+  transition: text-indent 0.15s ease-in-out;
+}
+
+.settings-general-menu-container ul li:focus .vertical-list-menu-item h3 {
+  text-indent: 1vw;
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+.settings-general-menu-container ul li:focus .vertical-list-menu-item{
+  padding-left: 0%;
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item .picker-container {
+  display: flex;
+  justify-content: flex-start;
+  font: 1.5vw Sucrose-Two;
+  width: 30%;
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item .picker-container i {
+  width: 20%;
+  text-align: center;
+  pointer-events: all;
+  font: 2vw CullDings;
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item .picker-container i:hover {
+  color: rgba(204,0,0,1);
+}
+
+.settings-general-menu-container ul li .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-Two;
+  text-align: center;
+  width: 60%;
+  white-space: nowrap;
+}
+
+.settings-general-menu-container ul li:focus .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-BoldTwo;
+}

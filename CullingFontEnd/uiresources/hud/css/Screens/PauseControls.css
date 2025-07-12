@@ -1,0 +1,442 @@
+.pause-controls-menu-content{
+  height: 80%;
+  width: 100%;
+  box-sizing: border-box;
+  /* background-color: salmon;*/
+  overflow: hidden;
+}
+
+#settings-controls-menu-options{
+  height: 88%;
+  width: 100%;
+  position: absolute;
+  top:8%;
+  left:0;
+  overflow: hidden;
+}
+
+#pause-controls-menu-options ul {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-padding-start: 0;
+}
+
+.keyboard-table-container, .controller-table-container {
+ height: 100%;
+ width: 100%;
+ top: 0;
+ left: 0%;
+ position: absolute;
+ display: flex;
+ flex-direction: row;
+
+}
+
+.keyboard-table h1 {
+  padding: 0;
+  margin: 0;
+  margin-top: 1vw;
+}
+
+.keyboard-table h1:first-child {
+  margin-top: 0;
+}
+
+.keyboard-table {
+ height: 100%;
+ width: 70%;
+ font: 1.5vw Sucrose-Two;
+ color: rgba(255,255,255,1);
+ overflow-y: scroll;
+ overflow-x: hidden;
+}
+
+.controls-table{
+  width: 90%;
+  font: 1.5vw Sucrose-Two;
+  color: rgba(255,255,255,1);
+  display: flex;
+  flex-direction: column;
+}
+
+.controls-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 3vw;
+  margin-bottom: 0.2vw;
+}
+
+.controls-entry span{
+  margin: 0;
+  padding: 0;
+  padding-left: 0.5vw;
+}
+
+.controls-entry .action,
+.controls-entry .key {
+
+  box-sizing: border-box;
+  /* border: 2px solid white; */
+  margin-right: 0.8vw;
+  height: 3vw;
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.controls-entry:hover .action,
+.controls-entry:focus .action,
+.controls-entry:hover .key,
+.controls-entry:focus .key {
+  border: 2px solid rgb(227,0,5);
+}
+
+.controls-entry .action {
+  width: 30vw;
+}
+
+.controls-entry .key {
+  width: 12vw;
+}
+
+.controls-entry .key span {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+.controls-clear-notice {
+  font: 0.8vw Sucrose-BoldTwo;
+  color: white;
+  display:block;
+  padding-left: 0.5vw;
+  margin: 0;
+  float: right;
+  margin-right: 3.2vw;
+  margin-top: 0.25vw;
+}
+
+.control-bind-error{
+  color: rgb(227,0,5);
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  margin-top: 1vw;
+  display: block;
+  padding-top: 1vw;
+  font: 1.5vw Sucrose-BoldTwo !important;
+}
+
+.control-bind-error .hidden{
+  opacity:0;
+}
+
+.control-message-pulse{
+  -webkit-animation: keybind-message-pulse 0.5s ease-in 1;
+}
+.controls-weapon-bind-message {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 30%;
+  background-image: url('../../images/EOM_box.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  top: 30%;
+  z-index: 10000;
+  color: white;
+  padding: 0.25vw;
+}
+
+.controls-bind-clear{
+  font-size: 1vw;
+}
+
+.controls-bind-clear:hover{
+  color: rgba(13,13,13,0.7);
+}
+
+.controls-weapon-bind-message h1 {
+  font: 2vw Sucrose-BoldTwo;
+  margin: 0;
+}
+
+.controls-weapon-bind-message p {
+  font: 1.65vw Sucrose-Two;
+  margin: 0;
+}
+
+.controls-weapon-bind-background{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background: rgba(13,13,13,0.7);
+  z-index: 9999;
+}
+
+.player-profile-nav-bar{
+  margin: auto;
+  width: 50%;
+  height: 6%;
+  top: 12%;
+  left: 25%;
+  position: absolute;
+}
+
+.player-profile-nav-bar-list{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style: none;
+}
+
+.player-profile-nav-bar .player-profile-tab-deactive{
+  font: 1.5vw Sucrose-Two;
+  height: 3vw;
+  width: 13.5vw;
+  color: rgba(150,150,150,.5);
+  background-color: rgba(220,220,220,0);
+  /* border: 2px solid rgba(100,100,100,1); */
+  margin: 0 .5vw;
+  padding: .5vw 1.5vw;
+  text-align: center;
+}
+
+.player-profile-nav-bar .player-profile-tab{
+  font: 1.5vw Sucrose-Two;
+  height: 3vw;
+  width: 13.5vw;
+  color: rgba(255,255,255,1);
+  background-color: rgba(220,220,220,0);
+  /* border: 2px solid rgba(200,200,200,1); */
+  margin: 0 .5vw;
+  padding: .5vw 1.5vw;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.player-profile-nav-bar .player-profile-tab:focus, .player-profile-nav-bar .player-profile-tab:hover{
+  /* border: 2px solid rgba(204,0,0,1); */
+  /* color: rgba(255,255,255,1); */
+  color: rgba(204,0,0,1) !important;
+  font: 1.5vw Sucrose-BoldTwo !important;
+  background-image: url("/images/menuunderline.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom;
+}
+
+.player-profile-nav-bar .player-profile-tab:active{
+  /* border: 2px solid rgba(204,0,0,1); */
+  /* color: rgba(255,255,255,1); */
+  /* background: rgba(204,0,0,0.2); */
+}
+
+.player-profile-nav-bar .player-profile-tab.selected{
+  /* border: 2px solid rgba(255,255,255,1); */
+  color: rgba(255,255,255,1);
+  background: rgba(204,0,0,0.2);
+}
+
+.message-table{
+  height: 100%;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+}
+
+.restore-option-footer{
+  font: 1.5vw Sucrose-Two;
+  height: 3vw;
+  width: 13.5vw;
+  color: rgba(255,255,255,1);
+  background-color: rgba(220,220,220,0);
+  border: 2px solid rgba(200,200,200,1);
+  margin: 0 .5vw;
+  padding: .5vw 1.5vw;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: all;
+  display: flex;
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+.restore-option-footer span{
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+.restore-option-footer:hover span{
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+.restore-option-footer:hover{
+  border: 2px solid rgba(204,0,0,1) !important;
+  color: rgba(255,255,255,1) !important;
+}
+
+#controls-nav-tab-options li:hover{
+  /* border: 2px solid rgba(204,0,0,1); */
+  color: rgba(255,255,255,1);
+}
+
+#controls-nav-tab-options li:focus{
+  /* border: 2px solid rgba(204,0,0,1); */
+  color: rgba(255,255,255,1);
+}
+
+#controls-nav-tab-options li:active{
+  /* border: 2px solid rgba(204,0,0,1); */
+  color: rgba(255,255,255,1);
+  /* background: rgba(204,0,0,0.2); */
+}
+
+#controls-nav-tab-options li.trigger-container:hover{
+  background-color: rgba(204,0,0,0);
+  border: none;
+}
+
+.tab-focus span {
+    /* color: rgba(255,255,255,1)!important;
+    background: rgba(204,0,0,0.2)!important; */
+    color: rgba(204,0,0,1) !important;
+    font: 1.5vw Sucrose-BoldTwo !important;
+}
+
+.tab-focus{
+    background-image: url("/images/menuunderline.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+}
+
+#controller-table h2 {
+  font: 1.5vw Sucrose-Two;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  width: 70%;
+}
+
+#controller-table ul{
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.5vw;
+}
+
+#controller-table ul li {
+  width: 100%;
+  float: left;
+}
+#controller-table ul li .vertical-list-menu-item {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+#controller-table ul li .vertical-list-menu-item h2 {
+  transition: text-indent 0.15s ease-in-out;
+}
+
+#controller-table ul li:focus .vertical-list-menu-item h2 {
+  text-indent: 1vw;
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+#controller-table ul li:focus .vertical-list-menu-item{
+  padding-left: 0%;
+}
+
+#controller-table ul li .vertical-list-menu-item .picker-container {
+  display: flex;
+  justify-content: flex-start;
+  font: 1.5vw Sucrose-Two;
+  width: 30%;
+  height: 100%;
+}
+
+#controller-table ul li .vertical-list-menu-item .picker-container i {
+  width: 20%;
+  text-align: center;
+  pointer-events: all;
+  font: 2.25vw CullDings;
+}
+
+#controller-table ul li .vertical-list-menu-item .picker-container i:hover {
+  color: rgba(204,0,0,1);
+}
+
+#controller-table ul li .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-Two;
+  text-align: center;
+  width: 60%;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#controller-table ul li:focus .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+.controller-table{
+  width: 45%;
+  height: 100%;
+  font: 1.5vw Sucrose-Two;
+  color: white;
+
+}
+
+.controller-image-container{
+  margin:auto;
+  padding: auto;
+
+}
+
+.controller-image{
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+}
+
+.controller-image img{
+  width: 40vw;
+}
+
+
+
+.left-trigger:before{
+  content:"\003e";
+}
+
+.right-trigger:before{
+  content:"\003f";
+}
+
+.player-profile-nav-bar span.trigger{
+  font: 4.5vw CullDings;
+  line-height: 2vw;
+  color: white;
+  margin: 1vw .5vw;
+  vertical-align: text-top;
+}

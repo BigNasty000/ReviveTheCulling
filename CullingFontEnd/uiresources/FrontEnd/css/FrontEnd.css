@@ -1,0 +1,1399 @@
+/* @font-face {
+    font-family: ForgottenFuturist-Bold;
+    src: local(ForgottenFuturist-Bold), url('../../fonts/Yellow Design Studio - Sucrose-BoldTwo.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Bold-Italic;
+    src: local(ForgottenFuturist-Bold-Italic), url('../../fonts/Yellow Design Studio - SucroseSlant-BoldTwo.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist;
+    src: local(ForgottenFuturist), url('../../fonts/Yellow Design Studio - Sucrose-Two.otf');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Italic;
+    src: local(ForgottenFuturist-Italic), url('../../fonts/Yellow Design Studio - SucroseSlant-Two.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Black;
+    src: local(ForgottenFuturist-Bold), url('../../fonts/Yellow Design Studio - Sucrose-BoldFour.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Black-Italic;
+    src: local(ForgottenFuturist-Bold-Italic), url('../../fonts/Yellow Design Studio - SucroseSlant-BoldFour.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Light;
+    src: local(ForgottenFuturist-Bold), url('../../fonts/Yellow Design Studio - Sucrose-Three.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Light-Italic;
+    src: local(ForgottenFuturist-Bold-Italic), url('../../fonts/Yellow Design Studio - SucroseSlant-Three.otf') format('opentype');
+}
+
+@font-face {
+  font-family: Glyphicons-Halflings;
+  src: url('../../fonts/glyphicons-halflings-regular.eot') format('embedded-opentype');
+}
+
+@font-face {
+  font-family: CullDings;
+  src: url('../../fonts/CullDings.ttf');
+} */
+
+
+::-webkit-scrollbar {
+    width: 0.8vw;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(13,13,13,0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  /*
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 4px;
+    */
+   background-color: rgba(204,0,0,0.5);
+   border: 3px solid transparent;
+   border-radius: 9px;
+   background-clip: content-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Sucrose-Regular;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: all;
+    background-color: rgba(0,0,0,0.01);
+}
+
+span, li, p, h1, h2, li, div {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+    font-family: Sucrose-Regular;
+    box-sizing: border-box;
+}
+
+ol, ul {
+    padding: 0;
+    margin: 0;
+}
+
+p {
+  line-height: 1.2;
+}
+
+.hidden {
+    display: none !important;
+    pointer-events: none !important;
+}
+
+.screen {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    background-color: rgba(0,0,0,0.01);
+    font-family: Sucrose-Regular;
+    flex: 0 1 auto;
+    display: flex;
+}
+
+.screen-dynamic {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    background-color: rgba(0,0,0,0.01);
+    font-family: Sucrose-Regular;
+}
+
+.screens {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+}
+
+.culling-logo {
+  width: 15%;
+  -coherent-layer-clip-aa: on;
+}
+
+.build-version{
+  font: 0.8vw Sucrose-Regular;
+  color: rgba(200,200,200,0.75);
+  margin-top: 0.5%;
+}
+
+.menu-content > h1{
+  color: rgba(255,255,255,1);
+  /* text-shadow: 2px 2px 0 rgba(0, 255, 255, 0.5),
+              -2px -2px 0 rgba(255, 0, 0, 0.5); */
+
+  font: 4vw SucroseSlant-BoldTwo;
+  line-height: 0.8;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  /*margin-left: 2vw;*/
+  width: 20vw;
+  white-space: nowrap;
+}
+
+.header-line{
+  /* background: linear-gradient(to right, rgba(227,0,5,0.85) 0%,rgba(0,0,0,0) 45%); */
+  width: 100vw;
+  height: 0.83vh;
+  margin-bottom: 3vw;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("../images/headerstripe.png");
+  /*margin-left: 2vw;*/
+  /* border: 1px solid blue; */
+}
+
+.play-option {
+  pointer-events: all;
+  background-color: rgba(255,255,255,1);
+  height: 36.5vw;
+}
+
+.menu-tooltip{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 33.8%;
+  height: 6vw;
+  overflow: hidden;
+  white-space: normal;
+  background-color: rgba(13,13,13,0.8);
+  color: rgba(220,220,220,1);
+  font-size: 1.5vw;
+}
+
+.menu-tooltip p{
+  padding-left: 2.5vw;
+  padding-right: 1vw;
+  padding-top: 0.5vw;
+}
+
+.menu-tooltip span{
+  color: rgba(204,0,0,1);
+}
+
+.leaderboard-bg {
+  background: linear-gradient(to bottom, rgba(227,0,5,0.85) 0%,rgba(255,93,6,0.65) 100%);
+}
+
+.hide-focus:focus {
+  color: white !important;
+}
+
+#cloned-elements{
+  display: none;
+  pointer-events: none;
+}
+
+
+
+#controls-footer {
+  width: 100%;
+  height: 3vw;
+  /*position: absolute;
+  bottom: 5%;*/
+  z-index: 999;
+  /*padding-left: 6.5vw;*/
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: row;
+  margin-top:auto;
+}
+
+#controls-footer .button-section {
+  display: inline-flex;
+  width: 55%;
+  height: 100%;
+  flex-direction: row;
+}
+
+#controls-footer .button-section .button-tooltip {
+  margin-right: 0.5vw;
+  padding-right: 0.7vw;
+}
+
+#controls-footer .party-section {
+
+  width: 45%;
+  height: 10%;
+  position: absolute;
+  /*right: 13vw;*/
+  margin: 0;
+  padding: 0;
+
+}
+.party-section-container{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  align-content: flex-end;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0;
+}
+
+#controls-footer .party-icon {
+  display: flex;
+  width: 3vw;
+  height: 3vw;
+  background-color: rgba(13,13,13,1);
+  text-align: center;
+  color: rgba(255,255,255,1);
+  align-items: center;
+  justify-content: center;
+  padding-right: 0.25vw;
+}
+
+#controls-footer .create-party.party-icon:before {
+  font: 3vw CullDings;
+  content: "\002E";
+}
+
+#controls-footer .party-section .button-tooltip {
+  color: red;
+
+}
+
+#controls-footer .button-tooltip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  height: 3vw;
+  padding-left: 0.45vw;
+}
+
+#controls-footer .button-tooltip.party {
+  flex-shrink: 0;
+  /*margin-right: 1vw;*/
+  padding-right: .8vw;
+  margin-left: 1vw;
+}
+
+#controls-footer .control-icon {
+  display: block;
+  position: relative;
+  margin-right: 0.35vw;
+  background-color: rgba(13,13,13,0);
+  color: rgba(255,255,255,1);
+  width: auto;
+}
+
+#controls-footer .x-button.control-icon:before {
+  font: 3vw CullDings;
+  content: "\0036";
+  vertical-align: middle;
+}
+
+#controls-footer .control-icon.controller {
+  font: 3vw CullDings;
+  vertical-align: middle;
+  pointer-events: all;
+  width: auto;
+}
+
+#controls-footer .control-icon.kbm {
+  height: 2vw;
+  font: 1.4vw Sucrose-BoldTwo;
+  border-radius: 2px;
+  pointer-events: all;
+  color: rgba(13,13,13,1);
+  padding: 0.1vw 0.5vw;
+  background-color: rgba(255,255,255,1);
+}
+
+#controls-footer .button-tooltip .control-text {
+  font: 1vw Sucrose-Three;
+  display: inline-block;
+  text-transform: uppercase;
+  color: rgba(255,255,255,1);
+  width: auto;
+  white-space: nowrap;
+}
+
+
+#controls-footer .button-tooltip.clickable {
+  outline: 2px solid rgba(255,255,255,1);
+  border-radius: 2px;
+}
+
+#controls-footer .party-section .button-tooltip.clickable {
+  /*min-width: 10vw;*/
+}
+
+#controls-footer .button-tooltip.clickable:hover,
+#controls-footer .button-tooltip.clickable:focus {
+  outline: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+}
+#controls-footer .button-tooltip.clickable:active {
+  outline: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+  background: rgba(204,0,0,0.2);
+}
+
+
+#controls-footer .culling-card-container{
+  width: 18vw;
+  height: 3.2vw;
+}
+
+#controls-footer .local-culling-card-container {
+  background-image: url("/images/culling-cards/CC_Artboard-88.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#controls-footer .culling-card .player-level{
+  font: 2vw Sucrose-Bold;
+  line-height: 2vw;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+}
+
+#controls-footer .culling-card .player-name{
+  font: 1.2vw Sucrose-Bold;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+}
+
+#controls-footer .culling-card .player-rank{
+  font: .9vw Sucrose-Bold;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+}
+
+#controls-footer .culling-card .player-rank:before{
+  font: 1.2vw CullDings;
+  line-height: .5vw;
+  color: rgba(255,255,255,1);
+  content: '\0058  ';
+}
+
+/* .customization-badge {
+  position: relative;
+  display: inline;
+  width: 2vw;
+  height: 1.2vw;
+  font: 1vw Sucrose-BoldFour;
+  border-radius: 3px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  margin-left: 0.25vw;
+  color: rgba(13,13,13,1);
+  margin-right: 0.5vw;
+  flex-grow: 0;
+  flex-shrink: 0;
+  text-indent: 0vw !important;
+  vertical-align: middle;
+  pointer-events: none;
+} */
+
+.customization-badge {
+  position: relative;
+  width: auto;
+  height: 2vw;
+  /* font: 1vw Sucrose-BoldTwo; */
+  /* border-radius: 2px; */
+  /* text-align: center; */
+  margin: 0;
+  padding: 0;
+  /* color: rgba(13,13,13,1); */
+  pointer-events: none;
+  overflow: hidden;
+  /* vertical-align: middle; */
+  /* border: 1px solid lime; */
+}
+
+.customization-badge.new {
+  font: 2vw CullDings;
+  height: 2vw;
+  width: auto;
+  color: #ffbf01;
+  text-shadow: 0 0 15px #993e09;
+}
+
+.customization-badge.locked {
+  font: 2vw CullDings;
+  height: 2vw;
+  width: auto;
+  color: white;
+}
+
+.customization-badge.locked::after{
+  content: '\0027';
+  text-indent: 0vw !important;
+}
+
+/* .customization-badge.new::after{
+  content: 'NEW';
+  text-indent: 0vw !important;
+} */
+
+.customization-badge.new::after{
+  content: '\0054';
+  text-indent: 0vw !important;
+}
+
+.currency-container{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5%;
+  text-align: right;
+  font: 4vw SucroseSlant-BoldThree;
+  color: white;
+  -webkit-animation: currency-scale-in 0.2s ease-in-out;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-fill-mode:forwards;
+}
+
+@-webkit-keyframes currency-scale-in{
+  from {
+    transform: scaleY(0) scaleX(1.4);
+  }
+  to {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+@-webkit-keyframes currency-rotate-out{
+  from {
+    transform: scaleY(0) scaleX(1.4);
+  }
+  to {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+.currency-icon::after{
+  font-family: CullDings;
+  font-size: 1.3em;
+  content: '\0055';
+  background: linear-gradient(to bottom, #fbaa0f 0%, #ffbf01 50%, #993e09 73%,#993e09 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+@-webkit-keyframes newPulse {
+  from { color: rgba(0,0,0,0.75); -webkit-box-shadow: 0 0 19px #ffbf01; }
+  50% { color: rgba(0,0,0,0.95); -webkit-box-shadow: 0 0 28px #993e09; }
+  to { color: rgba(0,0,0,0.75); -webkit-box-shadow: 0 0 19px #ffbf01; }
+}
+
+#debug-info {
+  position: absolute;
+  right: 2%;
+  top: 2%;
+  width: 23vw;
+  min-height: 20%;
+  background-color: rgba(55,55,55,0.5);
+  list-style-type: none;
+  color: white;
+  pointer-events: none !important;
+  box-sizing: border-box;
+  max-height: 60%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  opacity: 0.75;
+  overflow: hidden;
+  display: static;
+}
+
+#debug-info ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  width: 100%;
+}
+
+#debug-info li {
+  margin: 0;
+  padding: 0;
+}
+
+#debug-info h1 {
+  margin: 0;
+  padding: 0;
+  font: 1.2vw Sucrose-BoldTwo;
+  display: block;
+  text-align: center;
+  width: 90%;
+  height: auto;
+  border-bottom: 1px solid white;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2.1%;
+}
+
+#debug-info h2 {
+  margin: 0;
+  padding: 0;
+  font: 1vw Sucrose-BoldTwo;
+  margin-right: 5%;
+  margin-left: 5%;
+}
+
+#debug-info span {
+  margin: 0;
+  padding: 0;
+  font: 1vw Sucrose-Three;
+  text-align: right;
+  padding-right: 1.1vw;
+}
+
+.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.background.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.background video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.player-card{
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  width: 24.06vw;
+  height: 7.6vw;
+  /* flex: 0 1 auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  z-index: 100;
+  /* border: 1px solid lime; */
+}
+
+.player-card-container{
+  width: 24.06vw;
+  height: 7.6vw;
+  margin: 0;
+  padding: 0;
+  /* flex: 0 1 auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  /* border: 1px solid magenta; */
+}
+
+.culling-card-container{
+  width: 24.06vw;
+  height: 4.1vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  /* border: 1px solid aqua; */
+}
+
+.local-culling-card-container {
+  background-image: url("/images/culling-cards/CC_Artboard-88.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.base-culling-card-container {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.culling-card{
+  width: 100%;
+  height: 100%;
+  padding-top: .8vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  /* border: 1px solid yellow; */
+}
+
+.left-column{
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right-column{
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.culling-card .player-level{
+  font: 2.5vw ForgottenFuturist-Bold !important;
+  line-height: 2.5vw;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+  overflow: hidden;
+  text-align: center;
+}
+
+.culling-card .player-name{
+  width: 70%;
+  font: 1.5vw ForgottenFuturist-Bold !important;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+  float: right;
+  overflow: hidden;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.culling-card .player-rank{
+  font: .9vw Sucrose-Bold;
+  color: black;
+    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: black;
+  overflow: hidden;
+  text-align: left;
+}
+
+.culling-card .player-rank:before{
+  font: 1.2vw CullDings;
+  line-height: .5vw;
+  color: rgba(255,255,255,1);
+  content: '\0058  ';
+}
+
+.culling-cash-container{
+  width: 24.06vw;
+  height: 3vw;
+  margin-top: .5vw;
+  display: flex;
+  align-items: stretch;
+  align-self: flex-end;
+  /* border: 1px solid red; */
+}
+
+.culling-cash{
+  width: 24.06vw;
+  height: 3vw;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* border: 1px solid green; */
+}
+
+.player-premium-container{
+  width: 12vw;
+  height: 3vw;
+  padding-right: .3vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  background-color: rgba(13,13,13,.4);
+  /* border: 1px solid rgba(250,250,250,.2); */
+  /* border: 1px solid blue; */
+}
+
+.player-cullcredits-container{
+  width: 12vw;
+  height: 3vw;
+  display: flex;
+  padding-right: .3vw;
+  margin-left: .5vw;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+  align-self: center;
+  background-color: rgba(13,13,13,.4);
+  /* border: 1px solid rgba(250,250,250,.2); */
+  /* border: 1px solid blue; */
+}
+
+.player-premium-icon-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.player-premium-container:hover{
+  outline: 1px solid rgba(204,0,0,1);
+  background-color: rgba(204,0,0,.5);
+}
+
+.culling-cash .player-premium-icon{
+  /* font: 2vw SucroseSlant-Three;
+  line-height: 1.5vw;
+  color: rgba(255,255,255,1); */
+  background-image: url("/images/token.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.culling-cash .player-currency-icon, .culling-cash .player-premium-icon{
+  width: 2vw;
+  height: 2vw;
+  flex: 0 1 auto;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* border: 1px solid yellow; */
+}
+
+.culling-cash .player-currency-icon{
+  background-image: url("/images/credit.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* font: 2.6vw CullDings;
+  line-height: 1.5vw;
+  content: '\0055';
+  background-color: #fbaa0f;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+}
+
+.culling-cash .player-premium{
+  /* width: 8vw; */
+  height: 2vw;
+  font: 2vw SucroseSlant-Three;
+  line-height: 3vw;
+  color: rgba(255,255,255,1);
+  padding-top: .5vw;
+  flex: 0 1 auto;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* border: 1px solid orange; */
+}
+
+.culling-cash .player-premium-add{
+  width: 3vw;
+  height: 3vw;
+  font: 2vw SucroseSlant-Three;
+  line-height: 2vw;
+  color: rgba(255,255,255,1);
+  flex: 0 1 auto;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: rgba(13,13,13,.4);
+  /* border: 1px solid rgba(250,250,250,.2); */
+  /* border: 1px solid yellow; */
+}
+
+.culling-cash .player-cash{
+  /* width: 10vw; */
+  height: 2vw;
+  font: 2vw SucroseSlant-Three;
+  line-height: 3vw;
+  padding-top: .5vw;
+  color: rgba(255,255,255,1);
+  flex: 0 1 auto;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* border: 1px solid orange; */
+}
+
+#status-bar{
+  width: 100%;
+  position: absolute;
+  bottom: 13%;
+}
+
+.status-bar-container{
+  width: 100%;
+  height: 2vw;
+  background-color: rgba(13,13,13,.5);
+  color: rgba(255,255,255,1);
+  font: .8vw Sucrose-Three;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.status-bar-text-container{
+  width: 90%;
+  height: 50%;
+  padding: auto;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* border: 1px solid green; */
+}
+
+.status-bar-container .spacer{
+  width: 8%;
+  height: 100%;
+  margin-right: auto;
+}
+
+.status-bar-container .update-text{
+  width: 70%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* border: 1px solid blue; */
+}
+
+.status-bar-container .connection-status{
+  width: 16.5%;
+  height: 100%;
+  margin-left: auto;
+  overflow: hidden;
+  /* border: 1px solid green; */
+}
+
+.status-bar-container .connection-status ul {
+  padding: 0 .2vw;
+  font: .8vw Sucrose-Three;
+  line-height: .6vw;
+  color: green;
+  text-align: right;
+  list-style-position: inside;
+  /* border: 1px solid blue; */
+}
+
+.online{
+  color: green !important;
+}
+
+.offline{
+  color: red !important;
+}
+
+.authing {
+  color: yellow !important;
+}
+
+.status-bar-container .connection-status span{
+  font: .8vw Sucrose-Three;
+  text-transform: uppercase;
+  color: rgba(255,255,255,1);
+  /* border: 1px solid red; */
+}
+
+.isDisabled{
+}
+
+.challenges-sidebar{
+  position: absolute;
+  top: 15%;
+  right: 0;
+  height: 65%;
+  width: 30%;
+
+}
+
+.challenges-sidebar-sections{
+  flex: 0 1 auto;
+  display:flex;
+  flex-direction: column;
+  align-content: space-around;
+  align-items: flex-end;
+  justify-content: center;
+  order:2;
+  padding: 0;
+  margin: 0;
+}
+
+.challenges-sidebar-sections section{
+  width: 20vw;
+  height: 8vw;
+  margin: 1% 0;
+  padding: 1% 4% 1% 3%;
+  display: flex;
+  align-items: center;
+  background-color: rgba(20,20,20,.6);
+}
+
+.challenges-sidebar-title h1{
+  font: 2vw Sucrose-Three;
+  color: rgba(255,255,255,1);
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.challenges-sidebar-title{
+  order:1;
+  align-self: flex-start;
+}
+
+.left-section{
+  float:left;
+  text-align: left;
+  margin-right: auto;
+  width: 60%;
+}
+
+.right-section{
+  float:right;
+  text-align: right;
+  margin-left:auto;
+  width: 40%;
+}
+
+.left-section h1{
+  font: 1.2vw Sucrose-Three;
+  color: rgba(255,255,255,1);
+  padding: 0;
+  margin: 0;
+}
+
+.left-section h2{
+  font: .9vw Sucrose-Three;
+  color: rgba(175,175,175,1);
+  padding: 0 0 .5vw 0;
+  margin: 0;
+}
+
+.left-section h3{
+  font: .9vw Sucrose-Three;
+  color: rgba(204,0,1,1);
+  padding: 0 0 .5vw 0;
+  margin: 0;
+}
+
+.right-section span{
+  font: 4.5vw Sucrose-Three;
+  color: rgba(255,255,255,1);
+  padding: 0;
+  margin: 0;
+  text-align: right;
+}
+
+.right-section img{
+  width: 8vw;
+  height: 8vw;
+  padding: 0;
+  margin: 0;
+  opacity: .7;
+}
+
+.challenge-progress-container{
+  width:10vw;
+  height:.7vw;
+  position:relative;
+  background-color:rgba(255,255,255,.3);
+}
+
+.challenge-progressbar{
+  height:100%;
+  position:absolute;
+  line-height:inherit;
+  background-color:rgba(255,255,255,1);
+}
+
+.control-slider-option {
+  width: 13vw;
+  height: 1vw;
+  display: inline-block;
+  margin-left: 5.5vw;
+}
+
+.settings-item{
+  margin-bottom: 0.5vw;
+}
+
+.settings-item span{
+  font: 1.5vw Sucrose-BoldTwo;
+  color: rgba(255,255,255,1);
+}
+
+/* #Store-Button{
+  width: 20vw !important;
+  height: 15vh;
+  padding: 2vw 1vw;
+  margin: 1vw .5vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  font-family: Sucrose-Bold;
+  font-size: 2.5vw;
+  background-color: rgba(50, 50, 50, 0);
+  outline: 6px solid rgba(72, 72, 72, 1);
+  border: 1px solid blue;
+}
+
+#Store-Button:hover, #Store-Button:focus{
+  background: radial-gradient(ellipse at center, rgba(204,0,0,0.16) 0%,rgba(102,0,0,0.16) 100%);
+  outline: 6px solid rgba(204, 0, 0, 1);
+  box-shadow:
+              inset 0px 0px 20px rgba(204, 0, 0, 1),
+              0px 0px 50px rgba(204, 0, 0, 1);
+} */
+
+#store-crate-menu-options{
+  width: 18vw;
+  height: 40vh;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: 0vw;
+  bottom: 20vh;
+  /* border: 1px solid red; */
+}
+
+#store-crate-menu-options h3{
+  color: white;
+  font-size: 2vw;
+  display: flex;
+}
+
+#store-crate-menu-options ul{
+  width: 18vw;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+}
+.store-banner:hover, .store-banner:focus, .crate-banner:hover, .crate-banner:focus{
+  transform: scale3d(1.1, 1.1, 1);
+  border: 3px solid rgba(204,0,0,1);
+}
+
+.store-banner{
+  width: 18vw;
+  height: 25vh;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 1vw;
+  display: flex;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 20%;
+  background-image: url('/images/Store/1101.png');
+  border: 3px solid rgba(0,0,0,1);
+}
+
+.store-banner-info-container{
+  width: 18vw;
+  height: 7vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1vh 1vw;
+  margin-top: auto;
+  text-align: center;
+  background-color: rgba(13,13,13,0.7);
+}
+
+.crate-banner{
+  width: 18vw;
+  height: 12vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 45%;
+  background-image: url("../images/cullCrate.png");
+  border: 3px solid rgba(0,0,0,1);
+}
+
+.crate-banner-info-container{
+  width: 18vw;
+  height: 6vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1vh;
+  margin-top: auto;
+  /* text-align: center; */
+  background-color: rgba(13,13,13,0.7);
+}
+
+.currency-purchase-xbox-button{
+  width: 3vw;
+  height: 3vw;
+  font: 3vw CullDings !important;
+  color: white;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  /* content: "="; */
+  /* border: 1px solid red; */
+}
+
+.currency-purchase-xbox-button:before{
+  content: "\003c";
+}
+
+/*LOADING SCREEN
+.loading-background {
+  width: 100%;
+  height:100%;
+  background-image: url("/images/LS_Jungle_P.png");
+}
+
+.loading-map-info {
+  position: absolute;
+  top: 5%;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin-left: 2%;
+  position: absolute;
+  display: inline-flex;
+  flex-flow: column;
+  text-align: left;
+}
+
+#title {
+  font-family: ForgottenFuturist-Bold;
+  display: inline-block;
+  font-size: 4vw;
+  background-color: rgba(13, 13, 13, 0.5);
+  line-height: 3.7vw;
+  height: 3.6vw;
+  padding: 0 .5vw 0 .5vw;
+  color: rgba(255,255,255,0.8);
+  text-shadow: 2px 0px 0 rgba(0, 255, 255, 0.5),
+              -2px -0px 0 rgba(255, 0, 0, 0.5);
+}
+
+#mode {
+  font-family: ForgottenFuturist;
+  display: inline-block;
+  font-size: 3vw;
+  background-color: rgba(13, 13, 13, 0.5);
+  line-height: 2.7vw;
+  height: 2.8vw;
+  padding: 0 .5vw 0 .5vw;
+  color: rgba(255,255,255,0.8);
+  text-shadow: 2px 0px 0 rgba(0, 255, 255, 0.5),
+              -2px -0px 0 rgba(255, 0, 0, 0.5);
+}
+
+#status {
+  display: inline-flex;
+  margin: 0;
+  font: 1.5vw ForgottenFuturist-Italic;
+  color: rgba(220,220,220,1);
+}
+
+.loading-screen-container{
+  position: absolute;
+  top: 86.5%;
+  width: 100%;
+  height: 15%;
+  padding-left: 2%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.loading-animated-icon {
+  position: relative;
+  width: 4vw;
+  height: 4vw;
+  padding: 0;
+  margin: 0;
+  margin-right: 2%;
+  background-image: url("/images/Culicon.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.loading-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-info span {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 1%;
+  font: 1.2vw ForgottenFuturist-Italic;
+  color: rgba(220,220,220,1);
+}
+
+meter {
+  width: 80vw;
+  height: .5vw;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+}
+
+meter::-webkit-meter-bar {
+  outline: .3vw solid rgba(51,51,51,.5);
+  background: rgba(51,51,51,.5);
+  border: none;
+}
+
+meter::-webkit-meter-optimum-value {
+  background: rgba(204,0,0,.5);
+}
+
+
+/* LOADOUT WIDGET
+
+.loadout-widget{
+  position: absolute;
+  top: 25%;
+  right: 0;
+  width: 20%;
+  height: 60%;
+  padding: 0;
+  margin: 0;
+}
+
+.loadout-widget-container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadout-widget-container ul{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.loadout-widget-select {
+  height: 10%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 2%;
+  background: rgba(51,51,51,0.5);
+  color: white;
+}
+
+.loadout-widget-select span {
+  margin: 0;
+  padding: 0;
+  font: 2.5vw ForgottenFuturist-Bold;
+  margin-bottom: 2%;
+  background: rgba(51,51,51,0.5);
+  color: white;
+}
+
+
+.loadout-widget-slot{
+  width: 100%;
+  height: 6.5vw;
+  padding: 0;
+  margin: 0;
+  padding-left: 3%;
+  margin-bottom: 2%;
+  background: rgba(13,13,13,0.5);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid red;
+}
+
+.loadout-widget-slot h1{
+  margin: 0;
+  padding: 0;
+  font: 1.5vw ForgottenFuturist-Bold-Italic;
+  color: rgba(250,250,250,0.9);
+  border: 1px solid lime;
+}
+
+.loadout-widget-slot p{
+  margin: 0;
+  padding: 0;
+  font: 1.5vw ForgottenFuturist-Italic;
+  color: rgba(170,170,170,1);
+  border: 1px solid cyan;
+}
+
+.loadout-widget-slot img{
+  margin: 0;
+  padding: 0;
+  width: 23%;
+  border: 1px solid magenta;
+}
+ */

@@ -1,0 +1,394 @@
+.pause-controls-menu-content{
+  height: 80%;
+  width: 100%;
+  box-sizing: border-box;
+  /* background-color: salmon;*/
+
+}
+
+/* #controls-nav-tab-options li:hover{
+  border: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+}
+
+#controls-nav-tab-options li:focus{
+  border: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+}
+
+#controls-nav-tab-options li:active{
+  border: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+  background: rgba(204,0,0,0.2);
+}
+
+#controls-nav-tab-options li.trigger-container:hover{
+  background-color: rgba(204,0,0,0);
+  border: none;
+} */
+
+/* .tab-focus{
+    color: rgba(255,255,255,1)!important;
+    background: rgba(204,0,0,0.2)!important;
+} */
+
+
+#settings-controls-menu{
+  font-family: Sucrose-Two;
+
+}
+
+#settings-controls-menu-options{
+  height: 70%;
+  width: 100%;
+  position: absolute;
+  top:20%;
+  left:0;
+}
+
+#pause-controls-menu-options ul {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-padding-start: 0;
+
+}
+
+.keyboard-table h1 {
+  padding: 0;
+  padding-left: 1vw;
+  margin: 0;
+  margin-top: 2vw;
+  font: 2vw Sucrose-Two;
+  background: linear-gradient(45deg, rgba(13,13,13,1) 0%, rgba(13,13,13,0) 40%);
+
+}
+
+.keyboard-table h1:first-child {
+  margin-top: 0;
+
+}
+
+.keyboard-table-container, .controller-table-container {
+ height: 100%;
+ width: 100%;
+ top: 0;
+ left: 0%;
+ position: absolute;
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+}
+
+.keyboard-table{
+  width: 65%;
+  font: 1.5vw Sucrose-Two;
+  color: white;
+  margin: 0;
+  padding: 0;
+  padding-top: .5vw;
+  overflow-y: scroll;
+}
+
+.controller-table{
+  width: 45%;
+  height: 100%;
+  font: 1.5vw Sucrose-Two;
+  color: white;
+  margin: 0;
+  padding: 0;
+  padding-top: .5vw;
+
+}
+
+.controller-image-container{
+  position: absolute;
+  height: 100%;
+  width: 55%;
+  margin:auto;
+  padding: auto;
+  background: linear-gradient(to bottom, rgba(13,13,13,0) 10%, rgba(13,13,13,0.5) 30%, rgba(13,13,13,0.5) 50%,rgba(0,0,0,0) 70%);
+
+}
+.controller-image img{
+  width: 45vw;
+}
+
+.controller-image{
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  display: flex;
+}
+
+.controls-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 2vw;
+  margin-bottom: 1vw;
+  /*padding-left: .5vw;*/
+}
+
+.controls-entry span{
+  margin: 0;
+  padding: 0;
+  padding-left: 1.5vw;
+}
+
+.controls-entry .action,
+.controls-entry .key {
+  /*background-color: rgba(255,255,255,0.1);
+  box-sizing: border-box;
+  border: 2px solid white;*/
+  margin-right: 0.8vw;
+  height: 3vw;
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.controls-entry:hover .action,
+.controls-entry:focus .action,
+.controls-entry:hover .key,
+.controls-entry:focus .key {
+  border: 2px solid rgba(204,0,0,1);
+}
+
+.controls-entry .action {
+  width: 60%;
+}
+
+.controls-entry .key {
+  width: 30%;
+}
+
+.controls-entry:focus .action span, .controls-entry:hover .action span {
+  text-indent: 1vw;
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+.controls-entry .key span {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+.controls-clear-notice {
+  font: 0.8vw Sucrose-BoldTwo;
+  color: white;
+  display:block;
+  padding-left: 0.5vw;
+  margin: 0;
+  float: right;
+  margin-right: 3.2vw;
+  margin-top: 0.25vw;
+}
+
+.control-bind-error{
+  color: rgb(204,0,0);
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  margin-top: 1vw;
+  display: block;
+  padding-top: 1vw;
+  font: 1.5vw Sucrose-BoldTwo !important;
+}
+
+.control-bind-error .hidden{
+  opacity:0;
+}
+
+.control-message-pulse{
+  -webkit-animation: keybind-message-pulse 0.5s ease-in 1;
+}
+.controls-weapon-bind-message {
+  height: 60%;
+  background-color: rgba(13,13,13,.8);
+  z-index: 10000;
+  color: white;
+  padding: 1vw;
+  margin: 1vw;
+}
+
+.controls-bind-clear{
+  font-size: 1vw;
+}
+
+.controls-bind-clear:hover{
+  color: rgba(13,13,13,0.7);
+}
+
+.controls-weapon-bind-message h1 {
+  font: 2vw Sucrose-BoldTwo;
+  margin: 0;
+}
+
+.controls-weapon-bind-message p {
+  font: 1.65vw Sucrose-Two;
+  margin: 0;
+}
+
+.message-table{
+  height: 100%;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+}
+
+.controls-weapon-bind-background{
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background: rgba(13,13,13,0.7);
+  z-index: 9999;
+}
+
+
+.option-footer{
+  font: 1.5vw Sucrose-Two;
+  height: 3vw;
+  width: auto;
+  color: rgba(220,220,220,1);
+  background-color: rgba(220,220,220,0);
+  border: 2px solid rgba(200,200,200,1);
+  margin: 0 .5vw;
+  padding: .5vw 1.5vw;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: all;
+  display: flex;
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+
+.option-footer:hover, .option-footer:focus{
+  border: 2px solid rgba(204,0,0,1) !important;
+  color: rgba(255,255,255,1) !important;
+}
+
+.option-footer:active{
+  border: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+  background: rgba(204,0,0,0.2);
+}
+
+
+#controller-setup-container ul li .vertical-list-menu-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 2vw;
+  /* border: 1px solid aqua; */
+}
+
+#controller-setup-container ul li .vertical-list-menu-item h2 {
+  transition: text-indent 0.15s ease-in-out;
+}
+
+#controller-setup-container ul li:focus .vertical-list-menu-item h2 {
+  text-indent: 1vw;
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+#controller-setup-container ul li:focus .vertical-list-menu-item{
+  padding-left: 0%;
+}
+
+#controller-setup-container .picker-container {
+  height: 2vw !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#controller-setup-container .picker-container span{
+  height: 1.8vw !important;
+  margin-top: .2vw;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#controller-setup-container ul li .vertical-list-menu-item .picker-container {
+  font: 1.5vw Sucrose-Two;
+  width: 30%;
+  height: 100%;
+}
+
+#controller-setup-container ul li .vertical-list-menu-item .picker-container i {
+  width: 20%;
+  text-align: center;
+  pointer-events: all;
+  font: 2vw CullDings;
+}
+
+#controller-setup-container ul li .vertical-list-menu-item .picker-container i:hover {
+  color: rgba(204,0,0,1);
+}
+
+#controller-setup-container ul li .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-Two;
+}
+
+#controller-setup-container ul li:focus .vertical-list-menu-item .picker-container span {
+  font: 1.5vw Sucrose-BoldTwo;
+}
+
+#controller-setup-container h2 {
+  font: 1.5vw Sucrose-Two;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  width: 45%;
+}
+
+#controller-setup-container ul{
+  width: 45%;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.5vw;
+}
+
+#controller-setup-container ul li {
+  width: 100%;
+  float: left;
+}
+/*
+.vertical-list-menu{
+  overflow-y: auto;
+  height: 73%;
+  font-family: ForgottenFuturist;
+  color: white;
+  width: 32%;
+}
+
+.vertical-list-menu ul{
+  overflow: hidden;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  font: 1.5vw ForgottenFuturist;
+  color: rgba(220,220,220,1);
+}
+
+.vertical-list-menu li{
+  width: 26.8vw;
+  height: 2vw;
+  transition: text-indent 0.15s ease-in-out;
+  padding: 0;
+  pointer-events: all;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}*/

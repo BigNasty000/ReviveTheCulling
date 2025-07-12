@@ -1,0 +1,191 @@
+ @font-face {
+    font-family: ForgottenFuturist-Bold;
+    src: local(ForgottenFuturist-Bold), url('../../fonts/forgotten_futurist_bd.otf') format('opentype');
+}
+/*
+@font-face {
+    font-family: ForgottenFuturist-Bold-Italic;
+    src: local(ForgottenFuturist-Bold-Italic), url('../../fonts/forgotten_futurist_bd_it.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist;
+    src: local(ForgottenFuturist), url('../../fonts/Forgotten_Futurist_Rg.ttf');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Italic;
+    src: local(ForgottenFuturist-Italic), url('../../fonts/forgotten_futurist_rg_it.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Black;
+    src: local(ForgottenFuturist-Black), url('../../fonts/forgotten_futurist_bl.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Black-Italic;
+    src: local(ForgottenFuturist-Black-Italic), url('../../fonts/forgotten_futurist_bl_it.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Light;
+    src: local(ForgottenFuturist-Bold), url('../../fonts/forgotten_futurist_lt.otf') format('opentype');
+}
+
+@font-face {
+    font-family: ForgottenFuturist-Light-Italic;
+    src: local(ForgottenFuturist-Light-Italic), url('../../fonts/forgotten_futurist_lt_it.otf') format('opentype');
+}
+
+@font-face {
+  font-family: Glyphicons-Halflings;
+  src: url('../../fonts/glyphicons-halflings-regular.eot') format('embedded-opentype');
+} */
+
+/* FONT NORMAL VERSIONS */
+@font-face {
+    font-family: Sucrose-Regular;
+    src: url('../../fonts/SucroseSlant-Regular.otf') format('opentype');
+}
+@font-face {
+    font-family: Sucrose-One;
+    src: url('../../fonts/Sucrose-One.otf') format('opentype');
+}
+@font-face {
+    font-family: Sucrose-Two;
+    src: url('../../fonts/Sucrose-Two.otf') format('opentype');
+}
+@font-face {
+    font-family: Sucrose-Three;
+    src: url('../../fonts/Sucrose-Three.otf') format('opentype');
+}
+@font-face {
+    font-family: Sucrose-Four;
+    src: url('../../fonts/Sucrose-Four.otf') format('opentype');
+}
+
+
+/* FONT NORMAL-BOLD VERSIONS */
+@font-face {
+    font-family: Sucrose-Bold;
+    src: url('../../fonts/Sucrose-Bold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Sucrose-BoldOne;
+    src: url('../../fonts/Sucrose-BoldOne.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Sucrose-BoldTwo;
+    src: url('../../fonts/Sucrose-BoldTwo.otf');
+}
+
+@font-face {
+    font-family: Sucrose-BoldThree;
+    src: url('../../fonts/Sucrose-BoldThree.otf') format('opentype');
+}
+
+@font-face {
+    font-family: Sucrose-BoldFour;
+    src: url('../../fonts/Sucrose-BoldFour.otf') format('opentype');
+}
+
+
+/* FONT SLANT VERSIONS */
+@font-face {
+    font-family: SucroseSlant-Regular;
+    src: url('../../fonts/SucroseSlant-Regular.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-One;
+    src: url('../../fonts/SucroseSlant-One.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-Two;
+    src: url('../../fonts/SucroseSlant-Two.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-Three;
+    src: url('../../fonts/SucroseSlant-Three.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-Four;
+    src: url('../../fonts/SucroseSlant-Four.otf') format('opentype');
+}
+
+
+/* FONT SLANT-BOLD VERSIONS */
+@font-face {
+    font-family: SucroseSlant-Bold;
+    src: url('../../fonts/SucroseSlant-Bold.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-BoldOne;
+    src: url('../../fonts/SucroseSlant-BoldOne.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-BoldTwo;
+    src: url('../../fonts/SucroseSlant-BoldTwo.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-BoldThree;
+    src: url('../../fonts/SucroseSlant-BoldThree.otf') format('opentype');
+}
+@font-face {
+    font-family: SucroseSlant-BoldFour;
+    src: url('../../fonts/SucroseSlant-BoldFour.otf') format('opentype');
+}
+
+
+/* EXTRAS */
+@font-face {
+  font-family: Glyphicons-Halflings;
+  src: url('../../fonts/glyphicons-halflings-regular.eot') format('embedded-opentype');
+}
+
+@font-face {
+  font-family: CullDings;
+  src: url('../../fonts/CullDings.ttf');
+}
+
+h1 {
+  font-size: 2.5vw;
+  line-height: 2.5vw;
+  font-family: Sucrose-BoldThree;
+  padding: 0;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.45vw;
+  line-height: 1.45vw;
+  font-family: Sucrose-BoldThree;
+  padding: 0;
+  margin: 0;
+}
+
+h3 {
+  font-size: .94vw;
+  line-height: .94vw;
+  font-family: Sucrose-Three;
+  padding: 0;
+  margin: 0;
+}
+
+h4 {
+  font-size: .83vw;
+  line-height: 1.4vh;
+  font-family: Sucrose-BoldThree;
+  padding: 0;
+  margin: 0;
+}
+
+h5 {
+  font-size: .63vw;
+  line-height: 1.1vh;
+  font-family: Sucrose-BoldThree;
+  padding: 0;
+  margin: 0;
+}

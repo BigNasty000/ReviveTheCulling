@@ -1,0 +1,17 @@
+.jungle-map-bg {
+  background-image: url("../../images/Jungle_Map.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.prison-map-bg {
+  background-image: url("../../images/Prison_Map.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.training-practice-bg {
+  background-image: url("../../images/Offline_Game.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}

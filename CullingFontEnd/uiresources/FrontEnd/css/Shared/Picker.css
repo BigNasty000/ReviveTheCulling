@@ -1,0 +1,72 @@
+.vertical-list-menu.picker-menu {
+  width: 60%;
+}
+
+/* Use a transparent border so contents don't shift on highlight */
+.picker-menu .vertical-list-menu-item,
+.picker-menu  .vertical-list-menu-item{
+  border: 2px solid rgba(0,0,0,0);
+}
+
+.picker-menu ul li {
+  width: 100%;
+}
+
+.picker-menu ul li .vertical-list-menu-item {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.picker-menu ul li .vertical-list-menu-item h2 {
+  margin: 0;
+  padding: 0;
+  font: 2vw Sucrose-Two;
+}
+
+.picker-menu ul li .vertical-list-menu-item .picker-label {
+  width: 90%;
+
+}
+.picker-menu ul li .vertical-list-menu-item .picker-label h2 {
+  transition: text-indent 0.15s ease-in-out;
+}
+
+.picker-menu ul li:focus .vertical-list-menu-item .picker-label h2 {
+  text-indent: 1vw;
+}
+
+.picker-menu ul li:focus .vertical-list-menu-item{
+  padding-left: 0%;
+}
+
+.picker-container {
+  display: flex;
+  justify-content: flex-start;
+  font: 2vw Sucrose-BoldTwo;
+  width: 50%;
+  height: 100%;
+}
+
+.picker-container i {
+  width: 20%;
+  text-align: center;
+  pointer-events: all;
+  font: 2.25vw CullDings;
+}
+
+.picker-container i:hover {
+  color: rgba(204,0,0,1);
+}
+
+.picker-container span {
+  font: 2vw Sucrose-Two;
+  text-align: center;
+  width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+}

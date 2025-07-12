@@ -1,0 +1,11 @@
+#casual-menu .casual-ffa-bg {
+  background-image: url("../../images/FreeForAll.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#casual-menu .casual-teams-bg {
+  background-image: url("../../images/Teams.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

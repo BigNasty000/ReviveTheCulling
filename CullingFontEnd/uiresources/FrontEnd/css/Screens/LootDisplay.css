@@ -1,0 +1,99 @@
+.loot-container{
+  width: 100%;
+  height: 10%;
+  position: absolute;
+  top: 65%;
+}
+
+.loot-labels-container{
+  padding: 0 4vw;
+  /*flex: 0 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  align-items: flex-start;
+  justify-content: center;*/
+}
+
+.loot-label-container:nth-child(1){
+  position: absolute;
+  top: 15%;
+  left: 4.2%;
+}
+
+.loot-label-container:nth-child(2){
+  position: absolute;
+  top: 30%;
+  left: 25.5%;
+}
+
+.loot-label-container:nth-child(3){
+  position: absolute;
+  top: 15%;
+  left: 46.6%;
+}
+
+.loot-label-container:nth-child(4){
+  position: absolute;
+  top: 30%;
+  left: 69.1%;
+}
+
+.loot-label-container{
+  width: 15vw;
+  margin: 0 5vw;
+  -webkit-animation: label-animation 1s ease-in 1;
+  -webkit-transition: all 1.5s;
+  transition-timing-function: ease-in;
+  display: flex;
+  flex-direction: column;
+}
+
+.loot-label{
+  padding: .5vw .5vw;
+  font: 1.3vw SucroseSlant-Bold;
+  color: white;
+  text-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  line-height: 1.4vw;
+  background-color: rgba(13,13,13,.8);
+  align-items: center;
+  text-align: center;
+}
+
+.exchange-label{
+  padding: .5vw 1vw;
+  font: 1vw SucroseSlant-Regular;
+  color: white;
+  background-color: rgba(100,0,0,1);
+  align-items: center;
+  text-align: center;
+}
+
+.cratecrediticon{
+  width: 1vw;
+  vertical-align:text-top;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.exchange-label .exchange-currency-icon{
+  width: 8%;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.exchange-label .exchange-currency-icon:before{
+  /* font: 1.5vw CullDings;
+  line-height: 1vw;
+  content: '\0055';
+  background-color: black;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+}
+
+@-webkit-keyframes label-animation {
+    0% { opacity: 0; transform: scale(0.5);}
+    80% { opacity: 0.8; transform: scale(1.05);}
+    100% { opacity: 1.0; transform: scale(1.0);}
+}

@@ -1,0 +1,37 @@
+@font-face {
+    font-family: Roboto-Black;
+    src: local(Roboto-Black), url('Roboto-Black.ttf') format('opentype');
+}
+
+@font-face {
+    font-family: Roboto-Regular;
+    src: local(Roboto-Regular), url('Roboto-Regular.ttf') format('opentype');
+}
+
+#WeaponHelper {
+	bottom: 2em;
+	right: 25em;
+	margin: 0 0 0 0;
+	position: absolute;
+}
+
+.weaponContainer{
+	width: 335px;
+	height: 120px;
+	background-color: rgba(1,1,1,0.65);
+	font: 20px Roboto-Black;
+	-webkit-text-stroke: 1px rgba(0, 0, 0, 0.1);
+	text-shadow: 1.25px 1.25px black;
+    color: white;
+    border-radius: 25px;
+    border: 2px solid rgba(138,192,7, 0.65);
+    padding: 12px; 
+}
+
+.weaponContainer-title{;
+}
+
+.weaponContainer-text{
+	font: 14px Roboto-Regular;
+	padding-top: 4px;
+}

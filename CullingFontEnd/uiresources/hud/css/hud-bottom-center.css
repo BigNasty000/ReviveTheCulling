@@ -1,0 +1,262 @@
+#spectator-player-element{
+  position: absolute;
+  bottom: 7vw;
+  left: 0;
+  right: 0;
+  margin-left:auto;
+  margin-right:auto;
+  width: 15vw;
+  height: 10vw;
+  background-color: rgba(0,0,0,0.0);
+  pointer-events: none;
+  z-index: -1;
+  /* border: 1px solid lime; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+#spectator-player-element .party-member-name{
+  position: absolute;
+  font: 1.2vw ForgottenFuturist-Bold-Italic;
+  color: rgba(255, 255, 255, 1);
+  width: 100%;
+  height: 2vw;
+  padding-left: 0.3vw;
+  margin-top: 0.3vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 1200;
+
+  /* border: 1px solid magenta; */
+}
+
+#spectator-player-element .spectator-stamina-meter-container{
+  display: flex;
+  height: 0.5vw;
+  width: 100%;
+  background-color: rgba(13,13,13,0);
+  pointer-events: none;
+  margin-bottom: 0.3vw;
+  /* border: 1px solid yellow; */
+
+}
+
+#spectator-player-element .stamina-meter-content{
+  height: 0.5vw;
+  width: 100%;
+  float: left;
+  position:absolute;
+}
+
+#spectator-player-element .stamina-bar{
+  position:absolute;
+  height: 0.5vw;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  font-size: 2.25vw;
+  z-index: 1000;
+}
+
+#spectator-player-element .party-stamina-bar{
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+#spectator-player-element  .spectator-health-bar-container {
+  display: flex;
+  height: 2vw;
+  width: 100%;
+  background-color: rgba(13,13,13,0.3);
+  margin-bottom: 0.3vw;
+}
+
+#spectator-player-element .health-meter-content{
+  height: 2vw;
+  width: 100%;
+  float: left;
+  position:absolute;
+}
+
+#spectator-player-element .health-bar{
+  position:absolute;
+  height: 2vw;
+  width: 100%;
+  background-color: rgba(227,0,5,0.5);
+  font-size: 2.25vw;
+  z-index: 1000;
+}
+
+#spectator-player-element .party-health-bar{
+  pointer-events: none;
+}
+
+#spectator-player-element .armor-icon-container{
+  display: flex;
+  height: 1.4vw;
+  width: 4.5vw;
+  background-image: url('../../images/barbackground.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  /* border: 1px solid pink; */
+}
+
+ #spectator-player-element .armor-icon-background{
+   position: absolute;
+   width: 4.5vw;
+   height: 1.4vw;
+   background: linear-gradient(to right, rgba(0,146,48,1) 0%,rgba(0,200,50,1) 100%);
+}
+
+ #spectator-player-element .armor-icon-foreground{
+   position: absolute;
+   width: 1vw;
+   height: 1vw;
+   background-image: url('../images/Armor_Icon.svg');
+   background-size: contain;
+}
+
+
+ #spectator-buffarmor-container {
+   width: 15vw;
+   margin-bottom: 0.3vw;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: flex-end;
+   /* border: 1px solid blue; */
+ }
+
+
+ #spectator-player-element .spectator-buff-container{
+   width: 10vw;
+   height: auto;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+   flex-wrap:nowrap;
+   /* border: 1px solid orange; */
+ }
+
+ #spectator-player-element .buff-icon {
+   position: relative;
+   width: 1.5vw;
+   height: 1.5vw;
+   background-image: url('../../images/barbackground.png');
+   background-size: cover;
+   background-repeat: no-repeat;
+ }
+
+ #spectator-player-element .buff-icon-background {
+   position: absolute;
+   width: 1.5vw;
+   max-height: 1.5vw;
+   background-color: rgba(0,35,255,0.4);
+ }
+
+ #spectator-player-element .buff-icon-foreground {
+   position:absolute;
+   width: 1.5vw;
+   height: 1.5vw;
+   background-image: url("../images/Wounds/Slow_Wound.svg");
+   background-size: contain;
+ }
+
+ #spectator-player-element .spectator-wound-container{
+   display: flex;
+   width: 100%;
+   height: auto;
+   flex-direction: row;
+   justify-content: center;
+   flex-wrap:nowrap;
+   /* border: 1px solid aqua; */
+ }
+ #spectator-wound-container .buff-icon {
+   position: relative;
+   width: 2vw;
+   height: 2vw;
+   background-image: url('../../images/barbackground.png');
+   background-size: cover;
+   background-repeat: no-repeat;
+ }
+
+ #spectator-player-element .wound-icon-background {
+   position: absolute;
+   width: 2vw;
+   height: 2vw;
+   background-color: rgba(227,0,5,0.7);
+   bottom: 0;
+ }
+
+ #spectator-player-element .wound-icon-foreground {
+   position: absolute;
+   width: 2vw;
+   height: 2vw;
+   background-image: url("../images/Wounds/Slow_Wound.png");
+   background-size: contain;
+   z-index:9999;
+ }
+
+
+
+.player-wound-container{
+  position: absolute;
+  bottom: 1.3vw;
+  width: 45vw;
+  height: 4vw;
+  margin-left: auto;
+  margin-right: auto;
+  pointer-events: none;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
+
+}
+
+.wound-icon {
+  width: 4vw;
+  height: 4vw;
+  background:linear-gradient(to top, rgba(13, 13, 13, 0.5) 0%, rgba(13, 13, 13, 0) 100%);
+  margin-right: 0.3vw;
+  margin-left: 0.3vw;
+}
+
+.wound-icon-background {
+  position: absolute;
+  width: 4vw;
+  background-color: rgba(227,0,5,0.5);
+  bottom: 0;
+}
+
+.wound-icon-foreground {
+  position: absolute;
+  width: 4vw;
+  height: 4vw;
+  background-image: url("../images/Wounds/Slow_Wound.png");
+  background-size: cover;
+  z-index: 9999;
+}
+
+.spectator-player-data{
+    display: block;
+    margin-top: 0.25vw;
+    font: 2vw ForgottenFuturist-Bold;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+}
+
+.spectator-player-wounds{
+  width: 100%;
+  height: 5vw;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+}

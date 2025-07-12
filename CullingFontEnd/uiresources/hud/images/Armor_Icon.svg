@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+	.st1{display:inline;fill:#4C4C4C;}
+	.st2{display:inline;fill:#999999;}
+	.st3{font-family:'ArialMT';}
+	.st4{font-size:12px;}
+	.st5{fill:#FFFFFF;}
+</style>
+<g id="Background" class="st0">
+	<rect x="-592" y="-148" class="st1" width="1460" height="1460"/>
+	<text transform="matrix(1 0 0 1 1.2724 -2.295)" class="st2 st3 st4">15</text>
+</g>
+<g id="Wounds" class="st0">
+</g>
+<g id="WoundsV2" class="st0">
+</g>
+<g id="Buffs" class="st0">
+</g>
+<g id="BuffsV2">
+	<g>
+		<path class="st5" d="M62.8,15.7c-27.4,0-46.9-5.3-46.9-5.3s0.5,37,6.8,65.1c6.1,27.7,40.4,41.7,41.3,42.2l0,0l0,0l0,0l0,0
+			c1-0.4,35.2-14.3,41.3-42.2c6.1-28.1,6.8-65.1,6.8-65.1S90.2,15.7,62.8,15.7z"/>
+	</g>
+</g>
+</svg>

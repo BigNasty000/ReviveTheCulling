@@ -1,0 +1,58 @@
+#settings-menu .tiled-menu-options-container ul li.audio{
+  background-image: url('../../../images/Settings/audio.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li.video{
+  background-image: url('../../../images/Settings/video.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li.gameplay{
+  background-image: url('../../../images/Settings/gameplay.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li.controls{
+  background-image: url('../../../images/Settings/controls.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li.controls{
+  background-image: url('../../../images/Settings/controls.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li.credits{
+  background-image: url('../../../images/Settings/credits.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#settings-menu .tiled-menu-options-container ul li{
+  background-position: center 30%;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+}
+
+#settings-menu .tiled-menu-rollover {
+  background-color: rgba(13,13,13,0);
+}
+
+#settings-menu .tiled-menu-options-container ul{
+  height: 60%;
+  width: 97%;
+}
+
+#settings-menu .tiled-menu-options-container ul li {
+  width: 18%;
+}
+
+#settings-menu .tiled-menu-options-container li .play-title h1 {
+  font-size: 2vw;
+}

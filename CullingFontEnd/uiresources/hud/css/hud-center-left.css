@@ -1,0 +1,71 @@
+.hud-center-left-container{
+  position: absolute;
+  left: 1vw;
+  top: 10%;
+  width: 12vw;
+  height: 10vw;
+  background-color: rgba(0,0,0,0.0);
+  pointer-events: none;
+  /* border: 1px solid blue; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.party-member-name {
+  position: absolute;
+  font: 1.5vw ForgottenFuturist-Bold-Italic;
+  color: rgba(255, 255, 255, 1);
+  width: 100%;
+  padding-left: 0.3vw;
+  margin-top: 0.3vw;
+  height: 1.75vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1200;
+}
+
+.party-health-bar-value{
+  position: absolute;
+  pointer-events: none;
+  height: 2.5vw;
+}
+
+.party-health-bar{
+  position: absolute;
+  height: 2.5vw;
+  pointer-events: none;
+}
+
+.party-health-meter{
+  display: flex;
+  margin-bottom: 0.3vw;
+  height: 2.5vw;
+  width: 100%;
+  pointer-events: none;
+  /* border: 1px solid lime; */
+}
+
+
+.party-stamina-meter-content{
+  display: flex;
+  width: 100%;
+  height: .8vw;
+  position: relative;
+  background-color: rgba(13,13,13,0);
+  pointer-events: none;
+}
+
+.party-stamina-bar{
+  position: absolute;
+  height: 100%;
+  pointer-events: none;
+}
+
+.party-player-wounds {
+  display: flex;
+  pointer-events: none;
+  /* border: 1px solid yellow; */
+}

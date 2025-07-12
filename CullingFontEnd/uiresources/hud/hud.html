@@ -1,0 +1,1494 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Victory</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Coherent CSS -->
+
+  <!-- Lib CSS Files-->
+  <link rel="stylesheet" href="../libs/bootstrap.min.css">
+
+  <!-- HUD CSS Files-->
+  <link href="css/Picker.css" rel="stylesheet"/>
+  <link href="css/VerticalListMenu.css" rel="stylesheet"/>
+  <link href="css/hud-fonts.css" rel="stylesheet"/>
+  <link href="css/hud-animations.css" rel="stylesheet"/>
+  <link href="css/hud.css" rel="stylesheet"/>
+  <link href="css/hud-center.css" rel="stylesheet"/>
+  <link href="css/hud-bottom-left.css" rel="stylesheet"/>
+  <link href="css/hud-top-left.css" rel="stylesheet"/>
+  <link href="css/hud-bottom-right.css" rel="stylesheet"/>
+  <link href="css/hud-bottom-center.css" rel="stylesheet"/>
+  <link href="css/hud-center-left.css" rel="stylesheet"/>
+  <link href="css/Screens/Screens.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../globalstyles/globalstylesheet.css"></link>
+  <link rel="stylesheet" href="../globalstyles/animate.css"></link>
+</head>
+
+<body class="hidden">
+  <!-- Coherent JS -->
+  <script src="../libs/coherent.js"></script>
+
+  <!-- Localization JS -->
+
+
+  <!-- Lib JS -->
+  <script src="../libs/jquery-2.0.3.min.js"></script>
+  <script src="../libs/bootstrap.min.js"></script>
+  <script src="../libs/rivets.bundled.min.js"></script>
+  <script src="../libs/rivets.js"></script>
+  <script src="../libs/rivets.formatters.shared.js"></script>
+  <script src="../libs/underscore.js"></script>
+
+  <!-- HUD JS -->
+
+  <!-- DO WORK -->
+  <div class="container" id="reportPlayer-container">
+    <div class="modal fade" id="reportPlayerModal" role="dialog">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="topc1 leftc1"></div>
+          <div class="topc1 rightc1"></div>
+          <div class="bottomc1 rightc1"></div>
+          <div class="bottomc1 leftc1"></div>
+          <div class="modal-header">
+            <h4 class="modal-title report-title">Report Player</h4>
+          </div>
+          <div class="modal-body">
+            <span class="dropdown-title report-body-label">Player:</span>
+            <div class="dropdown report-dropdown">
+              <button class="btn btn-info dropdown-toggle dropdown-toggle-report" type="button" data-toggle="dropdown">
+                { ReportData.selectedPlayer.nickname}
+                <span class="caret" style="float: right; margin-top:0.5vw"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-report-player">
+                <div rv-each-player="ReportData.playerList">
+                  <li><a href="#" rv-data-nickname="player.nickname" rv-data-onlineid="player.onlineid">{player.nickname}</a></li>
+                </div>
+              </ul>
+            </div><br><br>
+            <span class="dropdown-title report-body-label">Reason:</span>
+            <div class="dropdown report-dropdown">
+              <button class="btn btn-info dropdown-toggle dropdown-toggle-report" type="button" data-toggle="dropdown">
+                { ReportData.selectedReason }
+                <span class="caret" style="float: right; margin-top:0.5vw"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-report-reason">
+                <div rv-each-reason="ReportData.reasonList">
+                  <li><a href="#">{reason}</a></li>
+                </div>
+              </ul>
+            </div>
+            <div class="report-section">
+              <span class="report-body-label">Additional Info:</span>
+              <textarea name="textarea" maxlength=500 id="report-input-box"></textarea>
+            </div>
+          </div>
+          <div class="report-error hidden" id="report-error">
+            {ReportData.error}
+          </div>
+          <div class="modal-footer">
+            <button id="report-submit" type="button" class="btn btn-default btn-default-quit btn-cancel-quit"
+              data-sound-mouseover="Play_HUD_Mouseover" data-sound-mouseclick="Play_HUD_Click" onclick="SubmitReport()">Submit</button>
+            <button id="report-cancel" type="button" class="btn btn-default btn-default-quit btn-cancel-quit" data-dismiss="modal"
+              data-sound-mouseover="Play_HUD_Mouseover" data-sound-mouseclick="Play_HUD_Click">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hud-overlay" id="hud-overlay">
+    <div id="compass-container">
+      <div id="compass-debug"></div>
+      <div id="compass-image"></div>
+        <div id="compass-teammember" class="hidden">
+          <span id="compass-teammember-dist">100</span>
+        </div>
+        <div id="compass-objective" class="hidden">
+          <span id="compass-objective-dist">100</span>
+        </div>
+      </div>
+    </div>
+    <div id="location-container">
+    </div>
+    <div id="objective-container" class="obj-hidden">
+      <h1>{ObjectiveData.Title}</h1>
+      <p>{ObjectiveData.Body}</p>
+    </div>
+<!--   XAV_AFM Disable Challenges <div id="challenge-toast-container">
+
+    </div>-->
+    <div class="game-message-container" id="game-message-container">
+    </div>
+    <div class="pause-menu-box hidden" id="pause-menu-box">
+      <div class="screen hidden" id="pause-main-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>PAUSE</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <div class="pause-menu-content">
+          <div class="pause-menu-list" id="pause-main-menu-options">
+            <ul class="pause-menu">
+              <li tabindex="0" data-push-screen="PauseRecipes">
+                <span>Crafting Recipes</span>
+              </li>
+              <li tabindex="0" data-push-screen="PauseGameplay">
+                <span>General</span>
+              </li>
+              <li tabindex="0" data-push-screen="PauseAudio">
+                <span>Audio</span>
+              </li>
+              <li tabindex="0" data-push-screen="PauseVideo" rv-unless="matchData.bIsConsole">
+                <span>Video</span>
+              </li>
+              <li tabindex="0" data-push-screen="PauseControls">
+                <span>Controls</span>
+              </li>
+              <!--<li tabindex="0" onclick="ReportPlayerClicked()">
+                <span>Report a Player</span>
+              </li>-->
+              <li tabindex="0" data-action="Quit">
+                <span>Quit</span>
+              </li>
+            </ul>
+          </div>
+          <div class="loadout-list">
+            <div class="airdrop-list-container">
+              <h1>AIRDROP</h1>
+              <ul class="airdrop">
+                <li>{ matchData.playerAirdrop.AssetName | getAirdropName }
+                  <ul class="airdrop-item-list">
+                    <!--<img rv-each-airdropitem="matchData.playerAirdrop.Items" rv-src="airdropitem | getAirdropItemIcon">-->
+                    <li rv-each-airdropitem="matchData.playerAirdrop.Items">{airdropitem | getAirdropItemName}</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="perk-list-container">
+              <h1>PERKS</h1>
+              <ul class="perks">
+                <li rv-each-perk="matchData.playerPerks">
+                  <img rv-src="perk.AssetName | getIconForPerk"/>
+                  <span>{perk.AssetName | getPerkName}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+<!--  XAV_AFM Disable Challenges
+          <div class="loadout-list">
+            <h1>CHALLENGES</h1>
+            <div class="challenge-toast" rv-each-challenge="screenData.Challenges" rv-class-static-complete="challenge.bIsComplete">
+              <div class="challenge-strip"></div>
+              <div class="challenge-toast-content-group static-incomplete">
+                <img class="challenge-icon" rv-src="challenge.ChallengeType | formatChallengeIcon">
+                <content class="challenge-toast-content">
+                  <h1 class="challenge-description">{challenge.Description}</h1>
+                  <span class="challenge-progress">{challenge | formatChallengeProgress < challenge.Progress}</span>
+                  <i class="glyphicon glyphicon-ok"></i>
+                </content>
+              </div>
+            </div>
+          </div>-->
+        </div>
+      </div>
+      <div class="screen hidden" id="pause-controls-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>CONTROLS</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <div class="player-profile-nav-bar" id="controls-nav-options">
+          <ul class="player-profile-nav-bar-list" id="controls-nav-tab-options">
+            <li rv-show="FooterData.bHasGamepad" class="trigger-container">
+              <span class="left-trigger trigger"></span>
+            </li>
+            <li tabindex="0" id="keyboard-setup" class="player-profile-tab controls-nav-tab" onclick="PauseControlsScreen.prototype.MouseTabClick(this)">
+              <span>KEYBOARD/MOUSE</span>
+            </li>
+            <li tabindex="0" id="controller-setup" class="player-profile-tab controls-nav-tab" onclick="PauseControlsScreen.prototype.MouseTabClick(this)">
+              <span>CONTROLLER</span>
+            </li>
+            <li rv-show="FooterData.bHasGamepad" class="trigger-container">
+              <span class="right-trigger trigger"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="pause-menu-content">
+          <div id="settings-controls-menu-options">
+            <div class="controller-table-container hidden" id="controller-setup-container">
+              <div class="controller-table vertical-list-menu" id="controller-table">
+                <ul>
+                  <li tabindex="0" data-picker-config-var="Layout">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Layout</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>Layout {ControllerSettings.Layout}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="LookSenHor">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Look Sensitivity Horizontal</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.LookSenHor}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="LookSenVert">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Look Sensitivity Vertical</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.LookSenVert}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="InvertHor">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Invert Horizontal</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.InvertHor | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="InvertVert">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Invert Vertical</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.InvertVert | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="Vibration">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Vibration</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.Vibration | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="AimSenAst">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Aim Sensitivity Assist</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.AimSenAst}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="AimRotAst">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Rotational Assist</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.AimRotAst}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="RotAstDur">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                        <h2>Target Lock Duration</h2>
+                      </div>
+                      <div class="picker-container">
+                        <i data-picker="left">&#x0030;</i><span>{ControllerSettings.RotAstDur}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                  <li tabindex="0" data-picker-config-var="IrnSgtSen">
+                    <div class="vertical-list-menu-item">
+                      <div class="picker-label">
+                         <h2>Iron Sight Sensitivity</h2>
+                      </div>
+                      <div class="picker-container">
+                         <i data-picker="left">&#x0030;</i><span>{ControllerSettings.IrnSgtSen}</span><i data-picker="right">&#x002F;</i>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="controller-image-container" id="controller-image">
+                <div class="controller-image">
+                  <img rv-src="ControllerSettings.Layout | controllerImage"/>
+                </div>
+              </div>
+            </div>
+            <div class="keyboard-table-container hidden" id="keyboard-setup-container">
+              <div class="keyboard-table" id="keyboard-table">
+                <h1>MOVEMENT</h1>
+                <div class="controls-entry" rv-each-action="ActionMapData.AxisMap" onclick="OnAxisClicked(this)">
+                  <div class="axis-data action" onclick="OnAxisClicked(this)" rv-data-axis="action.Axis" rv-data-key="action.Keys | GetKey0">
+                    <span>
+                      {action.Axis}
+                    </span>
+                  </div>
+                  <div class="key" onclick="OnAxisClicked(this)" rv-data-axis="action.Axis" rv-data-key="action.Keys | GetKey0">
+                    <span>
+                      {action.Keys | GetKey0}
+                    </span>
+                  </div>
+                </div>
+                <h1>COMBAT</h1>
+                <div class="controls-entry" rv-each-action="ActionMapData.ActionMap">
+                  <div class="axis-data action" onclick="OnActionClicked(this, false)" rv-data-action="action.Action" rv-data-key="action.Keys | GetKey0">
+                    <span>
+                      {action.Action | FormatAction}
+                    </span>
+                  </div>
+                  <div class="key" onclick="OnActionClicked(this, false)" rv-data-action="action.Action" rv-data-key="action.Keys | GetKey0">
+                    <span>
+                      {action.Keys | GetKey0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="message-table">
+                <div class="controls-message hidden" id="KeyBindMessage">
+                  <div class="controls-weapon-bind-message">
+                    <h1>BIND</h1>
+                    <p>Press a key to bind to {KeyBindMessageData.KeyToBind | FormatAction}, or Escape to cancel.</p>
+                    <p class="control-bind-error" id="KeyBindMessageError">{KeyBindMessageData.ErrorMessage}</p>
+                  </div>
+                </div>
+                <div class="restore-option-footer">
+                  <span onclick="RestoreDefaultControls()">Restore Defaults</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen hidden" id="pause-gameplay-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>GENERAL</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <section id="pause-gameplay-menu-options" class="vertical-list-menu picker-menu">
+          <ul>
+            <li tabindex="0" data-picker-config-var="mouseSensitivity" rv-unless="matchData.bIsConsole">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Mouse Sensitivity</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.mouseSensitivity}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="invertY">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Invert Y-Axis</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.invertY | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="smoothMouse" rv-unless="matchData.bIsConsole">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Smooth Mouse</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.smoothMouse | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="showPing" rv-unless="matchData.bIsConsole">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Show Ping</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.showPing | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="fov">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Field of View (FOV)</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.fov}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="showWeaponTooltips">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Show Tooltips</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.showWeaponTooltips | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="showDamageNumbers">
+                <div class="vertical-list-menu-item">
+                    <div class="picker-label">
+                        <h2>Show Damage Numbers</h2>
+                    </div>
+                    <div class="picker-container" data-picker-config-var="showDamageNumbers">
+                        <i data-picker="left">&#x0030;</i><span>{screenData.showDamageNumbers | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                    </div>
+                </div>
+            </li>
+            <!-- <li tabindex="0" data-picker-config-var="showInGameHUD">
+                <div class="vertical-list-menu-item">
+                    <div class="picker-label">
+                        <h2>Show In-Game HUD</h2>
+                    </div>
+                    <div class="picker-container" data-picker-config-var="showInGameHUD">
+                        <i data-picker="left">&#x0030;</i><span>{screenData.showInGameHUD | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                    </div>
+                </div>
+            </li> -->
+          </ul>
+        </section>
+      </div>
+      <div class="screen hidden" id="pause-audio-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>Audio</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <section id="pause-audio-menu-options" class="vertical-list-menu picker-menu">
+          <ul>
+            <li tabindex="0" data-picker-config-var="masterVolume">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Master Volume</h2>
+                </div>
+                  <div class="picker-container" data-picker-config-var="masterVolume">
+                    <i data-picker="left">&#x0030;</i><span>{screenData.masterVolume}</span><i data-picker="right">&#x002F;</i>
+                  </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="musicVolume">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Lobby Music Volume</h2>
+                </div>
+                  <div class="picker-container" data-picker-config-var="musicVolume">
+                    <i data-picker="left">&#x0030;</i><span>{screenData.musicVolume}</span><i data-picker="right">&#x002F;</i>
+                  </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="teamChat">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Team Chat</h2>
+                </div>
+                <div class="picker-container" data-picker-config-var="teamChat">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.teamChat | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="proximityChat">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Proximity Chat</h2>
+                </div>
+                <div class="picker-container" data-picker-config-var="proximityChat">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.proximityChat | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="pushToTalk">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Push To Talk</h2>
+                </div>
+                <div class="picker-container" data-picker-config-var="pushToTalk">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.pushToTalk | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="speakerConfig">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Speaker Configuration</h2>
+                </div>
+                <div class="picker-container" data-picker-config-var="speakerConfig">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.speakerConfig | speakerConfigConversion}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+      <div class="screen hidden" id="pause-video-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>VIDEO</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <section id="pause-video-menu-options" class="pause-menu-content vertical-list-menu picker-menu">
+          <ul>
+            <li tabindex="0" data-picker-config-var="CurrRes">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Resolution</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.CurrRes}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="screenMode">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Screen Mode</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.screenMode | screenMode}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="postQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Post-Process</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.postQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="effectsQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Effects Quality</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.effectsQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="aaQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Anti-Aliasing Quality</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.aaQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="shadowQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Shadow Quality</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.shadowQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="viewDistQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>View Distance</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.viewDistQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="texQuality">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>Texture Quality</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.texQuality | basicSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+            <li tabindex="0" data-picker-config-var="vSync">
+              <div class="vertical-list-menu-item">
+                <div class="picker-label">
+                  <h2>V-Sync</h2>
+                </div>
+                <div class="picker-container">
+                  <i data-picker="left">&#x0030;</i><span>{screenData.vSync | trueFalseSetting}</span><i data-picker="right">&#x002F;</i>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+      <div class="screen hidden" id="pause-recipes-menu">
+        <div class="pause-menu-header">
+          <div class="pause-menu-title">
+            <h1>CRAFTING RECIPES</h1>
+          </div>
+          <div class="pause-menu-header-line"></div>
+        </div>
+        <div class="pause-menu-content">
+          <div class="pause-recipes-menu-content" id="pause-recipes-menu-options">
+            <h1>MELEE WEAPONS</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.MeleeWeapons">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div>{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+            <h1>RANGED WEAPONS</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.RangedWeapons">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div>{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+            <h1>TRAPS</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.Traps">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div>{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+            <h1>AMMO</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.Ammo">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div>{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+            <h1>ITEMS</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.Items">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div >{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+            <h1>GRENADES</h1>
+            <ul>
+              <li tabindex="0" rv-each-recipe="screenData.Grenades">
+                <div class="recipe-component recipe-title">
+                  <span>{recipe.Display}</span>
+                  <div class="recipe-cost"><div class="func-icon"></div><div>{recipe.Cost}</div></div>
+                </div>
+                <div class="recipe-component recipe-items">
+                  <img rv-src="recipe.Item1 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item3 | checkIconForWeaponBP" rv-src="recipe.Item3 | getIconForWeaponBPName"/>
+                  <img rv-show="recipe.Item4 | checkIconForWeaponBP" rv-src="recipe.Item4 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>+</span>
+                </div>
+                <div class="recipe-component">
+                  <img rv-src="recipe.Item2 | getIconForWeaponBPName"/>
+                </div>
+                <div class="recipe-decorator">
+                  <span>=</span>
+                </div>
+                <div class="recipe-result">
+                  <img rv-src="recipe.Result | getIconForWeaponBPName"/>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="chat-box">
+      <div id="chat-display" class="hidden">
+      </div>
+      <div id="chat-input-container" class="hidden">
+        <div id="chat-label">Team:</div>
+        <input tabindex="-1" id="chat-input" value="" type="text" name="chat" onclick="ClearChatInput()" onblur="OnChatInputLostFocus()">
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS FOOTER -->
+  <content id="controls-footer" class="">
+    <section class="button-section">
+      <div class="button-tooltip" rv-each-action="FooterData.Actions" rv-class-clickable="FooterData.isActionClickable | call action.value FooterData.Actions FooterData.bHasGamepad" rv-data-menu-action="action.value" rv-class-hidden="FooterData.shouldHideAction | call action.value FooterData.bHasGamepad" onclick="OnMenuActionClicked(this)">
+        <span rv-if="FooterData.shouldShowAction | call action.value FooterData.bHasGamepad" rv-class="FooterData.getActionClasses | call FooterData.bHasGamepad" rv-html="FooterData.getActionSymbol | call action.value FooterData.bHasGamepad"></span>
+        <span rv-if="FooterData.shouldShowAction | call action.value FooterData.bHasGamepad" class="control-text">{FooterData.getActionLabel | call action.value}</span>
+        <!--<span rv-if="FooterData.bIsController" class="control-icon controller" rv-html="action | formatActionButton"></span>
+        <span rv-unless="FooterData.bIsController" class="control-icon kbm">
+          {action | formatActionButton}
+        </span>-->
+
+      </div>
+    </section>
+  </content>
+
+<!--EOM COLOR BACKGROUND-->
+<content class="EOMBackground" id="EOMBackground">
+
+</content>
+
+<!-- SPECTATE SCREEN-->
+<content class="screen hidden" id="SpectateContainer">
+  <section class="action-button-container">
+    <div class="action-buttons-list">
+      <div class="action-button" id="Spectate-Summary-button">
+        <span class="kb-button" rv-hide="FooterData.bHasGamepad">TAB</span>
+        <span class="controller-button" rv-show="FooterData.bHasGamepad">&#53;</span>
+        <span class="button-text">MATCH SUMMARY</span>
+      </div>
+      <div class="action-button" id="Spectate-Exit-button">
+        <span class="kb-button" rv-hide="FooterData.bHasGamepad">ESC</span>
+        <span class="controller-button" rv-show="FooterData.bHasGamepad">&#60;</span>
+        <span class="button-text">MENU</span>
+      </div>
+    </div>
+  </section>
+</content>
+
+<!-- END OF MATCH HEADER -->
+<!--<content class="hidden" id="EOMHeaderContainer">
+  <section class="endofmatch-header-container">
+    <div class="endofmatch-header-overview"  id="">
+      <span class="header-outcome" id="EOMHeaderOutcomeTitle">{deathData.HeaderText}</span>-->
+      <!--<span class="header-gametype">Game Type</span>-->
+      <!--<span class="header-tod">{deathData.TimeAlive | formatTimeAlive }</span>-->
+  <!--  </div>
+  </section>
+</content>-->
+
+<!-- OUTCOME SCREEN-->
+<content class="screen hidden" id="EOMOutcomeContainer">
+  <section class="endofmatch-outcome-container">
+    <div class="endofmatch-outcome-status" id="EOMStatus">
+      <div class="endofmatch-outcome-image" id="EOMStatusImg"></div>
+    </div>
+    <section class="culling-card-container base-culling-card-container" rv-cardbackgroundimage="deathData.KillerAvatarURL" id="EOMKilledBy" rv-hide="deathData.bIsVictory | or deathData.bWasSuicide">
+      <div class="culling-card">
+        <div class="left-column">
+          <span class="player-level">{deathData.KillerLevel}</span>
+        </div>
+        <div class="right-column">
+          <span class="player-name">{deathData.KillerName}</span>
+          <!--<span class="player-rank">2</span>-->
+        </div>
+      </div>
+    </section>
+  </section>
+</content>
+<!-- END OF MATCH -->
+<!-- <content class="hidden" id="eom-screen-video">
+  <video id="eom-video">
+    <source src="../video/blueBackground.webm" type="video/webm">
+  </video>
+</content> -->
+ <content class="screen hidden" id="EOMContainer">
+    <section class="endofmatch-tab-navigation-container" id="EOMNavContainer">
+      <div class="endofmatch-tab-nav-bar">
+        <ul class="endofmatch-tab-nav-bar-list" id="EOMTabNav">
+          <li rv-show="FooterData.bHasGamepad" class="trigger-container">
+            <span class="left-trigger trigger"></span>
+          </li>
+          <li tabindex="0" id="EOMSummary" class="player-profile-tab controls-nav-tab" onclick="EndOfMatchScreen.prototype.MouseTabClick(this)">
+            <span>MATCH SUMMARY</span>
+          </li>
+          <li tabindex="0" id="EOMScoreboard" class="player-profile-tab controls-nav-tab" onclick="EndOfMatchScreen.prototype.MouseTabClick(this)">
+            <span>SCOREBOARD</span>
+          </li>
+          <li rv-show="FooterData.bHasGamepad" class="trigger-container">
+            <span class="right-trigger trigger"></span>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="endofmatch-summary-container" id="EOMSummary-container">
+      <div class="endofmatch-summary" id="" rv-if="matchData.gameModeType | checkGameModeType offlineGame.bIsLocalGame">
+        <div class="endofmatch-summary-performance">
+          <div class="match-placement-container">
+            <span class="match-placement-symbol"><img rv-src="matchStats.placed | checkPlace"></span>
+            <span class="match-placement-text">YOU PLACED {matchStats.placed | textFormatPlace}!</span>
+          </div>
+          <div class="match-rank-container">
+            <div class="match-rank">
+              <span class="match-rank-title">PLACE</span>
+              <span class="match-rank-place">{matchStats.placed | textFormatPlace}</span>
+              <span class="match-rank-score">{matchStats.placementPoints | checkValue}</span>
+            </div>
+            <div class="match-kills">
+              <span class="match-kills-title">KILLS</span>
+              <span class="match-kills-number">{matchStats.kills | checkValue}</span>
+              <span class="match-kills-score">{matchStats.killPoints | checkValue}</span>
+            </div>
+          </div>
+          <div class="match-score-container">
+            <div class="match-score">
+              <span class="match-score-title">MATCH SCORE</span>
+              <span class="match-score-total">{matchStats.matchScore | checkValue}</span>
+            </div>
+          </div>
+          <div class="level-up-outcome-container hidden" id="level-up">
+            <div class="level-up-outcome">
+              <span class="level-up-reached">LEVEL 5 REACHED!</span>
+              <span class="rewardcrateimage"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endofmatch-summary" rv-unless="matchData.gameModeType | checkGameModeType offlineGame.bIsLocalGame">
+          <div class="endofmatch-summary-performance-title">
+            <h1>PERFORMANCE</h1>
+          </div>
+          <div class="endofmatch-summary-performance-sections">
+            <section>
+              <div class="left-section">
+                <h1>DAMAGE DONE</h1>
+                <h2 rv-show="deathData.showXpProgress">CAREER AVERAGE: <span id="eom-career-avg-dmg"></span></h2>
+              </div>
+              <div class="right-section">
+                <span class="count" id="eom-match-dmg"></span>
+              </div>
+            </section>
+            <section>
+              <div class="left-section">
+                <h1>CONTESTANT KILLS</h1>
+                <h2 rv-show="deathData.showXpProgress">CAREER AVERAGE: <span id="eom-career-avg-kills"></span></h2>
+              </div>
+              <div class="right-section">
+                <span class="count" id="eom-match-kills"></span>
+              </div>
+            </section>
+            <section>
+              <div class="left-section">
+                <h1>F.U.N.C. EARNED</h1>
+                <h2 rv-show="deathData.showXpProgress">CAREER AVERAGE: <span id="eom-career-avg-func"></span></h2>
+              </div>
+              <div class="right-section">
+                <span class="count" id="eom-match-func"></span>
+              </div>
+            </section>
+          </div>
+      </div>
+
+        <!--XAV_AFM Disable Challenges
+            <div class="endofmatch-summary-challenges" id="endofmatch-summary-challenges">
+          <div class="endofmatch-summary-challenges-title">
+            <h1>Challenges</h1>
+          </div>
+          <div class="endofmatch-summary-challenges-sections">
+            <section rv-each-challenge="challengeData.Challenges">
+              <div class="left-section">
+                <h1>{challenge.Name}</h1>
+                <h2><span class="count">{challenge.Progress}</span>/{challenge.NumberRequired}</h2>
+                <div class="challenge-progress-container">
+                  <div class="challenge-progressbar" style="width:100%" id="{challenge.Name}"></div>
+                </div>
+              </div>
+              <div class="right-section">
+                <img class="scoreboard-airdrop-image" rv-src="challenge.ChallengeType | challengeImage">
+              </div>
+            </section>
+          </div>
+        </div>-->
+
+        <div class="endofmatch-summary-exp" id="EOMSummaryXP" rv-show="deathData.showXpProgress">
+          <!--<div class="endofmatch-summary-exp-title">
+            <h1>Experience Earned:</h1>
+            <span class="exp-earned">{deathData.xpEarned}</span>
+          </div>-->
+          <div class="endofmatch-summary-exp-bar">
+              <span>{deathData.playerLevel}</span>
+              <span class="exp-progress-container">
+                <div class="exp-progressbar" id="EOMXPPrgressBar" style="width:50%"></div>
+              </span>
+              <span>{deathData.playerLevel | formatNextLevel}</span>
+          </div>
+          <div class="endofmatch-summary-exp-total">
+            <span>{deathData.MatchStartXP}</span> / <span>{deathData.highXP | UpdateHightXP}</span> XP
+          </div>
+        </div>
+      </div>
+    </section>
+     <section class="endofmatch-scoreboard-container hidden" id="EOMScoreboard-container">
+      <div class="container-scoreboard">
+        <section class="scoreboard-header" tabindex="0">
+            <span class="scoreboard-rank">Rank</span>
+            <span class="scoreboard-name">Player</span>
+            <span class="scoreboard-kills">Kills</span>
+            <span class="scoreboard-status">Killed By</span>
+            <!--<span class="scoreboard-time">Time</span>-->
+            <span class="scoreboard-damage">Damage</span>
+        </section>
+        <section id="scoreboard-players-container">
+          <div rv-each-team="scoreData.teams">
+      			<div class="scoreboard-players" rv-each-player="team" tabindex="0" rv-data-player-id="player.playerID" rv-data-is-bot="player.bIsBot" onclick="GetXboxProfile(this)">
+      					<div class="scoreboard-stats">
+      						<span class="scoreboard-rank">{ %player% | orderRanking player.team %team%}</span>
+      						<span class="scoreboard-name"><span class="deadicon" rv-hide="player.bIsAlive"></span>{ player.name }</span>
+      						<span class="scoreboard-kills">{ player.kills }</span>
+      						<span class="scoreboard-status"><span rv-hide="player.bIsAlive"><span class="weapon-icon" rv-html="player.KilledByWeapon | iconConversion"></span> { player.killedBy }</span></span>
+      						<!--<span class="scoreboard-time"></span>-->
+      						<span class="scoreboard-damage">{player.damageDealt}</span>
+      					</div>
+      			</div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section class="action-button-container" id="EOMActionContainer">
+      <div class="action-buttons-list">
+        <div class="action-button" id="EOM-Spectate-button" onclick="EndOfMatchScreen.GoToSpectateScreen()" rv-hide="matchData.matchState | MatchState">
+          <span class="kb-button" rv-hide="FooterData.bHasGamepad">TAB</span>
+          <span class="controller-button" rv-show="FooterData.bHasGamepad">&#53;</span>
+          <span class="button-text">SPECTATE</span>
+        </div>
+        <div class="action-button" id="EOM-Menu-button" onclick="EndOfMatchScreen.GoToPauseScreen()">
+          <span class="kb-button" rv-hide="FooterData.bHasGamepad">ESC</span>
+          <span class="controller-button" rv-show="FooterData.bHasGamepad">&#60;</span>
+          <span class="button-text">MENU</span>
+        </div>
+        <div class="action-button hidden" id="EOM-Profile-button" data-bind-if="{{g_PlateformSettings.bIsXbox}}">
+          <span class="controller-button" rv-show="FooterData.bHasGamepad">&#55;</span>
+          <span class="button-text">XBox Profile</span>
+        </div>
+      </div>
+    </section>
+</content>
+  <!--<div class="endofmatch-container hidden" id="EOMContainer">
+    <div class="endofmatch-outcome-container" id="endofmatch-outcome-container">
+      <div id="endofmatch-outcome-background" rv-class="deathData.bIsVictory | getMatchOutcomeBgClass" class="endofmatch-outcome-background"></div>
+      <h1>{deathData.HeaderText}</h1>
+    </div>
+    <div class="endofmatch-stats-container hidden">
+      <div class="endofmatch-player-name hidden" id="endofmatch-player-name">{deathData.PlayerName}</div>
+      <table class="endofmatch-table hidden" id="endofmatch-table">
+        <tbody>
+          <tr>
+            <td class="endofmatch-table-cell left">Kills</td>
+            <td class="endofmatch-table-spacer"></td>
+            <td class="endofmatch-table-cell right">{deathData.NumKills}</td>
+          </tr>
+          <tr>
+            <td class="endofmatch-table-cell left">Damage Done</td>
+            <td class="endofmatch-table-spacer"></td>
+            <td class="endofmatch-table-cell right">{deathData.DamageDone}</td>
+          </tr>
+          <tr>
+            <td class="endofmatch-table-cell left">Time Alive</td>
+            <td class="endofmatch-table-spacer"></td>
+            <td class="endofmatch-table-cell right">{deathData.TimeAlive | time}</td>
+          </tr>
+          <tr>
+            <td class="endofmatch-table-cell left">Perf. Rank</td>
+            <td class="endofmatch-table-spacer"></td>
+            <td class="endofmatch-table-cell right">{deathData.Rank}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h1 id="endofmatch-killer-header" class="hidden">YOUR KILLER</h1>
+      <div class="endofmatch-killer-container hidden" id="endofmatch-killer-container" rv-unless="deathData.bIsVictory">
+        <div class="endofmatch-killer-avatar" rv-style="deathData.KillerAvatarURL | getAvatarURLStyle"></div>
+        <div class="endofmatch-killer-info">
+          <h2>{deathData.KillerName}</h2>
+          <span>{deathData.KillerWeapon | getWeaponLocalized} ({deathData.KillerDamage} DMG)</span><br>
+          <small>{deathData.KillerId}</small>
+        </div>
+        <div class="endofmatch-killer-airdrop" rv-style="deathData.KillerAirdrop | getStyleForAirdrop" rv-onmouseover="deathData.KillerAirdrop | getMouseOverForAirdrop" onmouseout="OnEOMItemMouseOver('')"></div>
+        <div class="endofmatch-killer-perks">
+          <div class="endofmatch-killer-perk" rv-each-perk="deathData.KillerPerks" rv-perk="perk" rv-style="perk | getStyleForPerk" rv-onmouseover="perk | getMouseOverForPerk" onmouseout="OnEOMItemMouseOver('')">
+          </div>
+-->
+          <!--<div class="endofmatch-killer-perk" onmouseover="OnEOMItemMouseOver('A Perk')" onmouseout="OnEOMItemMouseOver('')"></div>
+          <div class="endofmatch-killer-perk" onmouseover="OnEOMItemMouseOver('Some Other Perk')" onmouseout="OnEOMItemMouseOver('')"></div>
+          <div class="endofmatch-killer-perk" onmouseover="OnEOMItemMouseOver('Yet Another Perk')" onmouseout="OnEOMItemMouseOver('')"></div>-->
+<!--
+        </div>
+        <div class="endofmatch-mouseover-container">
+        </div>
+      </div>
+      <div class="endofmatch-reward-anchor" id="endofmatch-reward-anchor">
+        <div class="endofmatch-reward-container hidden" id="endofmatch-reward-container">
+          <h1>REWARD</h1>
+          <div class="endofmatch-reward-items hidden" id="endofmatch-reward-items">
+            <div rv-if="deathData.bRankTooLow">
+              <h2 class="endofmatch-reward-scoretoolow">No reward</h2>
+            </div>
+            <div rv-each-reward="deathData.Rewards" class="endofmatch-reward-item" rv-style="reward.rarity | getBorderStyleForRewardRarity">
+              <div class="icon" rv-style="reward.image_url | getIconStyleForReward"></div>
+              <div class="content">
+                <table>
+                  <tr>
+                    <td class="endofmatch-reward-item-cell">{reward.name}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+-->
+          <!--
+          <div class="endofmatch-reward-capsule hidden" id="endofmatch-reward-capsule">
+            <div class="endofmatch-reward-icon" id="endofmatch-reward-icon" rv-style="deathData.RewardRarity | getBorderStyleForRewardRarity">
+            </div>
+            <div class="endofmatch-reward-text" rv-style="deathData.RewardRarity | getTextStyleForRewardRarity">
+              <h2 id="endofmatch-reward-text"></h2>
+            </div>
+          </div>-->
+<!--
+        </div>
+      </div>
+    </div>
+-->
+    <!--<div class="endofmatch-outcome-loser-blood" rv-unless="deathData.bIsVictory"></div>-->
+<!--
+    <div class="endofmatch-side-menu">
+      <div rv-unless="deathData.bIsVictory" class="endofmatch-side-menu-button" onclick="OnSpectateClicked()">SPECTATE</div>
+      <div class="endofmatch-side-menu-button" onclick="OnReturnToMenuClicked()">RETURN TO MENU</div>
+      <div class="endofmatch-side-menu-button" onclick="ReportPlayerClicked()">REPORT A PLAYER</div>
+    </div>
+  </div>
+-->
+<!--<div class="hud-top-left-box hidden" id="hud-top-left-box" rv-class-hidden="matchData.hideTime">
+    <div class="hud-top-left-container">
+        <div class="hud-top-left-decorator"></div>
+        <div class="hud-top-left-match-time" id="match-time">{ matchData.time | time }</div>
+        <div class="hud-top-left-ping">
+            <div rv-if="pingData.showPing">
+                { pingData.ping }ms
+             <br>
+                { pingData.rtt }ms RTT
+            </div>
+        </div>
+    </div>
+    <div rv-if="matchData.showStatusText" class="match-status-container">
+        { matchData.statusText < matchData.spectating matchData.preMatch | call }
+        <div rv-if="matchData.showQuitTip">PRESS ESC TO QUIT</div>
+    </div>
+</div>-->
+
+<div class="hud-center-container" id="hud-center-container">
+    <div class="crosshair-container paused" id="crosshair-container">
+      <div id="crosshair-container-visible-group" class="paused hidden">
+        <div class="crosshair-basic" id="crosshair-basic">
+          <div class="crosshair-left" id="crosshair-left"></div>
+          <div class="crosshair-right" id="crosshair-right"></div>
+          <div class="crosshair-top" id="crosshair-top"></div>
+          <div class="crosshair-bottom" id="crosshair-bottom"></div>
+          <div class="crosshair-center" id="crosshair-center"></div>
+        </div>
+        <div class="crosshair-crafting" id="crosshair-crafting">
+          <div class="crosshair-crafting-toprightgear">
+          </div>
+          <div class="crosshair-crafting-centergear">
+          </div>
+        </div>
+      </div>
+      <div class="crosshair-basic" id="crosshair-hit">
+        <div class="crosshair-left crosshair-hit"></div>
+        <div class="crosshair-right crosshair-hit"></div>
+        <div class="crosshair-top crosshair-hit"></div>
+        <div class="crosshair-bottom crosshair-hit"></div>
+      </div>
+    </div>
+    <div class="usable-anchor">
+      <div class="usable-container" id="usable-container">
+        <div class="usable-text play-fadeout" id="usable-text-container">
+          <div class="usable-action-text" id="usable-action-text"></div>
+          <div class="usable-text-name" id="usable-text-top"></div>
+          <div class="usable-text-body" id="usable-text-bottom"></div>
+        </div>
+        <div>
+          <div class="usable-meter-container play-fadeout" id="usable-meter-container">
+            <div class="usable-meter-bg">
+              <div class="usable-meter-value" id="usable-meter-value"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="hud-top-left-box hidden" id="hud-top-left-box">
+  <div class="hud-timer-container">
+    <span class="hud-top-left-match-time hidden" rv-hide="matchData.hideTime" id="match-timer"> {matchData.time | time} </span>
+    <span class="header-outcome hidden" id="EOMHeaderOutcomeTitle">{deathData.HeaderText}</span>
+  </div>
+  <span class="match-status-container hidden" id="match-status"> {matchData.matchStatusText} </span>
+	<div class="hud-top-left-ping hidden" id="match-ping">
+    <div rv-if="pingData.showPing">
+      { pingData.ping }ms
+		  <br>
+			{ pingData.rtt }ms RTT
+		</div>
+	</div>
+</div>
+<div class="hud-bottom-center-container" id="hud-bottom-center-container">
+    <div class="player-wound-container" id="player-wound-container">
+      <div class="wound-icon" rv-each-wound="woundData.Wounds">
+        <div class="wound-icon-background" rv-style="wound | getWoundBackgroundStyle"></div>
+        <div class="wound-icon-foreground" rv-style="wound | getWoundForegroundStyle"></div>
+      </div>
+    </div>
+    <div id="spectator-player-element" class="hidden">
+        <!-- <div class="party-member-name" id="spectator-player-name">
+          {spectatorData.name}
+        </div> -->
+      <div id="spectator-buffarmor-container">
+        <div id="armor-icon-container" class="armor-icon-container" >
+    		  <div class="armor-icon-background" rv-style="spectatorData.armorTotal | getArmorBackgroundStyle 4.5"></div>
+    		  <div class="armor-icon-foreground"></div>
+    		</div>
+        <div id="spectator-buff-container" class="spectator-buff-container">
+          <div class="buff-icon" rv-each-buff="spectatorData.buffs">
+            <div class="buff-icon-background" rv-style="buff | getBuffBackgroundStyle"></div>
+            <div class="buff-icon-foreground" rv-style="buff | getWoundForegroundStyle"></div>
+          </div>
+        </div>
+      </div>
+        <div id="spectator-health-bar-container" class="spectator-health-bar-container">
+          <div class="health-meter-content">
+            <div id="spectator-player-health" class="health-bar party-health-bar" rv-style="spectatorData.health | getSpectatorStaminaStyle"></div>
+            <div class="party-member-name" id="spectator-player-name">{spectatorData.name}</div>
+          </div>
+        </div>
+        <div id="spectator-stamina-meter-container" class="spectator-stamina-meter-container">
+          <div class="stamina-meter-content">
+            <div id="spectator-stamina-bar" class="stamina-bar party-stamina-bar" rv-style="spectatorData.stamina | getSpectatorStaminaStyle"></div>
+          </div>
+        </div>
+
+        <div id="spectator-wound-container" class="spectator-wound-container" >
+          <div class="buff-icon" rv-each-wound="spectatorData.wounds">
+            <div class="wound-icon-background" rv-style="wound | getWoundBackgroundStyle"></div>
+            <div class="wound-icon-foreground" rv-style="wound | getWoundForegroundStyle"></div>
+          </div>
+        </div>
+
+
+      <!--
+      <div class="spectator-player-data" id="spectator-player-name">
+        { spectatorData.name }
+      </div>
+      <div class="spectator-player-data" id="spectator-player-health">
+        <span class="glyphicon glyphicon-plus" style="display: inline; position: relative; color:white; margin-right: 0.2vw;"></span>{ spectatorData.health }% <span class="glyphicon glyphicon-flash" style="display: inline; position: relative; color:white; margin-right: 0.2vw;"></span>{ spectatorData.stamina }%
+      </div>
+      <div class="spectator-player-wounds">
+        <img rv-each-wound="spectatorData.wounds" rv-src="wound" style="display: inline-block;" width=65 height=65></img>
+      </div>
+    -->
+    </div>
+  </div>
+<div class="hud-bottom-right-container hidden" id="hud-bottom-right-container">
+    <div class="weapon-tooltip-container weapon-tooltip-hide" id="weapon-tooltip-container">
+      <div class="weapon-tooltip-header" id="weapon-tooltip-header">
+        <div class="weapon-tooltip-title" id="weapon-tooltip-title">WeaponName</div>
+        <div class="weapon-tooltip-text" id="weapon-tooltip-text">
+          <!--<span id="weapon-tooltip-text">Text</span>-->
+        </div>
+      </div>
+    </div>
+    <div class="weapon-entry-container" id="weapon-slot-0" data-slot-item="empty" data-slot-highlighted="true" data-slot-locked="false" data-slot-ammotext="">
+      <div class="weapon-icon-container">
+          <div class="weapon-ammo-count"></div>
+      </div>
+      <div class="weapon-entry-key" rv-unless="FooterData.bHasGamepad">{ActionMapDB.ActionMappings.InvSlot1.Key | FormatInvSlotKey}</div>
+    </div>
+    <div class="weapon-entry-container" id="weapon-slot-1" data-slot-item="empty" data-slot-highlighted="false" data-slot-locked="false" data-slot-ammotext="">
+      <div class="weapon-icon-container">
+          <div class="weapon-ammo-count"></div>
+      </div>
+      <div class="weapon-entry-key" rv-unless="FooterData.bHasGamepad">{ActionMapDB.ActionMappings.InvSlot2.Key | FormatInvSlotKey}</div>
+    </div>
+    <div class="weapon-entry-container" id="weapon-slot-2" data-slot-item="empty" data-slot-highlighted="false" data-slot-locked="false" data-slot-ammotext="">
+      <div class="weapon-icon-container">
+          <div class="weapon-ammo-count"></div>
+      </div>
+      <div class="weapon-entry-key" rv-unless="FooterData.bHasGamepad">{ActionMapDB.ActionMappings.InvSlot3.Key | FormatInvSlotKey}</div>
+    </div>
+    <div class="weapon-entry-container" id="weapon-slot-3" data-slot-item="empty" data-slot-highlighted="false" data-slot-locked="true" data-slot-ammotext="">
+      <div class="weapon-icon-container">
+          <div class="weapon-ammo-count"></div>
+      </div>
+      <div class="weapon-entry-key" rv-unless="FooterData.bHasGamepad">{ActionMapDB.ActionMappings.InvSlot4.Key | FormatInvSlotKey}</div>
+    </div>
+    <div class="weapon-entry-container" id="weapon-slot-4" data-slot-item="empty" data-slot-highlighted="false" data-slot-locked="true" data-slot-ammotext="">
+      <div class="weapon-icon-container">
+          <div class="weapon-ammo-count"></div>
+      </div>
+      <div class="weapon-entry-key" rv-unless="FooterData.bHasGamepad">{ActionMapDB.ActionMappings.InvSlot5.Key | FormatInvSlotKey}</div>
+    </div>
+  </div>
+
+<div class="hud-bottom-left-container hidden" id="hud-bottom-left-container">
+  <div class="airdrop-container" id="airdrop-container">
+    <div class="airdrop-value-image" id="airdrop-value-image"></div>
+    <div class="airdrop-value" id="airdrop-value"><span id="airdrop-ready-text" class="hidden"></span><span id="airdrop-remainingfunc-text">{matchData.currRating}/{matchData.maxRating}</span></div>
+    <!-- <div class="airdrop-value-time hidden" id="airdrop-value-time"></div> -->
+  </div>
+
+  <div class="func-bar" id="func">
+    <div class="func-icon"></div>
+    <div class="func-text">{ matchData.currRating }</div>
+    <div id="airdrop-rating-queue">
+    <!--  <div class="airdrop-rating-notice">
+        <span>-5</span>
+        <p class="airdrop-rating-fade">Structures</p>
+      </div>-->
+    </div>
+  </div>
+  <div class="movement-icon-container" id="movement-icon-container">
+    <div id="movement-icon" class="walk-icon"></div>
+  </div>
+  <div class="buff-armor">
+    <div class="armor-icon-container" id="armor-icon-container">
+      <div class="armor-icon-background" rv-style="woundData.Armor | getArmorBackgroundStyle 7.5"></div>
+      <div class="armor-icon-foreground"></div>
+    </div>
+
+    <div class="player-buff-container">
+      <div class="buff-icon" rv-each-buff="woundData.Buffs">
+        <div class="buff-icon-background" rv-style="buff | getBuffBackgroundStyle"></div>
+        <div class="buff-icon-foreground" rv-style="buff | getWoundForegroundStyle"></div>
+      </div>
+    </div>
+
+
+  </div>
+
+    <div id="health-bar-container" class="health-meter">
+      <div class="health-meter-content">
+        <div id="health-bar" class="health-bar">
+          <span class="glyphicon glyphicon-plus"></span>
+          <div id="health-bar-value" class="health-bar-value">
+            100
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="stamina-bar-container" class="stamina-meter">
+      <div class="stamina-meter-content">
+        <div id="stamina-bar" class="stamina-bar">
+          <span class="glyphicon glyphicon-flash"></span>
+          <!-- <div id="stamina-bar-value" class="stamina-bar-value">100</div> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+<div class="hud-center-left-container hidden" id="party-member-container">
+
+  <div id="party-health-bar-container" class="health-meter party-health-meter">
+    <div class="health-meter-content">
+      <div id="party-health-bar" class="health-bar party-health-bar"></div>
+      <div class="party-member-name" id="party-member-name">testname</div>
+
+    </div>
+  </div>
+  <div class="stamina-meter-content party-stamina-meter-content">
+    <div id="party-stamina-bar" class="stamina-bar party-stamina-bar">
+    </div>
+  </div>
+</div>
+
+<div id="toast-container">
+</div>
+
+<div id="damage-container">
+</div>
+<!-- Element Repository - these are always hidden and cloned to create dynamic elements -->
+<div id="cloned-elements">
+  <div class="toast-object-container toast-enter">
+    <!--<div class="toast-object-left-highlight"></div>
+    <div class="toast-object-left-image"></div>-->
+    <div class="toast-object-text-container">
+      <h1 class="toast-object-header">Reward!</h1>
+      <span class="toast-object-text">Test reward</span>
+    </div>
+  </div>
+  <div class="game-message">
+    <div class="game-message-header"></div>
+    <div class="game-message-text">
+    </div>
+  </div>
+  <div class="pause-menu-modal">
+    <div class="pause-menu-modal-container">
+      <div class="pause-menu-left-container-header"></div>
+      <div class="pause-menu-modal-title">QUIT?</div>
+      <div class="pause-menu-modal-body">Exit to Main Menu?</div>
+      <div class="pause-menu-modal-options">
+      </div>
+    </div>
+  </div>
+  <div class="attack-damage damage-enter" id="attack-damage">
+    <div class="attack-damage-number"></div>
+    <div class="attack-damage-type"></div>
+  </div>
+<!--  XAV_AFM Disable Challenges <div class="challenge-toast">
+    <div class="challenge-strip"></div>
+    <div class="challenge-toast-content-group">
+    <img class="challenge-icon" src="">
+      <content class="challenge-toast-content">
+        <h1 class="challenge-description">Deal 100 Damage with Axes.</h1>
+        <span class="challenge-progress">10/10</span>
+        <i class="glyphicon glyphicon-ok"></i>
+      </content>
+    </div>
+  </div>-->
+  <content id="ModalScreen" class="screen">
+      <section class="blur-background">
+      </section>
+      <section class="modal-content">
+        <section class="modal-body">
+          <h1>{screenData.title}</h1>
+          <!--<span rv-unless="screenData.body | empty">{screenData.body}</span>-->
+          <section class="modal-menu">
+            <ul>
+              <li tabindex=0 rv-each-option="screenData.options" rv-data-option="option">
+                {option}
+              </li>
+            </ul>
+          </section>
+        </section>
+      </section>
+    </content>
+</div>
+  <script src="../OptionsScreen/js/OptionsScreen.js"></script>
+  <script src="../Scoreboard/js/scoreboard.js"></script>
+  <script src="js/Formatters.js"></script>
+  <script src="js/DataBindings.js"></script>
+  <script src="js/ScreenHolder.js"></script>
+  <script src="js/MenuActions.js"></script>
+  <script src="js/Screen.js"></script>
+  <script src="js/Screens/Mixins/VerticalMenuMixin.js"></script>
+  <script src="js/Screens/Mixins/HorizontalMenuMixin.js"></script>
+  <script src="js/Screens/Mixins/DynGenMixin.js"></script>
+  <script src="js/Screens/BaseMenu.js"></script>
+  <script src="js/Screens/PauseMain.js"></script>
+  <script src="js/Screens/PauseControls.js"></script>
+  <script src="js/Screens/PauseGameplay.js"></script>
+  <script src="js/Screens/PauseAudio.js"></script>
+  <script src="js/Screens/PauseVideo.js"></script>
+  <script src="js/Screens/Recipes.js"></script>
+  <script src="js/Screens/Modal.js"></script>
+  <script src="js/Screens/EOMOutcome.js"></script>
+  <script src="js/Screens/EndOfMatch.js"></script>
+  <script src="js/Screens/SpectateMatch.js"></script>
+  <script src="js/hud.js"></script>
+
+
+</body>
+</html>

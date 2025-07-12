@@ -1,0 +1,70 @@
+#weapon-list-options{
+  width: 100%;
+  height: 75%;
+  top: 15%;
+  overflow: hidden;
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+#weapon-list-options ul{
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+}
+
+.weapon-list-container{
+  width: 19%;
+  height: 11%;
+  margin: .3%;
+  display:inline-block;
+  outline: 2px solid rgba(220,220,220,.2);
+  color: rgba(220,220,220,1);
+  background: rgba(13,13,13,0.8);
+}
+
+.weapon-list-container:focus, .weapon-list-container:hover{
+  outline: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+  background: rgba(13,13,13,0.8);
+}
+
+.weapon-list-container:active{
+  outline: 2px solid rgba(204,0,0,1);
+  color: rgba(255,255,255,1);
+  background: rgba(204,0,0,0.2);
+}
+
+.weapon-list-container .weapon-list{
+  width: 100%;
+  height: 100%;
+  padding: 2% 0;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  -webkit-clip-path: circle(50% at 50% 50%);
+}
+
+.weapon-list-container span{
+  font: 1.5vw Sucrose-BoldTwo;
+  margin-top: 20%;
+}
+
+.weapon-list-container img{
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* #weapon-list-options .customization-badge {
+  margin-top: 1%;
+  width: 1.7vw;
+  height: .9vw;
+  font: .8vw Sucrose-BoldTwo;
+} */

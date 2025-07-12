@@ -1,0 +1,160 @@
+/*  ///////////////////////////////
+
+/* The player's Health, Stamina, Wounds, and "boons" */
+.hud-bottom-right-container{
+  position: absolute;
+  bottom: 1.2vw;
+  right: 1vw;
+  width: 10%;
+  height: 27%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  overflow: visible;
+  justify-content: right;
+  pointer-events: none;
+
+}
+
+.weapon-entry-container{
+  width: 100%;
+  height: 100%;
+  margin-bottom: .25vw;
+  display: flex;
+  flex-direction: row;
+  /* background-color: rgba(13,13,13,.5); */
+  background-image: url('../../images/EOM_box.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.weapon-icon-container{
+    width: 70%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: .7;
+}
+
+/* .weapon-entry-icon{
+  position:absolute;
+  width: 100%;
+  height: 3vw;
+  -webkit-mask-image: "";
+  background-color: rgba(13,13,13,1);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+
+}*/
+
+.weapon-entry-key{
+  width: 25%;
+  height: 18%;
+  margin-left: .5vw;
+  background-position: center;
+  color: rgba(255, 255, 255,1);
+  font: 1.2vw ForgottenFuturist;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  /* background-color: rgba(13,13,13,.8); */
+  background-image: url('../../images/EOM_box.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.weapon-ammo-count{
+  position: relative;
+  font: 1vw ForgottenFuturist-Bold-Italic;
+  display: inline;
+  float: right;
+  margin-right: 0.3vw;
+  margin-top: 25%;
+  color: rgba(255, 255, 255,1);
+  text-align: right;
+
+}
+
+.weapon-entry-highlight{
+  height: 100%;
+  width: 100%;
+  right: 0;
+  position: absolute;
+  display: inline;
+  z-index: -1;
+  color: rgba(13,13,13,1);
+}
+
+.weapon-entry-selected{
+  width: 100%;
+  /* background-color: rgba(220,220,220,1); */
+  background-image: url('../../images/EOM_box_hl.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.weapon-icon-selected{
+  /* transform: translateX(-8%); */
+  /* background-color: rgba(220,220,220,1); */
+  background-image: url('../../images/EOM_box_hl.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.weapon-ammo-count-selected{
+  color: rgba(13,13,13,1);
+}
+
+.weapon-tooltip-container{
+  position: absolute;
+  bottom: 0.2vw;
+  width: 13vw;
+  height: 10vw;
+  /* background-color: rgba(13,13,13,.5); */
+  background-image: url('../../images/EOM_box.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin-left: -14vw;
+  margin-top: 20vw;
+  overflow: hidden;
+  -webkit-transition: all 0.5s ease-in-out;
+  border: 1px solid rgba(220,220,220,1);
+}
+
+.weapon-tooltip-title {
+  padding-top: 0.2vw;
+  padding-left: 0.3vw;
+  width:100%;
+  font: 1vw ForgottenFuturist-Bold-Italic;
+  color: rgba(13,13,13,1);
+  /* background: rgba(220,220,220,1); */
+  background-image: url('../../images/EOM_box_hl.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.weapon-tooltip-text{
+  margin-top: 0.2vw;
+  width:100%;
+  padding-left: 0.5vw;
+  padding-right: 0.35vw;
+  font: 0.85vw ForgottenFuturist;
+  color: rgba(220,220,220,1);
+}
+
+.weapon-tooltip-header{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 0vw;
+}
+
+.weapon-tooltip-hide{
+  opacity: 0;
+  -webkit-transform: translateX(5vw);
+  transform: translateX(5vw);
+
+}

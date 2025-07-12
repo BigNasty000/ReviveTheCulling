@@ -1,0 +1,177 @@
+@font-face {
+   font-family: Bender-Black;
+   src:  url('../../../fonts/Bender-Black.otf') format('opentype');
+}
+
+@font-face {
+   font-family: Bender;
+   src:  url('../../../fonts/Bender.otf') format('opentype');
+}
+
+@font-face {
+   font-family: Bender-Bold;
+   src:  url('../../../fonts/Bender-Bold.otf') format('opentype');
+}
+
+body {
+    overflow: hidden;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.1);
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+  	opacity: 1.0;
+    width: 768px;
+    height: 1024px;
+    background-color: black;
+}
+
+div  {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    pointer-events: none !important;
+}
+
+#tracker-content{
+  width: 768px;
+  height: 1024px;
+  margin-left: 0;
+  padding-left: 0;
+  background-image: url('../images/mantracker_bg.png');
+  position:absolute;
+}
+
+#tracker-header{
+  font: 8vw Bender-Bold;
+  color: white;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 0px;
+  width: 100%;
+  display:block;
+}
+
+#tracker-footer{
+  font: 4vw Bender-Bold;
+  color: white;
+  margin-top: 15px;
+}
+
+#tracker-body{
+  background-image: url('../images/mantracker_center.png');
+  margin-left: 0;
+  padding-left: 0;
+  width: 700px;
+  height: 700px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 160px;
+}
+
+#current-arrow{
+  z-index: 9999;
+}
+
+#tracker-distance{
+  text-align: center;
+  font: 118px Bender-Bold;
+  color: white;
+  position: absolute;
+  top: 43%;
+  width: 300px;
+  left: 50%;
+  margin-left: -150px;
+}
+
+.dying-arrow{
+  z-index: 1000;
+  opacity: 0;
+}
+
+.tracker-arrow{
+  background-image: url('../images/mantracker_red_arrow.png');
+  width: 700px;
+  height: 700px;
+  opacity: 0.6;
+  position: absolute;
+}
+
+.anim-crt-on{
+  -webkit-animation: crt-on 0.3s 0s 1;
+  -webkit-animation-timing-function: ease-out;
+  -moz-animation: crt-on 0.3s 0s 1;
+  -moz-animation-timing-function: ease-out;
+}
+
+.anim-crt-off{
+  -webkit-animation: crt-off 0.3s 0s 1;
+  -webkit-animation-timing-function: ease-out;
+  -moz-animation: crt-off 0.3s 0s 1;
+  -moz-animation-timing-function: ease-out;
+}
+
+.arrow-scale-in{
+  -webkit-animation: scale-arrow-in 0.3s 0s 1;
+  -webkit-animation-timing-function: ease-in;
+}
+
+.arrow-scale-out{
+  -webkit-animation: scale-arrow-out 0.3s 0s 1;
+  -webkit-animation-timing-function: ease-in;
+}
+
+@keyframes scale-arrow-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes scale-arrow-out {
+  0% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes crt-on {
+	0% {
+		opacity: 0.0;
+		transform: scale(0.5, 0.005);
+	}
+	40% {
+		opacity: 1.0;
+	}
+	70% {
+		transform: scale(1.0, 0.005);
+	}
+	100% {
+		transform: scale(1.0, 1.0);
+	}
+}
+
+@keyframes crt-off {
+	0% {
+		transform: scale(1.0, 1.0);
+		opacity: 1.0;
+	}
+	40% {
+		transform: scale(1.0, 0.005);
+	}
+	70% {
+		opacity: 1.0;
+	}
+	100% {
+		opacity: 0.0;
+		transform: scale(0.5, 0.005);
+	}
+}

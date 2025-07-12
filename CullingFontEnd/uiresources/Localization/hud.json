@@ -1,0 +1,1598 @@
+{
+   "airdrops" : {
+      "0_goldenarm" : {
+         "tooltip_title" : {
+            "en" : "Golden Arm Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "0_randaxe" : {
+         "tooltip_title" : {
+            "en" : "Early Axe Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "0_randblade" : {
+         "tooltip_title" : {
+            "en" : "Early Blade Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "0_randbludgeon" : {
+         "tooltip_title" : {
+            "en" : "Early Bludgeon Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "0_randspear" : {
+         "tooltip_title" : {
+            "en" : "Early Spear Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_baseballbat" : {
+         "tooltip_title" : {
+            "en" : "Baseball Bat Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_bowieknife" : {
+         "tooltip_title" : {
+            "en" : "Bowie Knife Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_pipewrench" : {
+         "tooltip_title" : {
+            "en" : "Pipe Wrench Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_survivalaxe" : {
+         "tooltip_title" : {
+            "en" : "Survival Axe Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_survivalspear" : {
+         "tooltip_title" : {
+            "en" : "Survival Spear Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_tacticalmachete" : {
+         "tooltip_title" : {
+            "en" : "Tactical Machete Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_tomahawk" : {
+         "tooltip_title" : {
+            "en" : "Tomahawk Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "1_yari" : {
+         "tooltip_title" : {
+            "en" : "Yari Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "2_firemansaxe" : {
+         "tooltip_title" : {
+            "en" : "Fireman's Axe Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "2_katana" : {
+         "tooltip_title" : {
+            "en" : "Katana Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "2_sledgehammer" : {
+         "tooltip_title" : {
+            "en" : "Sledgehammer Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "2_trident" : {
+         "tooltip_title" : {
+            "en" : "Trident Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_backpack" : {
+         "tooltip_title" : {
+            "en" : "Backpack Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_baitcrate" : {
+         "tooltip_title" : {
+            "en" : "Bait Crate",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_explosives" : {
+         "tooltip_title" : {
+            "en" : "Explosives Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_griefing" : {
+         "tooltip_title" : {
+            "en" : "Griefing Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_stims" : {
+         "tooltip_title" : {
+            "en" : "Stims Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "3_traps" : {
+         "tooltip_title" : {
+            "en" : "Traps Airdrop",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "4_commando" : {
+         "tooltip_title" : {
+            "en" : "Commando",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "chef" : {
+         "tooltip_title" : {
+            "en" : "Chef",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "dwarf" : {
+         "tooltip_title" : {
+            "en" : "Dwarf",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "hunter" : {
+         "tooltip_title" : {
+            "en" : "Hunter",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "javelineer" : {
+         "tooltip_title" : {
+            "en" : "Javelineer",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "juggler" : {
+         "tooltip_title" : {
+            "en" : "Juggler",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "legolas" : {
+         "tooltip_title" : {
+            "en" : "Legolas",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "medic" : {
+         "tooltip_title" : {
+            "en" : "Medic",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "ninja" : {
+         "tooltip_title" : {
+            "en" : "Ninja",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pirate" : {
+         "tooltip_title" : {
+            "en" : "Pirate",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "plumber" : {
+         "tooltip_title" : {
+            "en" : "Plumber",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "police" : {
+         "tooltip_title" : {
+            "en" : "Five-Oh",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "rambo" : {
+         "tooltip_title" : {
+            "en" : "Rambo\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "sapper" : {
+         "tooltip_title" : {
+            "en" : "Sapper",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "sniper" : {
+         "tooltip_title" : {
+            "en" : "Sniper",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "swat" : {
+         "tooltip_title" : {
+            "en" : "S.W.A.T.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "thief" : {
+         "tooltip_title" : {
+            "en" : "Thief",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tough" : {
+         "tooltip_title" : {
+            "en" : "Tough",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "trapper" : {
+         "tooltip_title" : {
+            "en" : "Trapper",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "victim" : {
+         "tooltip_title" : {
+            "en" : "Non-Lethal",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      }
+   },
+   "items" : {
+      "357_magnum" : {
+         "tooltip_icon" : "&#223;",
+         "tooltip_text" : {
+            "en" : "Damage: 25<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : ".357 Magnum\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "9mm" : {
+         "tooltip_text" : {
+            "en" : "Damage: 15<br>\r\n<br>\r\nAmmunition craftable at Explosive Barrels",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "9mm\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "alarm_gun" : {
+         "tooltip_icon" : "&#162;",
+         "tooltip_text" : {
+            "en" : "Activates an emergency tracking beacon on the target for two minutes.<br>\r\n<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Alarm Gun",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "auto_bow" : {
+         "tooltip_icon" : "&#217;",
+         "tooltip_text" : {
+            "en" : "Damage: 6<br>\r\n",
+            "es" : "es Auto Bow"
+         },
+         "tooltip_title" : {
+            "en" : "Auto Bow",
+            "es" : "Roca"
+         }
+      },
+      "backpack" : {
+         "tooltip_icon" : "&#163;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Put on<br>\r\n<br>\r\nAdds 4th and 5th inventory slots",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Backpack",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "bandage" : {
+         "tooltip_icon" : "&#164;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply Bandage<br>\r\n<br>\r\nReplenishes 40 health",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Bandage",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "baseball_bat" : {
+         "tooltip_icon" : "&#165;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Bludgeon<br>\r\nDamage: 8-24<br>\r\nThrow: 8-24<br>\r\nWeakness 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Baseball Bat",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "bowie_knife" : {
+         "tooltip_icon" : "&#167;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Blade<br>\r\nDamage: 9-23<br>\r\nThrow: 9-23<br>\r\nBleed 0.9 dps<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Bowie Knife",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "branch" : {
+         "tooltip_icon" : "&#168;",
+         "tooltip_text" : {
+            "en" : "Crafting Material<br>\r\nDamage: 4-12<br>\r\nThrow: 5<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH BRANCH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Branch",
+            "es" : "MISSING SPANISH BRANCH TOOLTIP TITLE"
+         }
+      },
+      "brass_knuckles" : {
+         "tooltip_icon" : "&#169;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Bludgeon<br>\r\nDamage: 7-17<br>\r\nThrow: 7-17<br>\r\nWeakness 15%<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Brass Knuckles",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "caltrops" : {
+         "tooltip_icon" : "\\u00B3",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw deploy<br>\r\nBleed 1.0 dps\r\nCripple 30%<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Caltrops",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "camp_hatchet" : {
+         "tooltip_icon" : "&#220;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Axe<br>\r\nDamage: 7-17<br>\r\nThrow: 7-17<br>\r\nBleed 0.35 dps\r\nExpose 7.5%<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Camp Hatchet",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "chainsaw" : {
+         "tooltip_icon" : "&#170;",
+         "tooltip_text" : {
+            "en" : "Damage: 24/sec<br>\r\n<br>\r\nMay take multiple attempts to start. Applies Bleed.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Chainsaw",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "cleaver" : {
+         "tooltip_icon" : "&#171;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Axe<br>\r\nDamage: 6-22<br>\r\nThrow: 6-22<br>\r\nBleed 0.4 dps\r\nExpose 7.5%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Cleaver",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "compound_bow" : {
+         "tooltip_icon" : "&#172;",
+         "tooltip_text" : {
+            "en" : "Damage: 2-20<br>\r\n",
+            "es" : "es Compound Bow"
+         },
+         "tooltip_title" : {
+            "en" : "Compound Bow",
+            "es" : "Roca"
+         }
+      },
+      "crafted_bandage" : {
+         "tooltip_icon" : "&#173;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nReplenishes 25 health",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Bandage",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_blowgun" : {
+         "tooltip_icon" : "&#177;",
+         "tooltip_text" : {
+            "en" : "Damage:2-5<br>\r\nWound: Sickness<br><br>\r\nAmmunition craftable at Poison Gas Pylons",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Blowgun",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_bow" : {
+         "tooltip_icon" : "&#178;",
+         "tooltip_text" : {
+            "en" : "Damage: 3-12<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Bow",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_cudgel" : {
+         "tooltip_icon" : "&#180;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Bludgeon<br>\r\nDamage: 5-15<br>\r\nThrow: 5-15<br>\r\nWeakness 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Cudgel",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_explosive" : {
+         "tooltip_icon" : "&#181;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw<br>\r\nRight Mouse: Light Fuse<br>\r\nDamage: 20<br>\r\nBleed 0.6 dps<br>\r\nCripple 30%",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Explosive\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_gas_bomb" : {
+         "tooltip_icon" : "&#193;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw<br>\r\nCreates Poison Gas Cloud",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Gas Grenade",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_hatchet" : {
+         "tooltip_icon" : "&#182;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Axe<br>\r\nDamage: 5-15<br>\r\nThrow: 5-15<br>\r\nBleed 0.3 dps\r\nExpose 7.5%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Hatchet",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_knife" : {
+         "tooltip_icon" : "&#183;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Blade<br>\r\nDamage: 5-15<br>\r\nThrow: 5-15<br>\r\nBleed 0.6 dps<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Knife",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_mine" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 30<br>\r\nCripple 10%<br>\r\n<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Mine",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_punji_sticks" : {
+         "tooltip_icon" : "&#184;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 10<br>\r\nWound: Cripple, Sickness<br>\r\n<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Punji Sticks",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_satchel" : {
+         "tooltip_icon" : "&#163;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Put on<br>\r\n<br>\r\nAdds 4th inventory slot",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Satchel",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_smoke_bomb" : {
+         "tooltip_icon" : "&#175;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw<br>\r\nWound: Blindness",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Smoke Bomb",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_snare" : {
+         "tooltip_icon" : "&#176;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 15<br>\r\nCripple 30%<br>\r\n<br>\r\nTraps are only triggered by opponents\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Snare",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crafted_spear" : {
+         "tooltip_icon" : "&#185;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Spear<br>\r\nDamage: 5-15<br>\r\nThrow: 5-15<br>\r\nExpose 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Spear",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crowbar" : {
+         "tooltip_icon" : "&#186;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Bludgeon<br>\r\nDamage: 7-21<br>\r\nThrow: 7-21<br>\r\nWeakness 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crowbar",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "crude_crafted_armor" : {
+         "tooltip_icon" : "&#186;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Put on<br>\r\n<br>\r\nAbsorbs 50% of incoming damage, destroyed after it receives 20 points of damage",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Armor",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "decoy_bot" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Hold to use<br>\r\n<br>\r\nCreates a short lived Synthetic Clone that runs a simple straight path to fool your enemies.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Decoy",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "dynamite" : {
+         "tooltip_icon" : "&#187;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Light Fuse and Throw<br>\r\nRight Mouse: Light Fuse<br>\r\nDamage: 80<br>\r\nBleed 1.0 dps\r\nCripple 30%",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Dynamite\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "explodecoy_bot" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Hold to use<br>\r\n<br>\r\nCreates a short lived Explosive Synthetic Clone that runs a simple straight path to fool your enemies.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Explosive Decoy",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "explosive_mine" : {
+         "tooltip_icon" : "&#202;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 65<br>\r\nBleed 1.0 dps\r\nCripple 30%<br>\r\n<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Explosive Mine",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "firemans_axe" : {
+         "tooltip_icon" : "&#189;",
+         "tooltip_text" : {
+            "en" : "Tier 4 Axe<br>\r\nDamage: 9-27<br>\r\nThrow: 9-27<br>\r\nBleed 0.5 dps\r\nExpose 7.5%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Fireman's Axe",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "fist" : {
+         "tooltip_icon" : "&#190;",
+         "tooltip_text" : {
+            "en" : "Damage: 4-12<br>\r\nNormal Speed",
+            "es" : "Puï¿½os"
+         },
+         "tooltip_title" : {
+            "en" : "Fists",
+            "es" : "Puï¿½os"
+         }
+      },
+      "goldenaxe" : {
+         "tooltip_icon" : "&#189;",
+         "tooltip_text" : {
+            "en" : "Unique Axe<br>\r\nDamage: 8-23<br>\r\nThrow: 7-21<br>\r\nExpose 30%<br>\r\nImmune to wounds.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Axetinguisher\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldenbat" : {
+         "tooltip_icon" : "&#165;",
+         "tooltip_text" : {
+            "en" : "Unique Bludgeon<br>\r\nDamage: 6-21<br>\r\nThrow: 6-18<br>\r\nCripple 20%<br>\r\nFast<br>\r\nSteals 2 HP on each hit.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Vampire Bat\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldencrowbar" : {
+         "tooltip_icon" : "&#186;",
+         "tooltip_text" : {
+            "en" : "Unique Bludgeon<br>\r\nDamage: 5-17<br>\r\nThrow: 5-15<br>\r\nCripple 10%<br>\r\nSlow<br>\r\nOpens the golden crate.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Golden Crowbar\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldenkatana" : {
+         "tooltip_icon" : "&#195;",
+         "tooltip_text" : {
+            "en" : "Unique Blade<br>\r\nDamage: 8-25<br>\r\nThrow: 7-21<br>\r\nBleed 1.4 dps<br>\r\nFast<br>\r\nApplies never ending bleed.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Bleeding Blade\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldenknife" : {
+         "tooltip_icon" : "&#167;",
+         "tooltip_text" : {
+            "en" : "Unique Blade<br>\r\nDamage: 7-19<br>\r\nThrow: 6-18<br>\r\nBleed 1.4 dps<br>\r\nFast<br>\r\nSilent and Double Jump!",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Doppledagger\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldensledgehammer" : {
+         "tooltip_icon" : "&#206;",
+         "tooltip_text" : {
+            "en" : "Unique Bludgeon<br>\r\nDamage: 8-60<br>\r\nThrow: 7-21<br>\r\nCripple 20%<br>\r\nSlow<br>\r\nLudicrous charge time.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Nutcracker\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldentomahawk" : {
+         "tooltip_icon" : "&#214;",
+         "tooltip_text" : {
+            "en" : "Unique Axe<br>\r\nDamage: 6-18<br>\r\nThrow: 7-24<br>\r\nExpose 20%<br>\r\nApplies sickness on each hit.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Vomihawk\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldentrident" : {
+         "tooltip_icon" : "&#216;",
+         "tooltip_text" : {
+            "en" : "Unique Spear<br>\r\nDamage: 8-27<br>\r\nThrow: 7-21<br>\r\nShred 5-12 Armor<br>\r\nReflects 2 damage to attacker.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Triflector\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "goldenyari" : {
+         "tooltip_icon" : "&#216;",
+         "tooltip_text" : {
+            "en" : "Unique Spear<br>\r\nDamage: 6-21<br>\r\nThrow: 6-18<br>\r\nShred 5-12 Armor<br>\r\nReturns after being thrown.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Infinity Pole\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "hammer" : {
+         "tooltip_icon" : "&#191;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Bludgeon<br>\r\nDamage: 6-18<br>\r\nThrow: 6-18<br>\r\nWeakness 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Hammer",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "healthregen_shot" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nHeal 5 hitpoints and regenerate 20 hitpoints over 20 seconds<br>\r\n<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Hemo Drip",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "hemo_blast" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nIncreases max health by 10",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Hemo Blast",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "hunting_bow" : {
+         "tooltip_icon" : "&#201;",
+         "tooltip_text" : {
+            "en" : "Damage: 4-16<br>\r\n",
+            "es" : "es Recurve Bow"
+         },
+         "tooltip_title" : {
+            "en" : "Recurve Bow",
+            "es" : "Roca"
+         }
+      },
+      "hunting_rifle" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Fire<br>\r\nRight Mous: Aim<br>\r\nR: Reload",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Hunting Rifle",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "ice_axe" : {
+         "tooltip_icon" : "&#192;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Axe<br>\r\nDamage: 8-20<br>\r\nThrow: 8-20<br>\r\nBleed 0.4 dps\r\nExpose 7.5%<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Ice Axe",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "impact_grenade" : {
+         "tooltip_icon" : "&#222;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw<br>\r\nDamage: 40<br>\r\nBleed 1.0 dps\r\nCripple 10%<br>\r\nDetonates on Impact",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Impact Grenade",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "iron_4_skin" : {
+         "tooltip_icon" : "&#228;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nReduces incoming damage by 15% for 2 minutes.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Iron-4-Skin",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "javelin" : {
+         "tooltip_icon" : "&#194;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Spear<br>\r\nDamage: 6-22<br>\r\nThrow: 6-22<br>\r\nExpose 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Javelin",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "katana" : {
+         "tooltip_icon" : "&#195;",
+         "tooltip_text" : {
+            "en" : "Tier 4 Blade<br>\r\nDamage: 10-26<br>\r\nThrow: 10-26<br>\r\nBleed 1.0 dps<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Katana",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "kukri" : {
+         "tooltip_icon" : "&#196;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Blade<br>\r\nDamage: 7-21<br>\r\nThrow: 7-21<br>\r\nBleed 0.8 dps<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Kukri",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "machete" : {
+         "tooltip_icon" : "&#197;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Blade<br>\r\nDamage: 5-19<br>\r\nThrow: 5-19<br>\r\nBleed 0.7 dps<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Machete",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "man_tracker" : {
+         "tooltip_icon" : "&#198;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Track<br>\r\n<br>\r\nTracks position of nearest contestant",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Man Tracker",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "med_kit" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nFully restores missing health",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Med Kit",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "muscleman_milk" : {
+         "tooltip_icon" : "&#226;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nIncreases melee damage dealt by 15% for 2 minutes.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Muscle Man Milk",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "nanitedynamite" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Light Fuse and Throw<br>\r\nRight Mouse: Light Fuse<br>\r\nDamage: 60\r\nCripple 5%<br>\r\nDeals no damage to user.",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Nanite Dynamite\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "orange_juice" : {
+         "tooltip_icon" : "&#224;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nGain the effects of Muscle-Man Milk, Iron-4-Skin, Explosive Runs and Lung Butter for 2 minutes",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Orange Juice",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pdw" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Fire<br>\r\nRight Mous: Aim<br>\r\nR: Reload",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "PDW\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pepper_spray" : {
+         "tooltip_icon" : "&#199;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Hold to fire<br>\r\n<br>\r\nTemporarily blinds opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Pepper Spray",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pike" : {
+         "tooltip_icon" : "&#219;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Spear<br>\r\nDamage: 7-21<br>\r\nThrow: 7-21<br>\r\nExpose 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Pike",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pipe_wrench" : {
+         "tooltip_icon" : " &#200;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Bludgeon<br>\r\nDamage: 7-25<br>\r\nThrow: 7-25<br>\r\nWeakness 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Pipe Wrench",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "pitchfork" : {
+         "tooltip_icon" : "&#218;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Spear<br>\r\nDamage: 5-19<br>\r\nThrow: 5-19<br>\r\nExpose 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Pitchfork",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "reinforced_crafted_armor" : {
+         "tooltip_icon" : "&#218;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Put on<br>\r\n<br>\r\nAbsorbs 50% of incoming damage, destroyed after it receives 20 points of damage",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Crafted Armor",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "remote_explosive" : {
+         "tooltip_icon" : "&#202;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nRight Mouse: Detonate placed bomb<br>\r\nDamage: 95<br>\r\nBleed 1.0 dps\r\nCripple 30%",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Remote Explosive",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "rifle" : {
+         "tooltip_icon" : "&#203;",
+         "tooltip_text" : {
+            "en" : "Damage: 50<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "Rifle",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "rock" : {
+         "tooltip_icon" : " &#204;",
+         "tooltip_text" : {
+            "en" : "Crafting Material<br>\r\nDamage: 4-12<br>\r\nThrow: 5<br>\r\nNormal Speed",
+            "es" : "Roca"
+         },
+         "tooltip_title" : {
+            "en" : "Rock",
+            "es" : "Roca"
+         }
+      },
+      "sabre" : {
+         "tooltip_icon" : "&#205;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Blade<br>\r\nDamage: 8-20<br>\r\nThrow: 8-20<br>\r\nBleed 0.8 dps<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Sabre",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "sledgehammer" : {
+         "tooltip_icon" : "&#206;",
+         "tooltip_text" : {
+            "en" : "Tier 4 Bludgeon<br>\r\nDamage: 8-28<br>\r\nThrow: 8-28<br>\r\nWeakness 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Sledgehammer",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "smg" : {
+         "tooltip_icon" : "&#207;",
+         "tooltip_text" : {
+            "en" : "Damage: 10<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         },
+         "tooltip_title" : {
+            "en" : "SMG",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "stamina_shot" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nIncreased stamina regen rate<br>\r\n<br>\r\n",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Lung Butter",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "stealthy_stim" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nMovement and crafting are nearly silent for 2 minutes",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Silent But Deadly",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "steel_caltrops" : {
+         "tooltip_icon" : "&#179;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Throw deploy<br>\r\nBleed 1.4 dps\r\nCripple 30%<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Steel Caltrops",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "steel_pipe" : {
+         "tooltip_icon" : " &#208;",
+         "tooltip_text" : {
+            "en" : "Tier 2 Bludgeon<br>\r\nDamage: 6-22<br>\r\nThrow: 6-22<br>\r\nWeakness 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Steel Pipe",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "steel_punji_sticks" : {
+         "tooltip_icon" : "&#184;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 20<br>\r\nWound: Cripple, Sickness, Bleed<br>\r\n<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Steel Punji Sticks",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "steel_snare" : {
+         "tooltip_icon" : "&#209;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Place on ground<br>\r\nDamage: 25<br>\r\nCripple 30%<br>\r\n<br>\r\nTraps are only triggered by opponents",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Steel Snare",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "stun_gun" : {
+         "tooltip_icon" : "&#210;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Attack<br>\r\n<br>\r\nStuns a target within a close range",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Stun Gun",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "survival_axe" : {
+         "tooltip_icon" : "&#221;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Axe<br>\r\nDamage: 9-23<br>\r\nThrow: 9-23<br>\r\nBleed 0.45 dps\r\nExpose 7.5%<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Survival Axe",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "survival_spear" : {
+         "tooltip_icon" : "&#211;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Spear<br>\r\nDamage: 7-25<br>\r\nThrow: 7-25<br>\r\nExpose 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Survival Spear",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tactical_body_armor" : {
+         "tooltip_icon" : "&#166;",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Put on<br>\r\n<br>\r\nAbsorbs 50% of incoming damage, destroyed after it receives 30 points of damage",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Tactical Body Armor",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tactical_machete" : {
+         "tooltip_icon" : "&#212;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Blade<br>\r\nDamage: 8-24<br>\r\nThrow: 8-24<br>\r\nBleed 0.9 dps<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Tactical Machete",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tanto_knife" : {
+         "tooltip_icon" : "&#213;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Blade<br>\r\nDamage: 7-17<br>\r\nThrow: 7-17<br>\r\nBleed 0.7 dps<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Tanto Knife",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tomahawk" : {
+         "tooltip_icon" : "&#214;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Axe<br>\r\nDamage: 8-24<br>\r\nThrow: 8-24<br>\r\nBleed 0.45 dps\r\nExpose 7.5%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Tomahawk",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "tonfa" : {
+         "tooltip_icon" : "&#215;",
+         "tooltip_text" : {
+            "en" : "Tier 1 Bludgeon<br>\r\nDamage: 5-19<br>\r\nThrow: 5-19<br>\r\nWeakness 15%<br>\r\nSlow Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Tonfa",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "trident" : {
+         "tooltip_icon" : "&#216;",
+         "tooltip_text" : {
+            "en" : "Tier 4 Spear<br>\r\nDamage: 9-27<br>\r\nThrow: 9-27<br>\r\nExpose 15%<br>\r\nNormal Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Trident",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "wound_lessstim" : {
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nReduce wounds applied to you by 50%",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Wound Less",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "x-plosive_runs" : {
+         "tooltip_icon" : "",
+         "tooltip_text" : {
+            "en" : "Left Mouse: Apply<br>\r\n<br>\r\nIncreases sprint speed by 15% for 2 minutes.",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "X-plosive Runs",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      },
+      "yari" : {
+         "tooltip_icon" : "&#216;",
+         "tooltip_text" : {
+            "en" : "Tier 3 Spear<br>\r\nDamage: 9-23<br>\r\nThrow: 9-23<br>\r\nExpose 15%<br>\r\nFast Speed",
+            "es" : "MISSING SPANISH TOOLTIP TEXT"
+         },
+         "tooltip_title" : {
+            "en" : "Yari",
+            "es" : "MISSING SPANISH TOOLTIP TITLE"
+         }
+      }
+   },
+   "messages" : {
+      "open_match_teaser" : {
+         "en" : "There are players queuing for a new match. Quit to the Main Menu and choose \"Play Online\" to join them!",
+         "es" : "Hay jugadores que buscan iniciar un partido. Salir al menú principal y seleccione 'Play Online' a unirse a ellos!"
+      }
+   },
+   "recipes" : {
+      "recipe_357reload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_357reload_alt" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_9mmreload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_autobowreload" : {
+         "en" : "Bolts",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_bandage" : {
+         "en" : "Crafted Bandage",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_blowgun" : {
+         "en" : "Crafted Blowgun",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_blowgunreload" : {
+         "en" : "Poison Dart",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_bow" : {
+         "en" : "Crafted Bow",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_bow_cudgel" : {
+         "en" : "Crafted Bow",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_bow_hatchet" : {
+         "en" : "Crafted Bow",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_bowreload" : {
+         "en" : "Arrows",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_caltrop" : {
+         "en" : "Crafted Caltrops",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_compbowreload" : {
+         "en" : "Arrows",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_craftedexplosive" : {
+         "en" : "Crafted Explosive",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_craftedexplosive_alt" : {
+         "en" : "Crafted Explosive",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_craftedmine" : {
+         "en" : "Crafted Mine",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_crudearmor" : {
+         "en" : "Crafted Armor",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_crudearmor_alt" : {
+         "en" : "Crafted Armor",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_cudgel" : {
+         "en" : "Crafted Cudgel",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_decoy" : {
+         "en" : "Decoy",
+         "es" : "Trampa Aspera"
+      },
+      "recipe_explodecoy" : {
+         "en" : "Explosive Decoy",
+         "es" : "Trampa Aspera"
+      },
+      "recipe_gasbomb" : {
+         "en" : "Crafted Gas Grenade",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_hatchet" : {
+         "en" : "Crafted Hatchet",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_hatchet2" : {
+         "en" : "Crafted Hatchet",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_huntingriflereload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_knife" : {
+         "en" : "Crafted Knife",
+         "es" : "Cuchillo Aspera"
+      },
+      "recipe_manalarmreload" : {
+         "en" : "Alarm Dart",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_pdwreload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_punjis" : {
+         "en" : "Crafted Punji Sticks",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_recurvereload" : {
+         "en" : "Arrows",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_reinforcedarmor" : {
+         "en" : "Crafted Armor",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_riflereload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_riflereload_alt" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_satchel" : {
+         "en" : "Crafted Satchel",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_satchel_alt" : {
+         "en" : "Crafted Satchel",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shot_deepshoot" : {
+         "en" : "Deep Pene-trol Stim",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shot_glancingblow" : {
+         "en" : "Projectile Disfunction Stim",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shot_glancingblow_alt" : {
+         "en" : "Projectile Disfunction Stim",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shot_iron4skin" : {
+         "en" : "Iron-4-Skin",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shot_muscleman" : {
+         "en" : "Muscle Man Milk",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotdamage" : {
+         "en" : "Muscle Man Milk",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_deepshoot" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_deepshoot_alt" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_exploruns" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_glancingblow_alt" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_glancingblow_alt2" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_glancingblow_alt3" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_glancingblow_alt4" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_iron4skin" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_iron4skin_alt" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_muscleman" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_muscleman_alt" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_stamina" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_woundless" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_woundless_alt" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotreload_woundless_alt2" : {
+         "en" : "+1 Stim Charge",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotspeed" : {
+         "en" : "Explosive Runs",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotstamina" : {
+         "en" : "Lung Butter",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotstamina_alt" : {
+         "en" : "Lung Butter",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotwoundless" : {
+         "en" : "Wound Less Stim",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_shotwoundless_alt" : {
+         "en" : "Wound Less Stim",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_smgreload" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_smgreload_alt" : {
+         "en" : "Ammunition",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_smokebomb" : {
+         "en" : "Crafted Smoke Bomb",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_snare" : {
+         "en" : "Crafted Snare",
+         "es" : "Trampa Aspera"
+      },
+      "recipe_spear" : {
+         "en" : "Crafted Spear",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      },
+      "recipe_caltrop_ammo" : {
+         "en" : "Caltrop Ammo",
+         "es" : "PLACEHOLDER SPANISH RECIPE TEXT"
+      }
+   },
+   "use" : {
+      "crafting" : {
+         "en" : "Craft",
+         "es" : "Arte"
+      },
+      "interact" : {
+         "en" : "Interact",
+         "es" : "Interactuar"
+      },
+      "none" : {
+         "en" : "F",
+         "es" : "F"
+      },
+      "nospace" : {
+         "en" : "Inventory Full",
+         "es" : "Inventario Completo"
+      },
+      "pickup" : {
+         "en" : "Pick Up",
+         "es" : "Recoger"
+      },
+      "pickupammo" : {
+         "en" : "Pick Up Ammo",
+         "es" : "Recoger Municiï¿½n"
+      }
+   },
+   "craftingrecipes" : {
+      "357_magnum" : {
+         "Item1" : "357_magnum",
+         "Item2" : "Hazard_ExplodingBarrel_C",
+         "Result": "357_magnum",
+         "Category": "AMMO",
+         "Cost": 50
+      },
+      "alarm_gun" : {
+         "Item1" : "alarm_gun",
+         "Item2" : "rock",
+         "Result": "alarm_gun",
+         "Category": "AMMO",
+         "Cost": 10
+      }
+    }
+}
