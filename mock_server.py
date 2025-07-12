@@ -1,7 +1,9 @@
+import random
+import string
 import uuid
 import eventlet
 from flask import Flask, request, jsonify
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 from flask_cors import CORS
 from socketio import WSGIApp          # ← comes from python-socketio, NOT your instance
 import logging
@@ -47,11 +49,15 @@ class MatchmakingService:
         self.socketio = socketio_instance
         self.queues = {
             'ffa_jungle': [],
-            'ffa_jungle_coop2': []
+            'ffa_jungle_coop2': [],
+            'ffa_prison': [],
+            'ffa_prison_coop2': []
+            # Add any other queues you find
         }
         self.lock = Lock()
         self.MATCH_SIZE = 1 # Set to 1 for easy testing
         self.ticker_task = None
+        self.lobbies = {}
 
     def start(self):
         if self.ticker_task is None:
@@ -102,7 +108,69 @@ class MatchmakingService:
                 self.socketio.emit('leave-mm-ack', room=player_info['sid'])
             else:
                 logging.warning(f"User {user_id} tried to leave queue but was not found in any.")
+                self.socketio.emit('leave-mm-ack', room=player_info['sid'])
 
+    def get_player_cards(self, user_ids):
+        """
+        Retrieves card information for a list of user IDs.
+        In a real application, this would query a database.
+        For now, we return dummy data.
+        """
+        cards_data = []
+        for user_id in user_ids:
+            # You can create more varied dummy data if needed
+            dummy_card = {
+                "userID": user_id,
+                "cardID": "191059",  # A default or random card ID
+                "cardLevel": 999,
+                "cardRank": 5
+            }
+            cards_data.append(dummy_card)
+        
+        logging.info(f"Retrieved card data for users: {user_ids}")
+        return cards_data
+    
+    def create_lobby(self, user_id, culling_card, map_name):
+        """Creates a new custom lobby and adds the creator to it."""
+        with self.lock:
+            player_info = connected_players.get(user_id)
+            if not player_info or not player_info.get('sid'):
+                logging.error(f"Cannot create lobby for user {user_id}: not fully connected.")
+                # Optionally, send a failure message back
+                # self.socketio.emit('lobby-create-fail', {'reason': 'Not connected'}, room=player_info['sid'])
+                return
+
+            # Generate a unique 6-character lobby code
+            lobby_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            while lobby_code in self.lobbies:
+                lobby_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+            logging.info(f"Creating new lobby '{lobby_code}' for owner {user_id} on map '{map_name}'.")
+
+            # Create the lobby data structure
+            new_lobby = {
+                'code': lobby_code,
+                'owner': user_id,
+                'mapName': map_name,
+                'members': [
+                    {
+                        'user': user_id,
+                        'cullingcard': culling_card
+                        # The client-side JS will fill in other details like level/name
+                    }
+                ]
+            }
+
+            self.lobbies[lobby_code] = new_lobby
+            
+            # The player is now "in" this lobby, so we need to add them to a SocketIO room
+            # so we can easily send updates to everyone in the lobby.
+            player_sid = player_info['sid']
+            join_room(lobby_code, sid=player_sid)
+            
+            # Send the 'lobby-update' event back to the creator.
+            # The client's UI is listening for this event to show the lobby screen.
+            self.socketio.emit('lobby-update', new_lobby, room=player_sid)
                 
     def _ticker(self):
         """The main loop that runs every few seconds to process queues."""
@@ -134,6 +202,8 @@ class MatchmakingService:
         
         match_data = {
             "gameServer": "127.0.0.1:7777",
+
+            # "gameServer": "https://clientweb2.us-east-1.matchmaking.theculling.net/",
             "nonce": f"nonce-client-{uuid.uuid4()}",
             "serverNonce": f"nonce-server-{uuid.uuid4()}"
         }
@@ -148,13 +218,49 @@ matchmaking_service = MatchmakingService(socketio)
 # ===================================================================
 #                      API ENDPOINTS - LOGIN/MATCHMAKE
 # ===================================================================
+@app.before_request
+def log_http_request():
+    print(f"\n--- HTTP Request ---")
+    print(f"Host: {request.host}") # Log which "server" is being hit
+    print(f"{request.method} {request.path}")
+    print(f"{request.headers}")
+
+    print(connected_players, flush=True)
+    if request.form: print(f"Form Data: {request.form.to_dict()}")
+
+
+@app.route('/api/discovery/GetClientData2', methods=['GET'])
+def get_client_data():
+    """
+    This is the newly discovered prerequisite endpoint.
+    We need to return a successful response that the game can parse.
+    Based on the name, it's probably expecting server IPs and settings.
+    """
+    logging.info("--- SUCCESS: Discovery endpoint /api/discovery/GetClientData2 was hit! ---")
+    
+    # We will provide a response that points the client back to our main API server.
+    # The format is a guess, but it's a very strong one.
+    discovery_data = {
+        "status": "ok",
+        "clientweb": {
+            "url": "https://clientweb2.us-east-1.production.theculling.net/api"
+        },
+        "telemetry": {
+            "url": "https://telemetry.theculling.net/data" # A placeholder
+        },
+        "friends": {
+            "url": "https://clientweb.us-east-1.friends.theculling.net/api"
+        }
+    }
+    return jsonify(discovery_data), 200
 
 @app.route("/api/matchqueue", methods=["POST"])
 def api_matchqueue():
     """HTTP endpoint to request joining a queue."""
     print("--- HTTP: Received 'MatchQueueWithTicket' request ---")
-    user_id = request.form.get("userid")
-    queue_name = request.form.get("queuename")
+    data = request.form.to_dict()
+    user_id = data.get("userid")
+    queue_name = data.get("queueName")
     
     if not user_id or not queue_name:
         return jsonify({"error": "Missing userid or queuename"}), 400
@@ -166,15 +272,7 @@ def api_matchqueue():
     return jsonify({"status": "QUEUED", "message": "Queue request received."}), 200
 
 
-@app.before_request
-def log_http_request():
-    print(f"\n--- HTTP Request ---")
-    print(f"Host: {request.host}") # Log which "server" is being hit
-    print(f"{request.method} {request.path}")
-    print(f"{request.headers}")
 
-    print(connected_players, flush=True)
-    if request.form: print(f"Form Data: {request.form.to_dict()}")
 
 @app.route("/api", methods=["GET"])
 def api_root_unauthenticated():
@@ -185,7 +283,6 @@ def api_root_unauthenticated():
     socket_url = f"{protocol}://{request.host}/socket.io"
     
     print(f"Generated WSS socket URL: {socket_url}")
-    
     response_data = {
       "authenticated": False,
       "login": f"{base_url}/api/login",
@@ -194,7 +291,6 @@ def api_root_unauthenticated():
       "redeemSystemOnline": True,
       "bIsConsole":"steam"
     }
-    # return jsonify(AUTHENTICATED_PLAYER_DATA)
     return jsonify(response_data)
 
 
@@ -231,7 +327,7 @@ def api_root_authenticated():
     # Add the socket URL to the authenticated response
     socket_url = f"wss://{request.host}/"
     final_data['socket'] = socket_url
-
+    final_data['matchqueue'] = f"https://{request.host}/api/matchqueue"
     print(f"Sending back: {final_data}", flush=True)
     return jsonify(final_data)
 
@@ -246,7 +342,6 @@ def collect_data():
         print(f"[ERROR parsing JS log] {e}")
         print(request.get_data(as_text=True))
     return "", 200
-
 
 
 # ===================================================================
@@ -302,6 +397,49 @@ def handle_leave_matchmaking(data):
     else:
         logging.warning(f"Received 'leave-mm' from an unknown session ID: {sid}")
 
+
+@socketio.on('lobby-create')
+def handle_lobby_create(data):
+    """Handles a client's request to create a new custom game lobby."""
+    sid = request.sid
+    user_id = next((uid for uid, p_info in connected_players.items() if p_info.get('sid') == sid), None)
+    
+    if user_id:
+        culling_card = data.get('cullingcard')
+        map_name = data.get('mapName')
+        
+        logging.info(f"--- WebSocket: Received 'lobby-create' from {user_id} ---")
+        logging.info(f"    - Card: {culling_card}, Map: {map_name}")
+        
+        # Delegate the work to our service
+        matchmaking_service.create_lobby(user_id, culling_card, map_name)
+    else:
+        logging.warning(f"Received 'lobby-create' from an unknown session ID: {sid}")
+
+@socketio.on('get-cards')
+def handle_get_cards(data):
+    """Handles the client's request for player Culling Card information."""
+    sid = request.sid
+    user_list = data.get('users', [])
+    
+    logging.info(f"--- WebSocket: Received 'get-cards' from {sid} for users: {user_list} ---")
+
+    if not isinstance(user_list, list):
+        logging.warning("'get-cards' request received with invalid data format.")
+        return
+
+    # Delegate the logic to our service
+    cards_result = matchmaking_service.get_player_cards(user_list)
+    
+    # The client expects the result in a specific format
+    response_payload = {
+        "cards": cards_result
+    }
+
+    # Send the result back to the client that requested it
+    emit('get-cards-result', response_payload, room=sid)
+    logging.info(f"-> Sent 'get-cards-result' back to {sid}.")
+
 # --- PARTY SYSTEM PLACEHOLDERS ---
 @socketio.on('group-invite')
 def handle_group_invite(data):
@@ -353,8 +491,8 @@ if __name__ == "__main__":
     print("Starting server with DEFAULT WebSocket path and SSL...")
     matchmaking_service.start()
 
-    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+4.pem'
-    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+4-key.pem'
+    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+5.pem'
+    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+5-key.pem'
 
     listener = eventlet.listen(('0.0.0.0', 443))
     ssl_listener = eventlet.wrap_ssl(
