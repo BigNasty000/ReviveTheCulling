@@ -1,5 +1,6 @@
 import random
 import string
+import subprocess
 import uuid
 import eventlet
 from flask import Flask, request, jsonify
@@ -194,18 +195,29 @@ class MatchmakingService:
 
     def _create_match(self, queue_name):
         """Forms a match and sends the match-ready event."""
+        client_nonce_str =f"nonce-client-{uuid.uuid4()}"
+        server_nonce_str = f"nonce-server-{uuid.uuid4()}"
+        # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
+        # Assuming your server script is named 'game_server.py'
+        server_process = subprocess.Popen([
+            'python', 
+            'dummy_server.py', 
+            '--client-nonce', client_nonce_str,
+            '--server-nonce', server_nonce_str
+        ])
         match_players = self.queues[queue_name][:self.MATCH_SIZE]
         self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
         
         player_ids = [p['user_id'] for p in match_players]
         logging.info(f"MATCH FOUND for queue '{queue_name}'! Players: {player_ids}")
         
+       
         match_data = {
             "gameServer": "127.0.0.1:7777",
 
             # "gameServer": "https://clientweb2.us-east-1.matchmaking.theculling.net/",
-            "nonce": f"nonce-client-{uuid.uuid4()}",
-            "serverNonce": f"nonce-server-{uuid.uuid4()}"
+            "nonce": client_nonce_str,
+            "serverNonce": server_nonce_str
         }
         for player in match_players:
             self.socketio.emit('match-ready', match_data, room=player['sid'])
