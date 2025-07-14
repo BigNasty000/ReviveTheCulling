@@ -50,6 +50,8 @@ class MatchmakingService:
         self.socketio = socketio_instance
         self.queues = {
             'ffa_jungle': [],
+            'ffa': [],
+
             'ffa_jungle_coop2': [],
             'ffa_prison': [],
             'ffa_prison_coop2': []
@@ -199,12 +201,20 @@ class MatchmakingService:
         server_nonce_str = f"nonce-server-{uuid.uuid4()}"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
-        server_process = subprocess.Popen([
+        if queue_name in ["ffa"]:
+            server_process = subprocess.Popen([
             'python', 
-            'dummy_server.py', 
+            'dummy_old_server.py', 
             '--client-nonce', client_nonce_str,
             '--server-nonce', server_nonce_str
         ])
+        else:
+            server_process = subprocess.Popen([
+                'python', 
+                'dummy_server.py', 
+                '--client-nonce', client_nonce_str,
+                '--server-nonce', server_nonce_str
+            ])
         match_players = self.queues[queue_name][:self.MATCH_SIZE]
         self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
         
@@ -215,7 +225,7 @@ class MatchmakingService:
         match_data = {
             "gameServer": "127.0.0.1:7777",
 
-            # "gameServer": "https://clientweb2.us-east-1.matchmaking.theculling.net/",
+            # "gameServer": "https://clientwe6b2.us-east-1.matchmaking.theculling.net/:7777",
             "nonce": client_nonce_str,
             "serverNonce": server_nonce_str
         }
@@ -379,7 +389,11 @@ def handle_disconnect():
 
 @socketio.on('login')
 def handle_socket_login(data):
-    user_id = data.get('userID')
+    if not data:
+        user_id = request.sid
+        data = {}
+    else:
+        user_id = data.get('userID')
     print(f"--- WebSocket: Received 'login' for {user_id} (sid: {request.sid}) ---")
     
     # Gracefully handle reconnection.
@@ -409,6 +423,18 @@ def handle_leave_matchmaking(data):
     else:
         logging.warning(f"Received 'leave-mm' from an unknown session ID: {sid}")
 
+
+@socketio.on('join-mm')
+def handle_old_join_matchmaking(data):
+    """Handles the client's request to leave the matchmaking queue."""
+    # Find the user ID associated with the current session
+    queue_name = data.get("queueName")
+    user_id =request.sid
+    if not user_id or not queue_name:
+        return jsonify({"error": "Missing userid or queuename"}), 400
+
+    # Delegate the logic to our service
+    matchmaking_service.add_player_to_queue(user_id, queue_name)
 
 @socketio.on('lobby-create')
 def handle_lobby_create(data):

@@ -1,7 +1,8 @@
  # Define your map and game mode candidates
         map_candidates = [
+            "/Game/Maps/Entry"
             "/Game/Maps/Jungle",
-            "/Game/Maps/FrontEnd",
+            "/Game/Maps/FrontEnd/FrontEnd",
             "/Game/Maps/Jungle2",
             "/Game/Maps/TheIsland" # A common default
         ]
