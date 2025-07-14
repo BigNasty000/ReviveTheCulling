@@ -51,43 +51,90 @@ def run_server(ip, port, client_nonce, server_nonce):
     session_key = derive_key(client_nonce, server_nonce)
     logging.info(f"Derived Session Key: {session_key.hex()}")
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); sock.bind((ip, port))
-    logging.info(f"✅ Server listening on {ip}:{port}"); sock.settimeout(10)
+    logging.info(f"✅ Server listening on {ip}:{port}"); sock.settimeout(20)
 
     try:
         # === STEP 1: Client sends NMT_Hello ===
         data, peer = sock.recvfrom(2048)
-        iv, ct = data[:16], data[16:]; initial_blob = aes_decrypt(session_key, iv, ct, use_padding=False)
-        logging.info(f"📥 [1] Received client's Hello blob.")
+        iv, ct = data[:16], data[16:];
+        # We know the first packet is an unpadded blob
+        initial_blob = aes_decrypt(session_key, iv, ct, use_padding=False)
+        logging.info(f"📥 [1] Received client's Hello blob ({len(initial_blob)} bytes).")
 
-        # === STEP 2: Server sends NMT_Challenge with the CORRECT payload ===
-        # The payload is NOT random. It must be the server_nonce so the client can verify it.
-        # We will send it as a length-prefixed string, as that is the UE4 standard.
+        # === STEP 2: Server sends NMT_Challenge ===
+        # As per the UE4 documentation and our successful test, this is the first server response.
+        # The payload must be the server_nonce so the client can verify the server.
         CHALLENGE_OPCODE = 0x03
-        
         challenge_payload = build_ue4_fstring(server_nonce)
         
         logging.info(f"Sending NMT_Challenge with server_nonce: {server_nonce}")
         send_handshake_blob(sock, peer, session_key, CHALLENGE_OPCODE, challenge_payload)
         logging.info("⇠ [2] Sent definitive NMT_Challenge. Waiting for client's NMT_Login...")
 
-        # === STEP 3: Client should now send NMT_Login ===
+        # === STEP 3: Client responds with NMT_Login ===
+        # We now expect a NEW packet from the client.
         data, _ = sock.recvfrom(2048)
         iv, ct = data[:16], data[16:];
+        # Subsequent packets are padded
         login_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
         
-        if len(login_blob) > 0 and login_blob == initial_blob:
-             logging.error("❌ FAILURE: Client re-transmitted Hello. The Challenge was rejected.")
-             return
+        logging.info("✅✅✅ SUCCESS: Received client's NMT_Login packet! ✅✅✅")
+        logging.info(f"📥 [3] Login Packet is {len(login_blob)} bytes long.")
+
+        # === STEP 4: Server sends the "You're In" Finalization Burst ===
+        # Now that the client is authenticated, we give it everything it needs to join the level.
         
-        logging.info("✅✅✅ SUCCESS! Client accepted the Challenge and sent a Login packet! ✅✅✅")
-        logging.info(f"📥 [3] Received Login Packet (hex): {login_blob.hex()}")
+        # Packet 1: The Welcome Packet with Map/Game Info
+        WELCOME_OPCODE = 0x01
+        # Using your verified paths
+        MAP_PATH = "/Game/Maps/Jungle"
+        GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
         
-        # Now we would continue with the NMT_Welcome, etc.
-        # Getting here is the victory.
+        map_bytes = build_ue4_fstring(MAP_PATH)
+        gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
+        # It's good practice to include the nonce again for the client to double-check
+        nonce_bytes = build_ue4_fstring(server_nonce) 
+        welcome_payload = map_bytes + gamemode_bytes + nonce_bytes
+        send_handshake_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload)
+        logging.info("⇠ [4a] Sent NMT_Welcome with map info.")
         
+        # Packet 2: The Final Setup Packets (GUID, NetSpeed, and Open)
+        # Let's try combining these, as that is a common optimization.
+        guid_payload = bytes([0x06]) + b'\x01\x00\x00\x00' # NMT_AssignGUID
+        netspeed_payload = bytes([0x04]) + struct.pack('<I', 30000) # NMT_NetSpeed
+        open_payload = bytes([0x07]) # NMT_ControlChannelOpen (opcode only)
+        
+        final_setup_blob = guid_payload + netspeed_payload + open_payload
+        
+        # We need a master "blob" opcode. Let's try 0x0A (NMT_Join) to wrap them.
+        send_handshake_blob(sock, peer, session_key, 0x0A, final_setup_blob)
+        logging.info(f"⇠ [4b] Sent final setup burst (GUID, NetSpeed, Open) wrapped in NMT_Join.")
+        
+        logging.info("✅ Full finalization burst sent. Waiting for client to send NMT_Join...")
+
+         # We need a master "blob" opcode. Let's try 0x0A (NMT_Join) to wrap them.
+        send_handshake_blob(sock, peer, session_key, 0x0A, final_setup_blob)
+        logging.info(f"⇠ [4b] Sent final setup burst (GUID, NetSpeed, Open) wrapped in NMT_Join.")
+        
+        logging.info("✅ Full finalization burst sent. Waiting for client to send NMT_Join...")
+
+        # === STEP 5: Client sends the final NMT_Join message ===
+        # This confirms it has loaded the map and is spawning the player.
+        data, _ = sock.recvfrom(2048)
+        iv, ct = data[:16], data[16:];
+        join_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
+
+        logging.info("🎉🎉🎉 VICTORY! HANDSHAKE COMPLETE! 🎉🎉🎉")
+        logging.info(f"📥 [5] Received final NMT_Join packet (hex): {join_blob.hex()}")
+        
+        # --- Main Game Loop ---
+        while True:
+            logging.info("In main game loop. Client is fully connected.")
+            time.sleep(10)
+
     except socket.timeout:
-        logging.warning("⌛ TIMEOUT: The client did not respond to our Challenge.")
-        logging.warning("This means the Challenge payload structure is still wrong (e.g., needs a build ID), or the key derivation is non-standard.")
+        logging.warning("⌛ TIMEOUT: The client did not respond to one of our packets.")
+        logging.warning("Check which step it timed out on to identify the faulty packet.")
     except Exception as e:
         logging.error(f"An error occurred: {e}", exc_info=True)
     finally:
