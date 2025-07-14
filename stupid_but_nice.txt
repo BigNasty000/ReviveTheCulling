@@ -1,0 +1,32 @@
+ # Define your map and game mode candidates
+        map_candidates = [
+            "/Game/Maps/Jungle",
+            "/Game/Maps/FrontEnd",
+            "/Game/Maps/Jungle2",
+            "/Game/Maps/TheIsland" # A common default
+        ]
+        
+        gamemode_candidates = [
+            "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryFrontEnd.VictoryFrontEnd_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode.VictoryGameMode_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_CoopRanked.VictoryGameMode_CoopRanked_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_Custom.VictoryGameMode_Custom_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_EndOfMatch.VictoryGameMode_EndOfMatch_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_Lightning.VictoryGameMode_Lightning_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_Lightning_Coop2.VictoryGameMode_Lightning_Coop2_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_NewTutorial.VictoryGameMode_NewTutorial_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_Practice.VictoryGameMode_Practice_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_PracticeRange.VictoryGameMode_PracticeRange_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_RandomShit.VictoryGameMode_RandomShit_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_SoloRanked.VictoryGameMode_SoloRanked_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_Survival.VictoryGameMode_Survival_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_SurvivalAdvanced.VictoryGameMode_SurvivalAdvanced_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryGameMode_TrialsSolo.VictoryGameMode_TrialsSolo_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryPhysicsCollisionHandler.VictoryPhysicsCollisionHandler_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryPlayerState.VictoryPlayerState_C", # Your verified one
+            "/Game/Blueprints/GameMode/VictoryTutorial.VictoryTutorial_C", # Your verified one
+
+
+            "/Game/Blueprints/GameMode/GM_FreeForAll.GM_FreeForAll_C" # A likely generic default
+        ]

@@ -42,72 +42,52 @@ def build_ue4_string(s: str) -> bytes:
 
 
 def build_ue4_fstring(s: str) -> bytes:
-    """Builds a length-prefixed, null-terminated string for UE4 networking."""
-    # Note: For unicode strings, length is negative. For ASCII, it's positive. We'll use ASCII.
+    """Builds a length-prefixed, null-terminated ASCII string."""
     encoded_s = s.encode('ascii') + b'\x00'
-    length = len(encoded_s)
-    # The length is sent as a 32-bit signed little-endian integer.
-    return struct.pack('<i', length) + encoded_s
-
+    length = len(encoded_s); return struct.pack('<i', length) + encoded_s
 
 # --- Main Server Logic ---
 def run_server(ip, port, client_nonce, server_nonce):
     session_key = derive_key(client_nonce, server_nonce)
     logging.info(f"Derived Session Key: {session_key.hex()}")
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); sock.bind((ip, port))
-    logging.info(f"✅ Server listening on {ip}:{port}"); sock.settimeout(25)
+    logging.info(f"✅ Server listening on {ip}:{port}"); sock.settimeout(10)
 
-       
     try:
-        # Step 1: Client sends Hello blob
+        # === STEP 1: Client sends NMT_Hello ===
         data, peer = sock.recvfrom(2048)
         iv, ct = data[:16], data[16:]; initial_blob = aes_decrypt(session_key, iv, ct, use_padding=False)
-        logging.info(f"📥 [1] Received client's initial Hello blob.")
+        logging.info(f"📥 [1] Received client's Hello blob.")
 
-        # Step 2: Server responds with a Welcome message using the CORRECT opcode and PAYLOAD STRUCTURE.
-        WELCOME_OPCODE = 0x01
+        # === STEP 2: Server sends NMT_Challenge with the CORRECT payload ===
+        # The payload is NOT random. It must be the server_nonce so the client can verify it.
+        # We will send it as a length-prefixed string, as that is the UE4 standard.
+        CHALLENGE_OPCODE = 0x03
         
-        # Using the most generic paths to reduce variables.
-        MAP_PATH = "/Game/Maps/Jungle"
-        GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
-        logging.info(f"Using Map Path: {MAP_PATH}")
-        logging.info(f"Using Game Mode Path: {GAME_MODE_PATH}")
+        challenge_payload = build_ue4_fstring(server_nonce)
+        
+        logging.info(f"Sending NMT_Challenge with server_nonce: {server_nonce}")
+        send_handshake_blob(sock, peer, session_key, CHALLENGE_OPCODE, challenge_payload)
+        logging.info("⇠ [2] Sent definitive NMT_Challenge. Waiting for client's NMT_Login...")
 
-        # Construct the payload using the length-prefixed string format.
-        map_bytes = build_ue4_fstring(MAP_PATH)
-        gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
-        nonce_bytes = build_ue4_fstring(server_nonce)
-
-        welcome_payload = map_bytes + gamemode_bytes + nonce_bytes 
-        # welcome_payload = map_bytes + nonce_bytes + gamemode_bytes 
-        # welcome_payload = gamemode_bytes + map_bytes + nonce_bytes 
-        # welcome_payload = gamemode_bytes + nonce_bytes + map_bytes 
-        # welcome_payload = nonce_bytes + map_bytes + gamemode_bytes 
-        # welcome_payload = nonce_bytes + gamemode_bytes + map_bytes 
-        send_handshake_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload)
-        logging.info(f"⇠ [2] Sent Welcome message (opcode {WELCOME_OPCODE:#02x}) with correct payload structure. Waiting for response...")
-
-        # Step 3: Wait for the client's response. A successful response will be a NEW packet.
+        # === STEP 3: Client should now send NMT_Login ===
         data, _ = sock.recvfrom(2048)
-        iv, ct = data[:16], data[16:]
-        response_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
+        iv, ct = data[:16], data[16:];
+        login_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
         
-        if len(response_blob) == 112 and response_blob[4:] == initial_blob[4:]:
-            logging.error("❌ FAILURE: Client re-transmitted Hello. Payload content (Map/GM paths) is still wrong.")
-            return
-
-        logging.info("🎉🎉🎉 VICTORY! Handshake Advanced! 🎉🎉🎉")
-        logging.info(f"📥 [3] Received new packet (hex): {response_blob.hex()}")
+        if len(login_blob) > 0 and login_blob == initial_blob:
+             logging.error("❌ FAILURE: Client re-transmitted Hello. The Challenge was rejected.")
+             return
         
-        # Now the real work begins... parsing this new blob and continuing the handshake.
-        # But this is the win.
+        logging.info("✅✅✅ SUCCESS! Client accepted the Challenge and sent a Login packet! ✅✅✅")
+        logging.info(f"📥 [3] Received Login Packet (hex): {login_blob.hex()}")
         
-        while True:
-            logging.info("Handshake has progressed. Idling...")
-            time.sleep(10)
-
+        # Now we would continue with the NMT_Welcome, etc.
+        # Getting here is the victory.
+        
     except socket.timeout:
-        logging.warning("⌛ Client timed out. The welcome payload was accepted, but it is now waiting for the next step.")
+        logging.warning("⌛ TIMEOUT: The client did not respond to our Challenge.")
+        logging.warning("This means the Challenge payload structure is still wrong (e.g., needs a build ID), or the key derivation is non-standard.")
     except Exception as e:
         logging.error(f"An error occurred: {e}", exc_info=True)
     finally:
@@ -115,13 +95,19 @@ def run_server(ip, port, client_nonce, server_nonce):
         logging.info("Server shut down.")
 
 def main():
-    parser = argparse.ArgumentParser(description="UE4 Dummy Game Server for The Culling")
-    parser.add_argument('--ip', default="127.0.0.1", help="IP address to bind to")
-    parser.add_argument('--port', type=int, default=7777, help="Port to bind to")
+    parser = argparse.ArgumentParser(description="The Culling - TLS Handshake Server")
+    parser.add_argument('--ip', default="127.0.0.1", help="IP to listen on")
+    parser.add_argument('--port', type=int, default=7777, help="Port to listen on")
     parser.add_argument('--client-nonce', required=True, help="Client nonce provided by matchmaker")
     parser.add_argument('--server-nonce', required=True, help="Server nonce provided by matchmaker")
+
+    # --- IMPORTANT ---
+    # You need to provide the path to your extracted certificate and generated key
+    parser.add_argument('--cert', default='certs/gameserver.pem', help="Path to the server certificate file")
+    parser.add_argument('--key', default='certs/gameserver.key', help="Path to the server private key file")
+
     args = parser.parse_args()
-    run_server(args.ip, args.port, args.client_nonce, args.server_nonce)
+    run_server(args.ip, args.port, args.cert, args.key)
 
 if __name__ == "__main__":
     main()
