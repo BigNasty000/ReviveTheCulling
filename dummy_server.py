@@ -4,157 +4,215 @@ import os
 import argparse
 import logging
 import time
+
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5, AES
 from hashlib import sha1
-from Crypto.Cipher import AES
-
-# --- Helpers (All are confirmed correct) ---
+import hmac
+import hashlib
+# --- Global Helpers ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-def derive_key(client_nonce: str, server_nonce: str) -> bytes: return sha1(client_nonce.encode('ascii') + server_nonce.encode('ascii')).digest()[:16]
-def aes_decrypt(session_key: bytes, iv: bytes, ciphertext: bytes, use_padding=True) -> bytes:
-    cipher = AES.new(session_key, AES.MODE_CBC, iv)
-    decrypted = cipher.decrypt(ciphertext)
-    if use_padding and decrypted:
-        pad_len = decrypted[-1]
-        if 0 < pad_len <= 16 and len(decrypted) >= pad_len and decrypted[-pad_len:] == bytes([pad_len]) * pad_len: return decrypted[:-pad_len]
-    return decrypted
-def aes_encrypt(session_key: bytes, iv: bytes, plaintext: bytes, use_padding=True) -> bytes:
-    cipher = AES.new(session_key, AES.MODE_CBC, iv)
-    if use_padding:
-        pad_len = 16 - (len(plaintext) % 16); plaintext += bytes([pad_len]) * pad_len
-    return cipher.encrypt(plaintext)
-def send_handshake_blob(sock, peer, session_key, control_opcode: int, extra_payload: bytes = b''):
-    # Based on the Ghidra function, the client expects a raw opcode, not one with the 0x80 flag.
-    raw_packet_data = bytes([control_opcode]) + extra_payload
 
-    iv = os.urandom(16)
-    encrypted_payload = aes_encrypt(session_key, iv, raw_packet_data, use_padding=True)
-    full_packet = iv + encrypted_payload
-    sock.sendto(full_packet, peer)
-
-
-# --- NEW HELPER FUNCTION ---
-def build_ue4_string(s: str) -> bytes:
-    """Builds a length-prefixed, null-terminated string for UE4 networking."""
-    encoded_s = s.encode('ascii') + b'\x00'
-    length = len(encoded_s)
-    # The length is sent as a 32-bit signed little-endian integer.
-    return struct.pack('<i', length) + encoded_s
+def decrypt_custom_cbc(ciphertext, key):
+    """
+    Attempts decryption using AES-128 in a manual CBC-like mode.
+    The IV for each block is the previous encrypted block.
+    The first IV is all zeros.
+    """
+    cipher = AES.new(key, AES.MODE_ECB) # We use ECB as a primitive
+    
+    iv = b'\x00' * 16
+    plaintext = b''
+    
+    for i in range(0, len(ciphertext), 16):
+        block = ciphertext[i:i+16]
+        decrypted_block = cipher.decrypt(block)
+        plaintext_block = bytes([decrypted_block[j] ^ iv[j] for j in range(16)])
+        plaintext += plaintext_block
+        iv = block # The next IV is the current encrypted block
+        
+    return plaintext
 
 
-def build_ue4_fstring(s: str) -> bytes:
-    """Builds a length-prefixed, null-terminated ASCII string."""
-    encoded_s = s.encode('ascii') + b'\x00'
-    length = len(encoded_s); return struct.pack('<i', length) + encoded_s
+def parse_client_packet(data: bytes):
+    """
+    Parses the 128-byte packet into chunks to see its structure.
+    This is based on the hex dump you provided.
+    """
+    if len(data) != 128:
+        return
 
-# --- Main Server Logic ---
-def run_server(ip, port, client_nonce, server_nonce):
-    session_key = derive_key(client_nonce, server_nonce)
-    logging.info(f"Derived Session Key: {session_key.hex()}")
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); sock.bind((ip, port))
-    logging.info(f"✅ Server listening on {ip}:{port}"); sock.settimeout(20)
+    logging.info("--- Parsing 128-byte Packet Structure ---")
+    
+    # Let's break it into 16-byte chunks, as seen in the hex dump
+    part1 = data[0:16]
+    part2 = data[16:32]
+    part3 = data[32:48]
+    part4 = data[48:64] # This one contained the exponent
+    part5 = data[64:80]
+    part6 = data[80:96]
+    part7 = data[96:112]
+    part8 = data[112:128]
+
+    logging.info(f"Part 1 (16 bytes): {part1.hex()}")
+    logging.info(f"Part 2 (16 bytes): {part2.hex()}")
+    logging.info(f"Part 3 (16 bytes): {part3.hex()}")
+    logging.info(f"Part 4 (16 bytes): {part4.hex()}")
+    
+    # Let's try to unpack the part with the exponent
+    # 'I' is a 4-byte unsigned int. We expect four of them.
+    # '<' means little-endian byte order.
+    try:
+        p4_unpacked = struct.unpack('<IIII', part4)
+        logging.info(f"Part 4 Unpacked: {[hex(x) for x in p4_unpacked]}")
+        if p4_unpacked[1] == 0x10001:
+            logging.info("   >>> CONFIRMED: Found public exponent 0x10001 here!")
+    except Exception as e:
+        logging.info(f"Could not unpack Part 4: {e}")
+
+    logging.info(f"Part 5 (16 bytes): {part5.hex()}")
+    logging.info(f"Part 6 (16 bytes): {part6.hex()}")
+    logging.info(f"Part 7 (16 bytes): {part7.hex()}")
+    logging.info(f"Part 8 (16 bytes): {part8.hex()}")
+    logging.info("-----------------------------------------")
+
+
+# The static key we found in the executable
+# STATIC_KEY_STRING = b'3@#$y38$t3dsB3a%12p|-49dF23fav'
+STATIC_KEY_STRING =  b"#51@#$y38$t3dsB3a%12p|-49dF23fav"
+SBOX_TABLES_FILE = 'hexdump/culling_T0_table.bin'
+
+# --- Custom AES Implementation (with a new encrypt method) ---
+
+
+def run_server(ip="127.0.0.1", port=7777):
+     # --- 1. Key Derivation and Crypto Setup ---
+    aes_key = hashlib.md5(STATIC_KEY_STRING).digest()
+    logging.info(f"Derived 16-byte AES Key: {aes_key.hex()}")
 
     try:
-        # === STEP 1: Client sends NMT_Hello ===
-        data, peer = sock.recvfrom(2048)
-        iv, ct = data[:16], data[16:];
-        # We know the first packet is an unpadded blob
-        initial_blob = aes_decrypt(session_key, iv, ct, use_padding=False)
-        logging.info(f"📥 [1] Received client's Hello blob ({len(initial_blob)} bytes).")
+        # We will use a standard library AES for this implementation, as it's now clear
+        # the problem was the key, not the algorithm itself. This is much cleaner.
+        # If issues arise, we can swap back to the manual implementation.
+        from Crypto.Cipher import AES
+        crypto = AES.new(aes_key, AES.MODE_ECB)
+        logging.info("Initialized AES-ECB cipher.")
+    except Exception as e:
+        logging.error(f"Crypto init failed: {e}")
+        return
 
-        # === STEP 2: Server sends NMT_Challenge ===
-        # As per the UE4 documentation and our successful test, this is the first server response.
-        # The payload must be the server_nonce so the client can verify the server.
-        CHALLENGE_OPCODE = 0x03
-        challenge_payload = build_ue4_fstring(server_nonce)
-        
-        logging.info(f"Sending NMT_Challenge with server_nonce: {server_nonce}")
-        send_handshake_blob(sock, peer, session_key, CHALLENGE_OPCODE, challenge_payload)
-        logging.info("⇠ [2] Sent definitive NMT_Challenge. Waiting for client's NMT_Login...")
+    # --- 2. Server Socket Setup ---
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind((ip, port))
+    logging.info(f"✅ Full Handshake Server listening on {ip}:{port}")
+    peer = None # To store the client's address
 
-        # === STEP 3: Client responds with NMT_Login ===
-        # We now expect a NEW packet from the client.
-        data, _ = sock.recvfrom(2048)
-        iv, ct = data[:16], data[16:];
-        # Subsequent packets are padded
-        login_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
+    try:
+        # ======================================================================
+        # STAGE 1: Initial Challenge/Response
+        # ======================================================================
+        logging.info("---------- STAGE 1: Awaiting Initial Client Challenge ----------")
+        encrypted_challenge, peer = sock.recvfrom(2048)
+        if len(encrypted_challenge) != 128:
+            raise ValueError(f"Expected 128-byte challenge, got {len(encrypted_challenge)}")
         
-        logging.info("✅✅✅ SUCCESS: Received client's NMT_Login packet! ✅✅✅")
-        logging.info(f"📥 [3] Login Packet is {len(login_blob)} bytes long.")
+        logging.info(f"Received 128-byte challenge from {peer}")
+        decrypted_challenge = crypto.decrypt(encrypted_challenge)
+        
+        # We prove we have the key by re-encrypting its challenge and sending it back.
+        encrypted_response = crypto.encrypt(decrypted_challenge)
+        sock.sendto(encrypted_response, peer)
+        logging.info("Sent 128-byte challenge response. Authentication complete.")
 
-        # === STEP 4: Server sends the "You're In" Finalization Burst ===
-        # Now that the client is authenticated, we give it everything it needs to join the level.
-        
-        # Packet 1: The Welcome Packet with Map/Game Info
-        WELCOME_OPCODE = 0x01
-        # Using your verified paths
-        MAP_PATH = "/Game/Maps/Jungle"
-        GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
-        
-        map_bytes = build_ue4_fstring(MAP_PATH)
-        gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
-        # It's good practice to include the nonce again for the client to double-check
-        nonce_bytes = build_ue4_fstring(server_nonce) 
-        welcome_payload = map_bytes + gamemode_bytes + nonce_bytes
-        send_handshake_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload)
-        logging.info("⇠ [4a] Sent NMT_Welcome with map info.")
-        
-        # Packet 2: The Final Setup Packets (GUID, NetSpeed, and Open)
-        # Let's try combining these, as that is a common optimization.
-        guid_payload = bytes([0x06]) + b'\x01\x00\x00\x00' # NMT_AssignGUID
-        netspeed_payload = bytes([0x04]) + struct.pack('<I', 30000) # NMT_NetSpeed
-        open_payload = bytes([0x07]) # NMT_ControlChannelOpen (opcode only)
-        
-        final_setup_blob = guid_payload + netspeed_payload + open_payload
-        
-        # We need a master "blob" opcode. Let's try 0x0A (NMT_Join) to wrap them.
-        send_handshake_blob(sock, peer, session_key, 0x0A, final_setup_blob)
-        logging.info(f"⇠ [4b] Sent final setup burst (GUID, NetSpeed, Open) wrapped in NMT_Join.")
-        
-        logging.info("✅ Full finalization burst sent. Waiting for client to send NMT_Join...")
+        # ======================================================================
+        # STAGE 2: Receive Encrypted Connect Request
+        # The client now trusts us and sends the first real game packet.
+        # This is the 112-byte packet you saw.
+        # ======================================================================
+        logging.info("---------- STAGE 2: Awaiting Encrypted Connect Request ----------")
+        encrypted_connect_request, _ = sock.recvfrom(2048)
+        while len(encrypted_connect_request) == 128:
 
-         # We need a master "blob" opcode. Let's try 0x0A (NMT_Join) to wrap them.
-        send_handshake_blob(sock, peer, session_key, 0x0A, final_setup_blob)
-        logging.info(f"⇠ [4b] Sent final setup burst (GUID, NetSpeed, Open) wrapped in NMT_Join.")
-        
-        logging.info("✅ Full finalization burst sent. Waiting for client to send NMT_Join...")
+            print(f"Inccoret packet: {len(encrypted_connect_request)}")
+            encrypted_connect_request, _ = sock.recvfrom(2048)
+            time.sleep(1)
+            continue
 
-        # === STEP 5: Client sends the final NMT_Join message ===
-        # This confirms it has loaded the map and is spawning the player.
-        data, _ = sock.recvfrom(2048)
-        iv, ct = data[:16], data[16:];
-        join_blob = aes_decrypt(session_key, iv, ct, use_padding=True)
 
-        logging.info("🎉🎉🎉 VICTORY! HANDSHAKE COMPLETE! 🎉🎉🎉")
-        logging.info(f"📥 [5] Received final NMT_Join packet (hex): {join_blob.hex()}")
+        logging.info(f"Received {len(encrypted_connect_request)}-byte packet, likely ConnectRequest.")
         
-        # --- Main Game Loop ---
+        # All further packets are standard AES-ECB.
+        decrypted_connect_request = crypto.decrypt(encrypted_connect_request)
+        logging.info(f"Decrypted ConnectRequest: {decrypted_connect_request.hex()}")
+        logging.info(f"Decrypted ConnectRequest: {decrypted_connect_request}")
+
+        # NOTE: You may need to analyze the hex of this decrypted packet to see
+        # what it contains (e.g., player ID, session ticket). For now, we assume
+        # we just need to respond to continue the handshake.
+
+        # ======================================================================
+        # STAGE 3: Send Encrypted Connect Challenge
+        # According to the expert notes, we now send back a simple challenge.
+        # The notes say this should be 4 bytes plain text.
+        # ======================================================================
+        logging.info("---------- STAGE 3: Sending Encrypted Connect Challenge ----------")
+        # Let's send a simple 4-byte challenge, e.g., b'\xDE\xAD\xBE\xEF'
+        challenge_payload = b'\xDE\xAD\xBE\xEF'
+        
+        # The payload must be padded to a multiple of 16 for AES.
+        # PKCS7 padding is standard.
+        pad_len = 16 - (len(challenge_payload) % 16)
+        padded_challenge = challenge_payload + bytes([pad_len]) * pad_len
+        
+        encrypted_challenge_response = crypto.encrypt(padded_challenge)
+        sock.sendto(encrypted_challenge_response, peer)
+        logging.info(f"Sent {len(encrypted_challenge_response)}-byte encrypted challenge.")
+        
+        # ======================================================================
+        # STAGE 4: Receive Encrypted Challenge Response
+        # The client must now respond to our challenge.
+        # ======================================================================
+        logging.info("---------- STAGE 4: Awaiting Encrypted Challenge Response ----------")
+        encrypted_final_response, _ = sock.recvfrom(2048)
+        logging.info(f"Received {len(encrypted_final_response)}-byte final packet.")
+        
+        decrypted_final_response = crypto.decrypt(encrypted_final_response)
+        logging.info(f"Decrypted final response: {decrypted_final_response.hex()}")
+
+        # ======================================================================
+        # VICTORY! Handshake Complete
+        # ======================================================================
+        logging.info("🎉🎉🎉 FULL HANDSHAKE COMPLETE! The client is now ready for game data. 🎉🎉🎉")
+        logging.info("The server should now transition to handling the main game loop.")
+        
+        # Keep the server alive for a bit to see if more packets arrive
+        sock.settimeout(30)
         while True:
-            logging.info("In main game loop. Client is fully connected.")
-            time.sleep(10)
+            more_data, _ = sock.recvfrom(2048)
+            decrypted_more_data = crypto.decrypt(more_data)
+            logging.info(f"Received subsequent game packet: LEN={len(decrypted_more_data)}: {decrypted_more_data.hex()}")
+
 
     except socket.timeout:
-        logging.warning("⌛ TIMEOUT: The client did not respond to one of our packets.")
-        logging.warning("Check which step it timed out on to identify the faulty packet.")
+        logging.warning("⌛ TIMEOUT: Client did not respond to one of the handshake stages.")
     except Exception as e:
-        logging.error(f"An error occurred: {e}", exc_info=True)
+        logging.error(f"An error occurred during the handshake: {e}", exc_info=True)
     finally:
-        sock.close()
         logging.info("Server shut down.")
+        sock.close()
 
 def main():
-    parser = argparse.ArgumentParser(description="The Culling - TLS Handshake Server")
+    parser = argparse.ArgumentParser(description="The Culling - Modern Handshake Server")
     parser.add_argument('--ip', default="127.0.0.1", help="IP to listen on")
     parser.add_argument('--port', type=int, default=7777, help="Port to listen on")
     parser.add_argument('--client-nonce', required=True, help="Client nonce provided by matchmaker")
     parser.add_argument('--server-nonce', required=True, help="Server nonce provided by matchmaker")
 
-    # --- IMPORTANT ---
-    # You need to provide the path to your extracted certificate and generated key
-    parser.add_argument('--cert', default='certs/gameserver.pem', help="Path to the server certificate file")
-    parser.add_argument('--key', default='certs/gameserver.key', help="Path to the server private key file")
+    # This MUST be the path to your 1024-bit server private RSA key.
+    parser.add_argument('--key', default='certs/private.key', help="Path to the server private RSA key file")
 
     args = parser.parse_args()
-    run_server(args.ip, args.port, args.cert, args.key)
+    run_server(args.ip, args.port)
 
 if __name__ == "__main__":
     main()

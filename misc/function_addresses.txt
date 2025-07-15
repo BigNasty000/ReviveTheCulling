@@ -1,0 +1,38 @@
+1.
+The sendto Caller (Packet Preparation)
+Address: 0x00007FF77153E510
+What it Does: This is the high-level function that the game's networking layer calls when it needs to send our 128-byte handshake packet. Its job is to orchestrate the whole process.
+Analogy: The General Contractor who oversees the project.
+Key Action: It calls the "Packet Factory" to do the heavy lifting of building the packet contents, and then it calls the system sendto function to put the packet on the wire.
+
+2. The Packet Factory
+Address: 0x00007FF77153CC70
+What it Does: This is the core logic function that assembles the 128-byte packet. It's responsible for generating the initial data and then calling other crypto primitives to process it.
+Analogy: The Factory Foreman who directs the assembly line.
+Key Actions:
+Loads the static key string (&#51@#$...).
+-- REALY IMPORTANT --
+STATIC_KEY_STRING = b'#5@#$y38$t3dsB3a%12p|-49dF23fav'
+-- END --
+Calls the MD5 function to derive the real AES key.
+Calls the custom AES encryption loop to encrypt the data.
+Assembles the final 128-byte data structure.
+
+
+3. The MD5 Hash Function (Key Derivation)
+Address: 0x00007FF771242B10
+What it Does: A standard implementation of the MD5 hash algorithm. Its only purpose in this context is to take the long static string and convert it into a predictable, 16-byte key suitable for use in a 128-bit block cipher.
+Analogy: The Toolmaker who forges the key.
+Key Action: We identified this by the four "magic number" initialization constants (0x67452301, etc.) that are the unique fingerprint of MD5.
+
+4. The Custom AES Encryption Loop
+Address: 0x00007FF771213160
+What it Does: This function contains the main for loop that iterates over the data, 16 bytes at a time, to perform the encryption.
+Analogy: The Assembly Line itself.
+Key Action: It calls the "AES Round Function" repeatedly until all the data is processed.
+
+5. The Custom AES Round Function 
+Address: 0x00007FF771228000
+What it Does: This is the cryptographic heart. It performs a single round of the custom AES-like algorithm. It takes 16 bytes of data and 16 bytes of a round key and mixes them together.
+Analogy: The Robotic Arm on the assembly line that does the actual work (welding, painting, etc.).
+Key Actions: Implements the SubBytes (using the custom S-Box tables), ShiftRows, MixColumns, and AddRoundKey steps that define their unique version of the cipher. This is the function whose assembly you last provided.
