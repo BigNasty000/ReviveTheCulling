@@ -224,8 +224,6 @@ class MatchmakingService:
        
         match_data = {
             "gameServer": "127.0.0.1:7777",
-
-            # "gameServer": "https://clientwe6b2.us-east-1.matchmaking.theculling.net/:7777",
             "nonce": client_nonce_str,
             "serverNonce": server_nonce_str
         }

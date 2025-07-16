@@ -6,6 +6,7 @@ import logging
 import time
 from hashlib import sha1
 from Crypto.Cipher import AES
+import gc # <--- IMPORT THE GARBAGE COLLECTOR MODULE
 
 # --- Global Helpers ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -97,177 +98,143 @@ def send_encrypted_ecb_probe_response(sock: socket.socket, peer: tuple, session_
 
 
 # --- Main Server Logic ---
-def run_server(ip, port, client_nonce, server_nonce):
+def run_server(ip, port, client_nonce_from_matchmaker, server_nonce_from_matchmaker):
+    """
+    High-performance version: Disables the Garbage Collector to minimize latency
+    during the critical handshake, aiming for consistent connections.
+    """
+    # =========================================================================
+    #  PERFORMANCE OPTIMIZATION: Disable GC
+    # =========================================================================
+    gc.disable()
+    logging.info("[PERFORMANCE] Garbage Collector disabled to minimize latency.")
+    # =========================================================================
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    session_key = derive_key(client_nonce, server_nonce)
+    
     try:
         sock.bind((ip, port))
     except OSError as e:
-        logging.error("[GAME SERVER]: "+f"FATAL: Could not bind to port {port}. Error: {e}")
+        logging.error(f"[GAME SERVER] FATAL: Could not bind to port {port}. Error: {e}")
         return
-    logging.error("[GAME SERVER]: "+f"✅ Simple UDP Server listening on {ip}:{port} for handshake.")
-    sock.settimeout(5) 
-
-    try:
-        # === STAGE 1: UNENCRYPTED PROBE/DISCOVERY PHASE ===
         
-        # Step 1: Client sends 1x Len=2 probe
-        logging.error("[GAME SERVER]: "+"⏳ Waiting for initial client probe (Len=2)...")
-        data, peer = sock.recvfrom(2048)
-        logging.error("[GAME SERVER]: "+f"📥 [1] Received packet (Length: {len(data)} bytes, Hex: {data.hex()})")
-        if len(data) != 2: logging.error("[GAME SERVER]: "+f"❌ ERROR: Expected 2-byte probe. Got {len(data)}. Raw: {data.hex()}"); return
-        
-        # Step 2: Server responds to the probe (Len=1)
-        response_to_probe = b'\x01' 
-        sock.sendto(response_to_probe, peer)
-        logging.error("[GAME SERVER]: "+f"⇠ [2] Sent probe response. Waiting for 2x Len=4 packets...")
+    session_key = derive_key(client_nonce_from_matchmaker, server_nonce_from_matchmaker)
+    logging.info(f"[GAME SERVER] UDP Server listening on {ip}:{port}")
+    logging.info(f"[GAME SERVER] Session Key Pre-derived: {session_key.hex()}")
 
-        # Step 3: Client sends 2x Len=4 packets
-        for i in range(2):
-            data, _ = sock.recvfrom(2048)
-            logging.error("[GAME SERVER]: "+f"📥 [3.{i+1}] Received packet (Length: {len(data)} bytes, Hex: {data.hex()})")
-            if len(data) != 4: logging.error("[GAME SERVER]: "+f"❌ ERROR: Expected 4-byte packet. Got {len(data)}. Raw: {data.hex()}"); return
+    # --- State Machine & Loop Breaker Variables ---
+    state = "WAITING_FOR_HANDSHAKE_START"
+    peer = None
+    challenge_cookie = None
+    probes_after_challenge = 0
+    PROBE_LIMIT = 10
+    sock.settimeout(5)
 
-            # Step 4: Server responds to each 4-byte packet with a 1-byte ACK
-            response_to_4byte_packet = b'\x01'
-            sock.sendto(response_to_4byte_packet, peer)
-            logging.error("[GAME SERVER]: "+f"⇠ [4.{i+1}] Sent response to 4-byte packet.")
-
-        # Step 5: Client sends 1x Len=2 ACK
-        logging.error("[GAME SERVER]: "+"⏳ Waiting for Len=2 ACK after 4-byte packets...")
-        data, _ = sock.recvfrom(2048)
-        logging.error("[GAME SERVER]: "+f"📥 [5] Received packet (Length: {len(data)} bytes, Hex: {data.hex()})")
-        if len(data) != 2: logging.error("[GAME SERVER]: "+f"❌ ERROR: Expected 2-byte ACK. Got {len(data)}. Raw: {data.hex()}"); return
-
-        # Step 6: Server responds to Len=2 ACK with a 1-byte ACK
-        response_to_2byte_ack = b'\x01'
-        sock.sendto(response_to_2byte_ack, peer)
-        logging.error("[GAME SERVER]: "+"⇠ [6] Sent response to 2-byte ACK.")
-
-        # Step 7: Client sends 1x Len=14 probe
-        logging.error("[GAME SERVER]: "+"⏳ Waiting for Len=14 probe...")
-        data, peer = sock.recvfrom(2048)
-        logging.error("[GAME SERVER]: "+f"📥 [7] Received packet (Length: {len(data)} bytes, Hex: {data.hex()})")
-        if len(data) != 14: logging.error("[GAME SERVER]: "+f"❌ ERROR: Expected 14-byte probe. Got {len(data)}. Raw: {data.hex()}"); return
-
-        # 1.  parse the nonce
-        client_nonce = data[1:9]          # 8 bytes after opcode
-        server_nonce = os.urandom(8)      # make your own 8-byte nonce
-
-        # 2.  send the real 4-byte challenge
-        ts = int(time.time()) & 0xFFFFFF  # 3-byte timestamp
-        seq = data[9]                     # last byte in 0x5D is sequence
-        cookie = struct.pack('<I', (ts<<8) | seq)  # UE4 format
-        sock.sendto(cookie, peer)
-
-        # 8. Wait for the 8-byte ChallengeResponse -------------------------------
-        data, _ = sock.recvfrom(2048)
-        # if len(data) != 8 or data[:4] != cookie:
-        #     logging.error("[GAME SERVER]: "+"Bad ChallengeResponse"); return
-        logging.error("[GAME SERVER]: "+"✔ ChallengeResponse ok")
-
-        # 9. Finalise the stateless phase – 1-byte ChallengeAck ------------------
-        sock.sendto(b'\x01', peer)
-
-        # 10.   *Now* derive the AES key and switch to encrypted traffic
-        # session_key = sha1(server_nonce + client_nonce).digest()[:16]
-        logging.error("[GAME SERVER]: "+"Derived AES key %s", session_key.hex())
-
-        # 11. Expect the 32-byte AES-CBC ClientHello next ------------------------
-        data, _ = sock.recvfrom(2048)
-        if len(data) != 32:
-            logging.error("[GAME SERVER]: "+"Expected 32-byte ClientHello"); return
-        client_hello = aes_decrypt_cbc(session_key, data)
-        logging.error("[GAME SERVER]: "+"ClientHello opcode %02x", client_hello[0])
-            
+    # --- THE REST OF THE LOGIC IS IDENTICAL TO OUR LAST ATTEMPT ---
+    while state != "SHUTDOWN":
         try:
-            decrypted_probe_blob = aes_decrypt_ecb(session_key, data) # Decrypt using ECB
-            logging.error("[GAME SERVER]: "+f"✅ Decrypted 2-byte probe: {decrypted_probe_blob.hex()}")
-            
-            # Step 10: Server responds to the 2-byte encrypted probe (padded to 16 for ECB).
-            response_to_encrypted_probe = b'\x01' # Payload
-            send_encrypted_ecb_probe_response(sock, peer, session_key, response_to_encrypted_probe) # Encrypt using ECB
-            logging.error("[GAME SERVER]: "+f"⇠ [10] Sent encrypted probe response. Waiting for AES ClientHello Record...")
+            data, addr = sock.recvfrom(2048)
 
-            # Step 11: Client sends the AES-encrypted ClientHello Record (Len=32)
-            logging.error("[GAME SERVER]: "+"⏳ Waiting for AES-encrypted ClientHello Record (Len=32)...")
-            data, _ = sock.recvfrom(2048)
-            logging.error("[GAME SERVER]: "+f"📥 [11] Received encrypted ClientHello Record (Length: {len(data)} bytes).")
-            
-            if len(data) != 32: # Now expecting 32 bytes for ClientHello Record
-                logging.error("[GAME SERVER]: "+f"❌ ERROR: Expected 32-byte encrypted ClientHello Record, got {len(data)}. Raw: {data.hex()}")
-                return
+            if peer is None: peer = addr
+            elif peer != addr: continue
+
+            if state == "WAITING_FOR_HANDSHAKE_START":
+                if len(data) in [2, 4]:
+                    sock.sendto(b'\x01', peer)
+                elif len(data) == 14:
+                    logging.info("Received NMT_Hello. Sending NMT_Challenge.")
+                    challenge_cookie = os.urandom(4)
+                    sock.sendto(challenge_cookie, peer)
+                    logging.info(f"Sent NMT_Challenge with cookie: {challenge_cookie.hex()}")
+                    state = "WAITING_FOR_CHALLENGE_RESPONSE"
+                    logging.info(f"Transitioned to state: {state}")
+
+            elif state == "WAITING_FOR_CHALLENGE_RESPONSE":
+                logging.info(f"[{state}] RX {len(data)} bytes: {data.hex()}")
                 
-            decrypted_client_hello_record = aes_decrypt_cbc(session_key, data) # Decrypt using CBC
-            logging.error("[GAME SERVER]: "+f"✅✅✅ CLIENTHELLO DECRYPTED! Decrypted blob (hex): {decrypted_client_hello_record.hex()}")
-            
-            # --- Continue the AES Encrypted NMT Handshake ---
-            # As per UE4 documentation: ClientHello -> Challenge -> Login -> Welcome -> Join
+                if len(data) == 32:
+                    if data[:4] == challenge_cookie:
+                        logging.info("GOLDEN PATH: Correct 32-byte response received and cookie matched!")
+                        sock.sendto(b'\x01', peer)
+                        logging.info("⇠ Sent final ACK. Proceeding to ENCRYPTED mode.")
+                        state = "WAITING_FOR_ENCRYPTED_LOGIN"
+                    else:
+                        logging.error(f"32-byte response with BAD COOKIE. Shutting down.")
+                        state = "SHUTDOWN"
+                
+                elif len(data) in [2, 4]:
+                    probes_after_challenge += 1
+                    logging.warning(f"[{state}] Received a probe when expecting challenge response. Count: {probes_after_challenge}/{PROBE_LIMIT}")
+                    if probes_after_challenge >= PROBE_LIMIT:
+                        logging.error("Probe limit reached. Client is stuck. Shutting down.")
+                        state = "SHUTDOWN"
+                    else:
+                        sock.sendto(b'\x01', peer)
+                else:
+                    logging.warning(f"[{state}] Received unexpected packet length: {len(data)}")
 
-            # Step 12: Server sends NMT_Challenge
-            CHALLENGE_OPCODE = 0x03
-            challenge_payload = build_ue4_fstring(server_nonce)
-            send_encrypted_nmt_blob(sock, peer, session_key, CHALLENGE_OPCODE, challenge_payload) # Use CBC
-            logging.error("[GAME SERVER]: "+"⇠ [12] Sent definitive NMT_Challenge. Waiting for client's NMT_Login...")
 
-            # Step 13: Client responds with NMT_Login
-            data, _ = sock.recvfrom(2048)
-            if len(data) < 16: logging.error("[GAME SERVER]: "+f"❌ ERROR: Too short for NMT_Login. Raw: {data.hex()}"); return
-            decrypted_login_blob = aes_decrypt_cbc(session_key, data)
-            
-            logging.error("[GAME SERVER]: "+"✅✅✅ SUCCESS: Received client's NMT_Login packet! ✅✅✅")
-            logging.error("[GAME SERVER]: "+f"📥 [13] Login Packet is {len(decrypted_login_blob)} bytes long.")
+            elif state == "WAITING_FOR_ENCRYPTED_LOGIN":
+                logging.info(f"[{state}] RX {len(data)} bytes, attempting decryption...")
+                try:
+                    decrypted_login = aes_decrypt_cbc(session_key, data)
+                    logging.info(f"[ENCRYPTED] Successfully decrypted NMT_Login! Payload: {decrypted_login.hex()}")
+                    
+                    WELCOME_OPCODE = 0x01
+                    MAP_PATH = "/Game/Maps/Jungle"
+                    GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
+                    
+                    map_bytes = build_ue4_fstring(MAP_PATH)
+                    gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
+                    server_nonce_bytes = build_ue4_fstring(server_nonce_from_matchmaker) 
+                    welcome_payload = map_bytes + gamemode_bytes + server_nonce_bytes
+                    
+                    send_encrypted_nmt_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload)
+                    logging.info("[ENCRYPTED] Sent NMT_Welcome.")
+                    
+                    send_encrypted_nmt_blob(sock, peer, session_key, 0x06, b'\x01\x00\x00\x00')
+                    send_encrypted_nmt_blob(sock, peer, session_key, 0x04, struct.pack('<I', 30000))
+                    send_encrypted_nmt_blob(sock, peer, session_key, 0x07)
+                    logging.info("[ENCRYPTED] Sent finalization burst (GUID, NetSpeed, Open).")
 
-            # Step 14: Server sends the "You're In" Finalization Burst
-            WELCOME_OPCODE = 0x01
-            MAP_PATH = "/Game/Maps/Jungle"
-            GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
-            
-            map_bytes = build_ue4_fstring(MAP_PATH)
-            gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
-            nonce_bytes = build_ue4_fstring(server_nonce) 
-            welcome_payload = map_bytes + gamemode_bytes + nonce_bytes
-            send_encrypted_nmt_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload) # Use CBC
-            logging.error("[GAME SERVER]: "+"⇠ [14a] Sent NMT_Welcome with map info.")
-            
-            guid_payload = bytes([0x06]) + b'\x01\x00\x00\x00' # NMT_AssignGUID
-            netspeed_payload = bytes([0x04]) + struct.pack('<I', 30000) # NMT_NetSpeed
-            open_payload = bytes([0x07]) # NMT_ControlChannelOpen (opcode only)
-            
-            send_encrypted_nmt_blob(sock, peer, session_key, 0x06, guid_payload) # NMT_AssignGUID
-            send_encrypted_nmt_blob(sock, peer, session_key, 0x04, netspeed_payload) # NMT_NetSpeed
-            send_encrypted_nmt_blob(sock, peer, session_key, 0x07, open_payload) # NMT_ControlChannelOpen
-            
-            logging.error("[GAME SERVER]: "+"✅ Full finalization burst sent. Waiting for client to send NMT_Join...")
+                    state = "WAITING_FOR_ENCRYPTED_JOIN"
+                    logging.info(f"Transitioned to state: {state}")
 
-            # Step 15: Client sends the final NMT_Join message
-            data, _ = sock.recvfrom(2048)
-            if len(data) < 16: logging.error("[GAME SERVER]: "+f"❌ ERROR: Too short for final NMT_Join. Raw: {data.hex()}"); return
-            decrypted_join_blob = aes_decrypt_cbc(session_key, data)
+                except Exception as e:
+                    logging.error(f"FAILED to decrypt NMT_Login packet. Raw data: {data.hex()}. Error: {e}")
+                    state = "SHUTDOWN"
 
-            logging.error("[GAME SERVER]: "+"🎉🎉🎉 CORE HANDSHAKE COMPLETE! 🎉🎉🎉")
-            logging.error("[GAME SERVER]: "+f"📥 [15] Received final NMT_Join packet (hex): {decrypted_join_blob.hex()}")
-            
-            # --- Main Game Loop ---
-            while True:
-                logging.error("[GAME SERVER]: "+"In main game loop. Client is fully connected. Waiting for game data...")
-                data, _ = sock.recvfrom(2048) # Keep receiving client heartbeats/input
-                logging.error("[GAME SERVER]: "+f"Received game data ({len(data)} bytes): {data.hex()}")
-                time.sleep(1) # Prevent busy loop
+            elif state == "WAITING_FOR_ENCRYPTED_JOIN":
+                logging.info(f"[{state}] RX {len(data)} bytes, attempting decryption...")
+                try:
+                    decrypted_join = aes_decrypt_cbc(session_key, data)
+                    logging.info(f"[ENCRYPTED] Received final NMT_Join: {decrypted_join.hex()}")
+                    
+                    logging.info("CORE HANDSHAKE FULLY COMPLETE! Entering game loop.")
+                    state = "GAME_LOOP"
+                    logging.info(f"Transitioned to state: {state}")
+                
+                except Exception as e:
+                    logging.error(f"FAILED to decrypt NMT_Join packet. Raw data: {data.hex()}. Error: {e}")
+                    state = "SHUTDOWN"
 
-        except Exception as aes_e:
-            logging.error("[GAME SERVER]: "+f"❌ ERROR: AES Handshake stage failed: {aes_e}", exc_info=True)
-            return
+            elif state == "GAME_LOOP":
+                try:
+                    decrypted_game_data = aes_decrypt_cbc(session_key, data)
+                    logging.info(f"[GAME_LOOP] RX Decrypted Game Data ({len(decrypted_game_data)} bytes): {decrypted_game_data.hex()}")
+                except Exception:
+                    logging.warning(f"[GAME_LOOP] RX Raw (could not decrypt) Game Data ({len(data)} bytes): {data.hex()}")
 
-    except socket.timeout:
-        logging.warning("⌛ TIMEOUT: Client did not respond as expected at this stage.")
-    except Exception as e:
-        logging.error("[GAME SERVER]: "+f"An unexpected error occurred: {e}", exc_info=True)
-    finally:
-        logging.error("[GAME SERVER]: "+"Server shutting down.")
-        sock.close()
+        except socket.timeout:
+            logging.warning(f"TIMEOUT: No packets received for 30 seconds. State: {state}. Shutting down.")
+            state = "SHUTDOWN"
+        except Exception as e:
+            logging.error(f"An unexpected error occurred in state {state}: {e}", exc_info=True)
+            state = "SHUTDOWN"
 
+    logging.info("[GAME SERVER] Server is shutting down.")
+    sock.close()
 # --- Main entry point ---
 def main():
     parser = argparse.ArgumentParser(description="The Culling - Full Handshake Server")

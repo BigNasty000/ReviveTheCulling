@@ -80,6 +80,30 @@ Once you have UE4-4.15.3 Installed from Epic Games.
  
 ---
 
+## Extremely Recommended Programs
+
+X64dbg
+https://x64dbg.com/
+
+Wireshark
+https://www.wireshark.org/
+
+TCPView
+https://learn.microsoft.com/en-us/sysinternals/downloads/tcpview
+
+UUUClient (Unreal Enginer Unlocker - allows for in game console using '~' key)
+https://framedsc.com/GeneralGuides/universal_ue4_consoleunlocker.htm#downloading-the-uuu
+
+Ghidra (viewing assembly AND analyzing it as more readable C code) -- I use this
+https://github.com/NationalSecurityAgency/ghidra
+
+-- OR --
+
+IDA Free (similar to Ghidra)
+https://hex-rays.com/ida-free
+
+--
+
 
 ## How to Run
 
