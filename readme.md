@@ -82,13 +82,15 @@ Once you have UE4-4.15.3 Installed from Epic Games.
 
 ## Extremely Recommended Programs
 
-X64dbg
+**IF you need any help understanding the setup or use of these tools, feel free to message me on Reddit or Discord and I can try to help you get setup**
+
+X64dbg (See LIVE running assembly code being executed in a debugger, helpful for seeing what data is being moved around while a program runs)
 https://x64dbg.com/
 
-Wireshark
+Wireshark (See live TCP/UDP connections - use upd.port == 7777 in the filter bar at the top to see connections to game server)
 https://www.wireshark.org/
 
-TCPView
+TCPView (Useful for seeing TCP/UDP connections)
 https://learn.microsoft.com/en-us/sysinternals/downloads/tcpview
 
 UUUClient (Unreal Enginer Unlocker - allows for in game console using '~' key)
