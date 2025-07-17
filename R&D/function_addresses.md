@@ -3,7 +3,7 @@
 - Your base will 100% be different from mine. Use ChatGPT to find your new functions. 
 - To do so:
     - Take the base in this file (0x7FF722010000), and the function you want to look at. 
-    - give ChatGPT (or any other AI) your current base, the base in this file (0x7FF722010000), and the function address you want to inspect.
+    - give ChatGPT (or any other AI) your current base, the base in this file (0x7FF722010000), and the function address you want to inspect in this file, in ex/ 0x00007FF7242F5700.
         - Tell it to recalculate the function signature based off your current base, and the previous (0x7FF722010000) base and function signature
     - HIGHLY recommend renaming functions in ghidra, as once you rebase your ghidra, you can still find the functions by name.
 
