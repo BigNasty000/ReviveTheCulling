@@ -20,14 +20,8 @@ This document outlines the two manual patches required to be applied to `Victory
 
 Modify the low-level sending function (`...e510`) to replace the call to the encryption function with a simple `memcpy`. This forces the client to send its handshake and game packets as plaintext.
 
-### Step 1: Find the `memcpy` Address
 
-1. In `x64dbg`, press **Ctrl+G**.
-2. In the “Go to Expression” dialog, type `memcpy` and press **OK**.
-3. The CPU view will jump to the `memcpy` function in the C runtime library.
-4. **Note this address** (e.g., `0x00007FFA0B62C820`). You will use it in the patch.
-
-### Step 2: Patch the Sending Function
+### Step 1: Patch the Sending Function
 
 1. Press **Ctrl+G** and go to address:  
    `0x00007FF72289E540`
@@ -43,7 +37,7 @@ LEA RCX, qword ptr [RSP+40]     ; Destination buffer
 MOV RDX, RDX                    ; Source buffer (redundant but logical)
 MOV R8, R8                      ; Size (redundant but logical)
 
-MOV RAX, 0x00007FFA0B62C820     ; <--- USE YOUR memcpy ADDRESS
+MOV RAX, vcruntime140.memcpy    ; <--- USE YOUR memcpy ADDRESS
 CALL RAX
 
 MOV dword ptr [RSP+44], R8D     ; Set expected final size

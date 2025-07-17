@@ -13,7 +13,8 @@ This project is a mock backend server for **The Culling**, designed to intercept
   - `/api/matchqueue`
 - Web server is running on **port 443** using a **self-signed SSL cert** with `eventlet`.
 - AJAX/XHR requests from the game client are confirmed to hit the spoofed server and respond correctly.
-- `hosts` file configured to redirect domains to `127.0.0.1`, including:
+- `hosts` (C:\Windows\System32\drivers\etc) file configured to redirect domains to `127.0.0.1`, including:
+
 
     - 127.0.0.1 discovery.theculling.net
     - 127.0.0.1 resources.theculling.com
