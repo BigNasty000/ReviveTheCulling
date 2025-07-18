@@ -123,6 +123,8 @@ hosts file needs to be edited:
     - 127.0.0.1 clientweb.us-east-1.development.theculling.net
     - 127.0.0.1 clientweb.us-east-1.friends.theculling.net
 
+--- 
+
 after that, 
 python 3.11 is what this project is running
 
@@ -133,9 +135,11 @@ FIRST TIME SETUP
 - py -m venv venv
 - venv\Scripts\activate
 - pip install -r requirements.txt
+- python mock_server.py
+
 
 ---
-
+OTHERWISE
 
 - venv\Scripts\activate
 - python mock_server.py
