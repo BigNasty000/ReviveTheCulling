@@ -151,5 +151,12 @@ OTHERWISE
 - venv\Scripts\activate
 - python mock_server.py
 
+---
+Launch the game
+- Once launched:
+    - if we are doing the unecrypted UDP build:
+        - navigate to patcher/patch.exe and launch that 
+        - IF you're nervous about running this .exe, read information.md
+    - else
+        - you are good to go!
 
-Run the game after you've made changes to your hosts file and have the mock_server.py running. You should see the current out puts for logging in.
