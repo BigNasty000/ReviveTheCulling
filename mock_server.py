@@ -1,6 +1,7 @@
 import random
 import string
 import subprocess
+import time
 import uuid
 import eventlet
 from flask import Flask, request, jsonify
@@ -197,37 +198,48 @@ class MatchmakingService:
 
     def _create_match(self, queue_name):
         """Forms a match and sends the match-ready event."""
-        client_nonce_str =f"nonce-client-{uuid.uuid4()}"
         server_nonce_str = f"nonce-server-{uuid.uuid4()}"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
         if queue_name in ["ffa"]:
-            server_process = subprocess.Popen([
+            subprocess.Popen([
             'python', 
             'dummy_old_server.py', 
-            '--client-nonce', client_nonce_str,
             '--server-nonce', server_nonce_str
         ])
         else:
-            server_process = subprocess.Popen([
+            subprocess.Popen([
                 'python', 
                 'dummy_server.py', 
-                '--client-nonce', client_nonce_str,
                 '--server-nonce', server_nonce_str
             ])
+
+        time.sleep(2)
         match_players = self.queues[queue_name][:self.MATCH_SIZE]
         self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
         
         player_ids = [p['user_id'] for p in match_players]
         logging.info(f"MATCH FOUND for queue '{queue_name}'! Players: {player_ids}")
         
-       
-        match_data = {
-            "gameServer": "127.0.0.1:7777",
-            "nonce": client_nonce_str,
-            "serverNonce": server_nonce_str
-        }
+        # --- The Player Loop: Generate a UNIQUE client nonce for each player ---
         for player in match_players:
+            # Generate a unique ticket for this specific player.
+            client_nonce_str = f"nonce-client-{uuid.uuid4()}"
+            
+            logging.info(f"Assigning client_nonce {client_nonce_str} to player {player['user_id']}")
+
+            # Tell the game server to expect this specific player with this nonce.
+            # This requires a way to communicate with your subprocess. For now, we assume
+            # the server will just accept any valid client nonce associated with the server nonce.
+
+            # Construct the unique match data for this player.
+            match_data = {
+                "gameServer": "127.0.0.1:7777",
+                "nonce": client_nonce_str,       # The unique client nonce
+                "serverNonce": server_nonce_str  # The shared server nonce
+            }
+            
+            # Send the personalized connection info to this player.
             self.socketio.emit('match-ready', match_data, room=player['sid'])
 
 # --- Initialize the Matchmaking Service ---

@@ -98,7 +98,7 @@ def send_encrypted_ecb_probe_response(sock: socket.socket, peer: tuple, session_
 
 
 # --- Main Server Logic ---
-def run_server(ip, port, client_nonce_from_matchmaker, server_nonce_from_matchmaker):
+def run_server(ip, port, server_nonce_from_matchmaker):
     """
     High-performance version: Disables the Garbage Collector to minimize latency
     during the critical handshake, aiming for consistent connections.
@@ -119,7 +119,7 @@ def run_server(ip, port, client_nonce_from_matchmaker, server_nonce_from_matchma
         logging.error(f"[GAME SERVER] FATAL: Could not bind to port {port}. Error: {e}")
         return
         
-    session_key = derive_key(client_nonce_from_matchmaker, server_nonce_from_matchmaker)
+    session_key = derive_key(server_nonce_from_matchmaker)
     logging.info(f"[GAME SERVER] UDP Server listening on {ip}:{port}")
     logging.info(f"[GAME SERVER] Session Key Pre-derived: {session_key.hex()}")
 
@@ -240,11 +240,10 @@ def main():
     parser = argparse.ArgumentParser(description="The Culling - Full Handshake Server")
     parser.add_argument('--ip', default="127.0.0.1", help="IP to listen on")
     parser.add_argument('--port', type=int, default=7777, help="Port to listen on")
-    parser.add_argument('--client-nonce', required=True, help="Client nonce")
     parser.add_argument('--server-nonce', required=True, help="Server nonce")
     
     args = parser.parse_args()
-    run_server(args.ip, args.port, args.client_nonce, args.server_nonce)
+    run_server(args.ip, args.port, args.server_nonce)
 
 if __name__ == "__main__":
     main()
