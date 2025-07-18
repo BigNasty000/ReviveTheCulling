@@ -275,13 +275,13 @@ def get_client_data():
     discovery_data = {
         "status": "ok",
         "clientweb": {
-            "url": "https://clientweb2.us-east-1.production.theculling.net/api"
+            "url": f"https://https://{request.host}/api"
         },
         "telemetry": {
             "url": "https://telemetry.theculling.net/data" # A placeholder
         },
         "friends": {
-            "url": "https://clientweb.us-east-1.friends.theculling.net/api"
+            "url": "https://{request.host}/api"
         }
     }
     return jsonify(discovery_data), 200
@@ -539,8 +539,8 @@ if __name__ == "__main__":
     print("Starting server with DEFAULT WebSocket path and SSL...")
     matchmaking_service.start()
 
-    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+4.pem'
-    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+4-key.pem'
+    cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+7.pem'
+    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+7-key.pem'
 
     listener = eventlet.listen(('0.0.0.0', 443))
     ssl_listener = eventlet.wrap_ssl(
