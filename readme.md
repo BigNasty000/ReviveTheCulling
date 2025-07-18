@@ -110,6 +110,20 @@ https://hex-rays.com/ida-free
 
 ## How to Run
 
+hosts file needs to edited:
+- `hosts` (C:\Windows\System32\drivers\etc) file configured to redirect domains to `127.0.0.1`, including:
+
+
+    - 127.0.0.1 discovery.theculling.net
+    - 127.0.0.1 resources.theculling.com
+    - 127.0.0.1 clientweb2.us-east-1.production.theculling.net
+    - 127.0.0.1 clientweb.us-east-1.production.theculling.net
+    - 127.0.0.1 clientweb2.us-west-2.production.theculling.net
+    - 127.0.0.1 clientweb2.eu-central-1.production.theculling.net
+    - 127.0.0.1 clientweb.us-east-1.development.theculling.net
+    - 127.0.0.1 clientweb.us-east-1.friends.theculling.net
+
+after that, 
 python 3.11 is what this project is running
 
 
