@@ -52,7 +52,6 @@ def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("===================================================")
     print("=== The Culling Standalone Auto-Patcher v13     ===")
-    print("=== (Final Version w/ Countdown)                ===")
     print("===================================================")
 
     OLD_BASE = 0x7FF722010000
