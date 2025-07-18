@@ -22,7 +22,7 @@ def run_definitive_handshake_server(ip, port, server_nonce):
     except Exception as e:
         logging.error(f"!!! FAILED TO BIND TO SOCKET {ip}:{port} - {e}")
         return
-    logging.info(f"✅ Definitive Handshake Server listening on {ip}:{port}")
+    logging.info(f"Definitive Handshake Server listening on {ip}:{port}")
     sock.settimeout(20)
 
     try:
