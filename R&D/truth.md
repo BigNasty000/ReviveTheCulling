@@ -4,7 +4,7 @@ This document outlines the two manual patches required to be applied to `Victory
 
 ---
 
-## 🧰 Prerequisites
+## Prerequisites
 
 - A running copy of **The Culling**.
 - `x64dbg` attached to the `Victory.exe` process.
@@ -14,9 +14,9 @@ This document outlines the two manual patches required to be applied to `Victory
 
 ---
 
-## 🧱 Part 1: Encryption Bypass (Client ➝ Server)
+##  Part 1: Encryption Bypass (Client ➝ Server)
 
-### 🎯 Goal
+### Goal
 
 Modify the low-level sending function (`...e510`) to replace the call to the encryption function with a simple `memcpy`. This forces the client to send its handshake and game packets as plaintext.
 
@@ -45,9 +45,9 @@ MOV dword ptr [RSP+44], R8D     ; Set expected final size
 
 ---
 
-## 🧱 Part 2: Decryption Bypass (Server ➝ Client)
+## Part 2: Decryption Bypass (Server ➝ Client)
 
-### 🎯 Goal
+### Goal
 
 Modify the low-level receiving function (`...e380`) to skip decryption and accept plaintext packets from our server.
 
@@ -67,7 +67,7 @@ mov dword ptr ss:[rsp+44], 0
 mov dword ptr [rsp+44], r8d
 ```
 
-> ✅ This sets the “decrypted” size to match the received packet size.
+>  This sets the “decrypted” size to match the received packet size.
 
 ### Step 2: NOP Out the Decryption Call
 
@@ -79,7 +79,7 @@ mov dword ptr [rsp+44], r8d
 
 ---
 
-## ✅ Final Result
+##  Final Result
 
 After applying both patches, the game client is **fully prepared for two-way unencrypted communication**. It will no longer crash or disconnect when interacting with a simple server that sends plaintext `NMT_Welcome` packets.
 

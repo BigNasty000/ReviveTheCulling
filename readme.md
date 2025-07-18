@@ -110,7 +110,7 @@ https://hex-rays.com/ida-free
 
 ## How to Run
 
-hosts file needs to edited:
+hosts file needs to be edited:
 - `hosts` (C:\Windows\System32\drivers\etc) file configured to redirect domains to `127.0.0.1`, including:
 
 
