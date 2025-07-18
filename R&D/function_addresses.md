@@ -71,8 +71,8 @@
 
 14. UNetConnection::Tick (Function "278" / The Connection "Heartbeat")
     - Address: 0x00007FF62AEE5370
-    - What it Does: This is the same function as #8. It is also called as part of the TickDispatch virtual call sequence.
-    - Key Action: Its role here is the same: to manage the low-level connection state. Its "Is Initialized?" flag prevents it from doing any meaningful work during the handshake phase we are stuck in.
+    - What it Does: This is a mid-level manager responsible for a single client-server connection. Its main jobs are to check for connection timeouts and to tell all of its associated "channels" to process any queued data.
+    - Key Action: Contains the "Is Initialized?" flag check (cmp byte ptr ds:[rbx+438], 0). Our handshake is failing because this flag is never set correctly, causing the jne at ...5385 to be taken, which skips all channel-level packet processing.
 
 15. UPendingNetGame::SendHandshakePacket (Function "280" / The "Messenger")
     - Address: 0x00007FF629FE87F0
