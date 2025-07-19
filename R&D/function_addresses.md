@@ -61,6 +61,33 @@
     - Key Action: Our hardware breakpoint landed here, which was the final, critical clue. It proved the crash wasn't because of a logical error in the handshake, but a fundamental memory error, which led us to its caller, the Bit Reader.
     Handshake Virtual Functions (Called by TickDispatch)
 
+(Base when found: 00007FF6BA490000)
+
+13. UNetConnection::ReceivedPacket (The "Packet Dispatcher")
+    - Address: 00007FF6BB8CA6C0
+    - What it Does: This function is called by UNetConnection::Tick when a new, complete UDP packet has arrived. It acts as the central hub for incoming data. It reads the packet's sequence and ACK headers, determines which UChannel the packet belongs to, and then dispatches the payload to that channel.
+    - Key Action: The call to UChannel::ReceivedRawBunch at ...A70C. Immediately after, it checks a boolean bHandled flag at ...A711. If this flag is false, it jumps to the error-handling block at ...A7FD, which contains the logic that closes the connection and sends you back to the main menu. This is the primary point of failure.
+
+14. UChannel::ReceivedRawBunch (The "Bunch Parser")
+    - Address: 00007FF6BB513FC0
+    - What it Does: This function receives a payload from ReceivedPacket and is responsible for parsing the "Bunch" data within it. A Bunch is a packet-within-a-packet that contains its own header and payload. This is where the specific content of a message (like NMT_Welcome) is processed.
+    - Key Action: The integrity check loop at the very beginning (...3FE5 to ...3FF3). Our debugging proved this loop is checking for zero-padding at the end of the packet. If this check fails, the function reads a non-zero byte, doesn't take the je at ...3FF3, and enters a parsing path that it shouldn't. If the check succeeds (by reading a zero), it takes the jump and exits without doing anything, failing to set the bHandled flag. Satisfying this check is the first major hurdle.
+
+15. ServerTravel / Load Map (The "Loading Screen Trigger")
+    - Address: 00007FF6BA642C10
+    - What it Does: This is the high-level function that is called by the GameInstance after the match-ready websocket message is received. It is the direct cause of the loading screen appearing and the entire network connection process beginning.
+    - Key Action: It loads the "VictoryLoadingScreen" map asset (...2C4F) and then calls the core ServerTravel function (...2C82), which is responsible for creating and initializing the UNetConnection object that we are debugging.
+
+16.  FBitReader::SerializeBits (The "Red Herring Parser")
+    - Address: 00007FF6BAA36A70
+    - What it Does: A low-level utility for reading data from a buffer bit-by-bit.
+    - Key Action: Our debugging revealed this function is not on the main execution path for valid handshake packets. It is only called when the packet is malformed in a specific way (like our plaintext LOLPAYLOAD packet). It is likely a fallback path for trying to log or make sense of unrecognized data, making it a red herring for our main investigation.
+
+17. GenerateAuthenticationResponse (The "Crypto Engine")
+    - Address: 00007FF6BC655800
+    - What it Does: This function is not part of the initial UDP handshake but is crucial for understanding the game's overall security. It implements HTTP Digest Authentication.
+    - Key Action: It uses MD5 hashing and a specific format string (username="%s", realm="%s", nonce="%s", ...) to generate a cryptographic response to a server challenge. This proves the client is likely using a standard web-based authentication protocol after the initial UDP connection is established.
+
 ---
 **Handshake Virtual Functions (Called by TickDispatch)**
 
