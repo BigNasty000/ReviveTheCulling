@@ -155,7 +155,7 @@ OTHERWISE
 Launch the game
 - Once launched:
     - if we are doing the unecrypted UDP build:
-        - navigate to patcher/patch.exe and launch that 
+        - navigate to patcher/patch.exe and launch that (this currently needs to be launched EVERY time you launch the game)
         - IF you're nervous about running this .exe, read information.md
     - else
         - you are good to go!
