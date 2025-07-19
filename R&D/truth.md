@@ -12,15 +12,12 @@ This document outlines the two manual patches required to be applied to `Victory
   - All addresses in this guide are based on the `0x7FF722010000` session base.
   - You **must recalculate them** if your base address is different.
       - To do so:
-
-            - Take the base in this file, and the function you want to look at (in ex/ 0x00007FF72289E540).
-
-               - give ChatGPT (or any other AI) your current base
-                   - (this can be found in x64dbg -> symbols -> filter for "victory.exe" in the bottom left pane search bar -> right click copy -> "base")
-                   - The base in this file: (0x7FF722010000)
-                   - The function address you want to inspect in this file, in ex/ 0x00007FF72289E540.
-               - Tell it to recalculate the function address based off your current base, and the previous base and previous function address
-                  HIGHLY recommend renaming functions in ghidra (if you're using it), as once you rebase your ghidra, you can still find the functions by name.
+         - give ChatGPT(or any other AI) the following:
+            - your current base: (this can be found in x64dbg -> symbols -> filter for "victory.exe" in the bottom left pane search bar -> right click copy -> "base")
+            - The base in this file: (0x7FF722010000)
+            - The function address you want to inspect in this file, in ex/ 0x00007FF72289E540.
+         - Tell it to recalculate the function address based off your current base, and the previous base and previous function address
+               HIGHLY recommend renaming functions in ghidra (if you're using it), as once you rebase your ghidra, you can still find the functions by name.
 
 ---
 
