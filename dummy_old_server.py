@@ -1,249 +1,120 @@
+# dummy_old_server.py (v18 - Final Evidence-Based Handshake)
+# This version corrects the bug that caused an 11-byte response.
+# It sends a 12-byte echo and verifies the 11-byte cookie, matching the evidence.
+
 import socket
 import struct
-import os
 import argparse
 import logging
-import time
 from hashlib import sha1
-from Crypto.Cipher import AES
-import gc # <--- IMPORT THE GARBAGE COLLECTOR MODULE
 
-# --- Global Helpers ---
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] - %(message)s')
 
-def derive_key(cn: str, sn: str) -> bytes:
-    """Derives the AES session key from client and server nonces."""
-    return sha1(sn.encode('ascii') + cn.encode('ascii')).digest()[:16]
+def derive_key(cn: bytes, sn: str) -> bytes:
+    """Derives the 16-byte AES session key."""
+    return sha1(sn.encode('ascii') + cn).digest()[:16]
 
-# --- AES-CBC for standard NMT packets (generates/expects IV) ---
-def aes_decrypt_cbc(s_key: bytes, rx_data: bytes) -> bytes:
-    """Decrypts AES-CBC data assuming IV is first 16 bytes. Handles PKCS7 unpadding."""
-    if len(rx_data) < 16:
-        raise ValueError("Received data too short for AES-CBC decryption (less than 16 bytes IV).")
-    iv_val = rx_data[:16]
-    ct_val = rx_data[16:]
-    
-    if len(ct_val) % 16 != 0:
-        raise ValueError(f"Ciphertext length ({len(ct_val)}) is not a multiple of 16 bytes. Cannot decrypt CBC.")
-
-    cipher = AES.new(s_key, AES.MODE_CBC, iv_val)
-    decrypted = cipher.decrypt(ct_val)
-    # PKCS7 Unpadding
-    if decrypted:
-        pad_len = decrypted[-1]
-        if 0 < pad_len <= 16 and len(decrypted) >= pad_len and decrypted[-pad_len:] == bytes([pad_len]) * pad_len:
-            return decrypted[:-pad_len]
-    return decrypted
-
-def aes_encrypt_cbc(s_key: bytes, tx_payload: bytes) -> bytes:
-    """Encrypts AES-CBC payload. Generates IV and prepends it. Applies PKCS7 padding."""
-    cipher = AES.new(s_key, AES.MODE_CBC) # IV is generated here
-    iv_val = cipher.iv 
-    
-    # PKCS7 Padding
-    pad_len = 16 - (len(tx_payload) % 16)
-    padding = bytes([pad_len]) * pad_len
-    encrypted_payload = cipher.encrypt(tx_payload + padding)
-    
-    return iv_val + encrypted_payload # Prepend IV
-
-# --- AES-ECB for small, fixed-size packets (no IV, requires 16-byte blocks) ---
-# This is for the 2-byte encrypted probes.
-def aes_decrypt_ecb(s_key: bytes, rx_data: bytes) -> bytes:
-    """Decrypts AES-ECB data (no IV). Assumes ciphertext is padded to 16 bytes."""
-    # The client might be sending exactly 2 bytes encrypted. It must be padded to 16 for AES.
-    # Our `aes_encrypt_ecb` will output 16 bytes.
-    if len(rx_data) % 16 != 0:
-        raise ValueError(f"Ciphertext length ({len(rx_data)}) is not a multiple of 16 bytes for ECB.")
-
-    cipher = AES.new(s_key, AES.MODE_ECB) # No IV for ECB
-    decrypted = cipher.decrypt(rx_data)
-    
-    # PKCS7 Unpadding - might or might not be used here. Let's try it.
-    if decrypted:
-        pad_len = decrypted[-1]
-        if 0 < pad_len <= 16 and len(decrypted) >= pad_len and decrypted[-pad_len:] == bytes([pad_len]) * pad_len:
-            return decrypted[:-pad_len]
-    return decrypted
-
-def aes_encrypt_ecb(s_key: bytes, tx_payload: bytes) -> bytes:
-    """Encrypts AES-ECB payload (no IV). Applies PKCS7 padding to 16-byte blocks."""
-    cipher = AES.new(s_key, AES.MODE_ECB) # No IV for ECB
-    
-    # PKCS7 Padding
-    pad_len = 16 - (len(tx_payload) % 16)
-    padding = bytes([pad_len]) * pad_len
-    encrypted_payload = cipher.encrypt(tx_payload + padding)
-    
-    return encrypted_payload # No IV to prepend
-
-# --- Build UE4 FString ---
 def build_ue4_fstring(s: str) -> bytes:
-    """Builds a length-prefixed, null-terminated ASCII string for UE4 networking."""
+    """Builds a UE4-style FString (int32 length followed by null-terminated ASCII string)."""
+    if not s: return struct.pack('<i', 0)
     encoded_s = s.encode('ascii') + b'\x00'
-    length = len(encoded_s); return struct.pack('<i', length) + encoded_s
+    return struct.pack('<i', len(encoded_s)) + encoded_s
 
-# --- Send Encrypted NMT Blob (uses CBC for standard packets) ---
-def send_encrypted_nmt_blob(sock: socket.socket, peer: tuple, session_key: bytes, control_opcode: int, extra_payload: bytes = b''):
-    """Sends a standard NMT packet encrypted with AES-CBC."""
-    raw_packet_data = bytes([control_opcode]) + extra_payload
-    encrypted_full_data = aes_encrypt_cbc(session_key, raw_packet_data)
-    sock.sendto(encrypted_full_data, peer)
+def apply_pkcs7_padding(payload: bytes) -> bytes:
+    """Pads the payload to be a multiple of 16 bytes using PKCS#7."""
+    block_size = 16
+    padding_len = block_size - (len(payload) % block_size)
+    padding = bytes([padding_len]) * padding_len
+    padded_payload = payload + padding
+    logging.info(f"Plaintext Welcome size: {len(payload)}, Padded to: {len(padded_payload)}")
+    return padded_payload
 
-# --- Send Encrypted ECB Blob (for the 2-byte probe response) ---
-def send_encrypted_ecb_probe_response(sock: socket.socket, peer: tuple, session_key: bytes, payload_byte: bytes):
-    """Sends a very small encrypted probe response using AES-ECB (if applicable)."""
-    encrypted_data = aes_encrypt_ecb(session_key, payload_byte) # Use ECB
-    sock.sendto(encrypted_data, peer)
-
-
-# --- Main Server Logic ---
 def run_server(ip, port, server_nonce_from_matchmaker):
-    """
-    High-performance version: Disables the Garbage Collector to minimize latency
-    during the critical handshake, aiming for consistent connections.
-    """
-    # =========================================================================
-    #  PERFORMANCE OPTIMIZATION: Disable GC
-    # =========================================================================
-    gc.disable()
-    logging.info("[PERFORMANCE] Garbage Collector disabled to minimize latency.")
-    # =========================================================================
-
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
-    try:
-        sock.bind((ip, port))
-    except OSError as e:
-        logging.error(f"[GAME SERVER] FATAL: Could not bind to port {port}. Error: {e}")
-        return
-        
-    session_key = derive_key(server_nonce_from_matchmaker)
-    logging.info(f"[GAME SERVER] UDP Server listening on {ip}:{port}")
-    logging.info(f"[GAME SERVER] Session Key Pre-derived: {session_key.hex()}")
+    sock.bind((ip, port))
+    logging.info(f"[GAME SERVER] v18 (Final Handshake) listening on {ip}:{port}")
 
-    # --- State Machine & Loop Breaker Variables ---
-    state = "WAITING_FOR_HANDSHAKE_START"
+    state = "WAITING_FOR_HELLO"
     peer = None
-    challenge_cookie = None
-    probes_after_challenge = 0
-    PROBE_LIMIT = 10
-    sock.settimeout(5)
+    challenge_cookie_to_verify = None
+    sock.settimeout(300)
 
-    # --- THE REST OF THE LOGIC IS IDENTICAL TO OUR LAST ATTEMPT ---
     while state != "SHUTDOWN":
         try:
             data, addr = sock.recvfrom(2048)
-
             if peer is None: peer = addr
             elif peer != addr: continue
 
-            if state == "WAITING_FOR_HANDSHAKE_START":
-                if len(data) in [2, 4]:
-                    sock.sendto(b'\x01', peer)
-                elif len(data) == 14:
-                    logging.info("Received NMT_Hello. Sending NMT_Challenge.")
-                    challenge_cookie = os.urandom(4)
-                    sock.sendto(challenge_cookie, peer)
-                    logging.info(f"Sent NMT_Challenge with cookie: {challenge_cookie.hex()}")
-                    state = "WAITING_FOR_CHALLENGE_RESPONSE"
-                    logging.info(f"Transitioned to state: {state}")
+            if state == "WAITING_FOR_HELLO":
+                if len(data) >= 14 and len(data) < 32:
+                    logging.info(f"✓ Received NMT_Hello: {data.hex()}")
+                    
+                    # THE FIX: The response MUST be the last 12 bytes of the Hello packet.
+                    challenge_response = data[2:]
+                    
+                    # As proven by the successful capture, the cookie for the next step is the first 11 of those 12 bytes.
+                    challenge_cookie_to_verify = data[2:-1]
+                    
+                    # Ensure we are sending 12 bytes.
+                    if len(challenge_response) != 12:
+                        logging.error(f"FATAL: Sliced challenge is not 12 bytes! Is {len(challenge_response)}. Aborting.")
+                        state = "SHUTDOWN"
+                        continue
 
-            elif state == "WAITING_FOR_CHALLENGE_RESPONSE":
-                logging.info(f"[{state}] RX {len(data)} bytes: {data.hex()}")
-                
-                if len(data) == 32:
-                    if data[:4] == challenge_cookie:
-                        logging.info("GOLDEN PATH: Correct 32-byte response received and cookie matched!")
-                        sock.sendto(b'\x01', peer)
-                        logging.info("⇠ Sent final ACK. Proceeding to ENCRYPTED mode.")
-                        state = "WAITING_FOR_ENCRYPTED_LOGIN"
-                    else:
-                        logging.error(f"32-byte response with BAD COOKIE. Shutting down.")
-                        state = "SHUTDOWN"
-                
-                elif len(data) in [2, 4]:
-                    probes_after_challenge += 1
-                    logging.warning(f"[{state}] Received a probe when expecting challenge response. Count: {probes_after_challenge}/{PROBE_LIMIT}")
-                    if probes_after_challenge >= PROBE_LIMIT:
-                        logging.error("Probe limit reached. Client is stuck. Shutting down.")
-                        state = "SHUTDOWN"
-                    else:
-                        sock.sendto(b'\x01', peer)
+                    sock.sendto(challenge_response, peer)
+                    logging.info(f"⇢ Sent NMT_Challenge (12-byte ECHO): {challenge_response.hex()}")
+                    
+                    state = "WAITING_FOR_LOGIN"
+                    logging.info(f"Transitioned to state: {state}")
                 else:
-                    logging.warning(f"[{state}] Received unexpected packet length: {len(data)}")
+                    logging.info(f"⇠ Got {len(data)}-byte probe. Sending stateless ACK (0x01).")
+                    sock.sendto(b'\x01', peer)
 
-
-            elif state == "WAITING_FOR_ENCRYPTED_LOGIN":
-                logging.info(f"[{state}] RX {len(data)} bytes, attempting decryption...")
-                try:
-                    decrypted_login = aes_decrypt_cbc(session_key, data)
-                    logging.info(f"[ENCRYPTED] Successfully decrypted NMT_Login! Payload: {decrypted_login.hex()}")
+            elif state == "WAITING_FOR_LOGIN":
+                if len(data) == 32 and data[2:13] == challenge_cookie_to_verify:
+                    logging.info(f"✓ Received NMT_Login with matching cookie: {data.hex()}")
                     
-                    WELCOME_OPCODE = 0x01
-                    MAP_PATH = "/Game/Maps/Jungle"
-                    GAME_MODE_PATH = "/Game/Blueprints/GameMode/VictoryGameMode_Solo.VictoryGameMode_Solo_C"
+                    client_nonce_bytes = data[14:]
+                    logging.info(f"✓ Parsed Client Nonce: {client_nonce_bytes.hex()}")
                     
-                    map_bytes = build_ue4_fstring(MAP_PATH)
-                    gamemode_bytes = build_ue4_fstring(GAME_MODE_PATH)
-                    server_nonce_bytes = build_ue4_fstring(server_nonce_from_matchmaker) 
-                    welcome_payload = map_bytes + gamemode_bytes + server_nonce_bytes
+                    session_key = derive_key(client_nonce_bytes, server_nonce_from_matchmaker)
+                    logging.info(f"✓✓✓ AES Session Key Derived: {session_key.hex()} ✓✓✓")
                     
-                    send_encrypted_nmt_blob(sock, peer, session_key, WELCOME_OPCODE, welcome_payload)
-                    logging.info("[ENCRYPTED] Sent NMT_Welcome.")
+                    map_path = "/Game/Maps/Jungle_P"
+                    welcome_payload = (
+                        b'\x01' + # NMT_Welcome packet type
+                        build_ue4_fstring(map_path) +
+                        build_ue4_fstring("/Game/Blueprints/GameMode/VictoryGameMode.VictoryGameMode_C") +
+                        build_ue4_fstring(server_nonce_from_matchmaker)
+                    )
                     
-                    send_encrypted_nmt_blob(sock, peer, session_key, 0x06, b'\x01\x00\x00\x00')
-                    send_encrypted_nmt_blob(sock, peer, session_key, 0x04, struct.pack('<I', 30000))
-                    send_encrypted_nmt_blob(sock, peer, session_key, 0x07)
-                    logging.info("[ENCRYPTED] Sent finalization burst (GUID, NetSpeed, Open).")
-
-                    state = "WAITING_FOR_ENCRYPTED_JOIN"
-                    logging.info(f"Transitioned to state: {state}")
-
-                except Exception as e:
-                    logging.error(f"FAILED to decrypt NMT_Login packet. Raw data: {data.hex()}. Error: {e}")
-                    state = "SHUTDOWN"
-
-            elif state == "WAITING_FOR_ENCRYPTED_JOIN":
-                logging.info(f"[{state}] RX {len(data)} bytes, attempting decryption...")
-                try:
-                    decrypted_join = aes_decrypt_cbc(session_key, data)
-                    logging.info(f"[ENCRYPTED] Received final NMT_Join: {decrypted_join.hex()}")
+                    padded_welcome_packet = apply_pkcs7_padding(welcome_payload)
+                    sock.sendto(padded_welcome_packet, peer)
+                    logging.info(f"⇢ Sent PADDED NMT_Welcome.")
                     
-                    logging.info("CORE HANDSHAKE FULLY COMPLETE! Entering game loop.")
                     state = "GAME_LOOP"
-                    logging.info(f"Transitioned to state: {state}")
-                
-                except Exception as e:
-                    logging.error(f"FAILED to decrypt NMT_Join packet. Raw data: {data.hex()}. Error: {e}")
-                    state = "SHUTDOWN"
+                    logging.info(f"Handshake complete. Transitioned to state: {state}")
+                else:
+                    logging.warning(f"[{state}] Received unexpected packet or bad cookie. Resetting for new Hello. Data: {data.hex()}")
+                    state = "WAITING_FOR_HELLO" # Reset state to allow client to retry
 
             elif state == "GAME_LOOP":
-                try:
-                    decrypted_game_data = aes_decrypt_cbc(session_key, data)
-                    logging.info(f"[GAME_LOOP] RX Decrypted Game Data ({len(decrypted_game_data)} bytes): {decrypted_game_data.hex()}")
-                except Exception:
-                    logging.warning(f"[GAME_LOOP] RX Raw (could not decrypt) Game Data ({len(data)} bytes): {data.hex()}")
+                logging.info(f"[GAME_LOOP] Received {len(data)} bytes.")
 
         except socket.timeout:
-            logging.warning(f"TIMEOUT: No packets received for 30 seconds. State: {state}. Shutting down.")
+            logging.warning(f"TIMEOUT in state {state}. Shutting down.")
             state = "SHUTDOWN"
         except Exception as e:
-            logging.error(f"An unexpected error occurred in state {state}: {e}", exc_info=True)
+            logging.error(f"An error occurred: {e}", exc_info=True)
             state = "SHUTDOWN"
 
-    logging.info("[GAME SERVER] Server is shutting down.")
+    logging.info("[GAME SERVER] Shutting down.")
     sock.close()
-# --- Main entry point ---
-def main():
-    parser = argparse.ArgumentParser(description="The Culling - Full Handshake Server")
-    parser.add_argument('--ip', default="127.0.0.1", help="IP to listen on")
-    parser.add_argument('--port', type=int, default=7777, help="Port to listen on")
-    parser.add_argument('--server-nonce', required=True, help="Server nonce")
-    
-    args = parser.parse_args()
-    run_server(args.ip, args.port, args.server_nonce)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ip', default="127.0.0.1")
+    parser.add_argument('--port', type=int, default=7777)
+    parser.add_argument('--server-nonce', required=True)
+    args = parser.parse_args()
+    run_server(args.ip, args.port, args.server_nonce)

@@ -1,4 +1,6 @@
+import os
 import random
+import signal
 import string
 import subprocess
 import time
@@ -41,6 +43,31 @@ AUTHENTICATED_PLAYER_DATA = {
     "stats": { "level": "999", "wins": 78, "kills": 856, "gamesPlayed": 621},
     "challenges": {"challengeMap": {}}
 }
+
+
+def find_pid_using_port(port):
+    """Returns a list of PIDs using the given port"""
+    try:
+        result = subprocess.check_output(f'netstat -ano | findstr :{port}', shell=True, text=True)
+        print("HERE :", result.split("*:*"), flush=True)
+        pids = set()
+        for line in result.strip().splitlines():
+            parts = line.split()
+            
+            pids.add(int(parts[-1]))
+        return list(pids)
+    except subprocess.CalledProcessError:
+        return []
+
+def kill_pids(pids):
+    for pid in pids:
+        try:
+            os.kill(pid, signal.SIGTERM)  # Or signal.SIGKILL
+            print(f"Killed PID {pid}")
+        except PermissionError:
+            print(f"Permission denied for PID {pid}")
+        except ProcessLookupError:
+            print(f"Process {pid} not found")
 
 # ===================================================================
 #                      MATCHMAKING SERVICE
@@ -140,40 +167,53 @@ class MatchmakingService:
             player_info = connected_players.get(user_id)
             if not player_info or not player_info.get('sid'):
                 logging.error(f"Cannot create lobby for user {user_id}: not fully connected.")
-                # Optionally, send a failure message back
-                # self.socketio.emit('lobby-create-fail', {'reason': 'Not connected'}, room=player_info['sid'])
                 return
 
-            # Generate a unique 6-character lobby code
             lobby_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             while lobby_code in self.lobbies:
                 lobby_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
             logging.info(f"Creating new lobby '{lobby_code}' for owner {user_id} on map '{map_name}'.")
 
-            # Create the lobby data structure
+            # --- THE KEY CHANGE IS HERE ---
+            # We add the real player first.
+            # Note: The client expects a 'userData' object inside each member. Let's add it.
+            real_player_member_data = {
+                'user': user_id,
+                'userData': {
+                    'cullingcard': culling_card,
+                    'userName': user_id, # Can be the same as user ID for now
+                    'stats': { 'level': 999, 'rank': 5 } # Add some dummy stats
+                }
+            }
+            
+            # Now, we add a FAKE player to trick the client into enabling the start button.
+            fake_player_member_data = {
+                'user': 'steam:FAKE_PLAYER_ID_123',
+                'userData': {
+                    'cullingcard': '123456', # A dummy card ID
+                    'userName': 'Bot_Player',
+                    'stats': { 'level': 50, 'rank': 3 }
+                }
+            }
+
             new_lobby = {
                 'code': lobby_code,
                 'owner': user_id,
                 'mapName': map_name,
                 'members': [
-                    {
-                        'user': user_id,
-                        'cullingcard': culling_card
-                        # The client-side JS will fill in other details like level/name
-                    }
+                    real_player_member_data,
+                    fake_player_member_data  # Add the fake player to the list
                 ]
             }
 
             self.lobbies[lobby_code] = new_lobby
             
-            # The player is now "in" this lobby, so we need to add them to a SocketIO room
-            # so we can easily send updates to everyone in the lobby.
             player_sid = player_info['sid']
             join_room(lobby_code, sid=player_sid)
             
-            # Send the 'lobby-update' event back to the creator.
-            # The client's UI is listening for this event to show the lobby screen.
+            # When we send the update, the client will see members.length is 2.
+            logging.info(f"Sending lobby-update for '{lobby_code}' with {len(new_lobby['members'])} members (1 real, 1 fake).")
             self.socketio.emit('lobby-update', new_lobby, room=player_sid)
                 
     def _ticker(self):
@@ -201,6 +241,9 @@ class MatchmakingService:
         server_nonce_str = f"nonce-server-{uuid.uuid4()}"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
+        open_ports = find_pid_using_port("7777")
+        if open_ports:
+            kill_pids(open_ports)
         if queue_name in ["ffa"]:
             subprocess.Popen([
             'python', 
@@ -214,7 +257,6 @@ class MatchmakingService:
                 '--server-nonce', server_nonce_str
             ])
 
-        time.sleep(2)
         match_players = self.queues[queue_name][:self.MATCH_SIZE]
         self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
         
@@ -224,7 +266,7 @@ class MatchmakingService:
         # --- The Player Loop: Generate a UNIQUE client nonce for each player ---
         for player in match_players:
             # Generate a unique ticket for this specific player.
-            client_nonce_str = f"nonce-client-{uuid.uuid4()}"
+            client_nonce_str = f"aNonce"
             
             logging.info(f"Assigning client_nonce {client_nonce_str} to player {player['user_id']}")
 
@@ -464,6 +506,78 @@ def handle_lobby_create(data):
     else:
         logging.warning(f"Received 'lobby-create' from an unknown session ID: {sid}")
 
+@socketio.on('lobby-start-match')
+def handle_lobby_start_match():
+    sid = request.sid
+    host_user_id = next((uid for uid, p_info in connected_players.items() if p_info.get('sid') == sid), None)
+    if not host_user_id: return
+    
+    logging.info(f"--- Received 'lobby-start-match' from host {host_user_id} ---")
+
+    # ... (Find the lobby this user owns) ...
+    lobby_to_start = None
+    lobby_code = None
+    with matchmaking_service.lock:
+        for code, lobby_data in matchmaking_service.lobbies.items():
+            if lobby_data['owner'] == host_user_id:
+                lobby_to_start = lobby_data
+                lobby_code = code
+                break
+    if not lobby_to_start:
+        # ... (error handling) ...
+        return
+
+    # --- THE FINAL LISTEN SERVER LOGIC, MIMICKING OFFLINE MODE ---
+    
+    # We will use the client's public IP in a real scenario, but localhost for testing.
+    host_ip = "127.0.0.1:7777" 
+    server_nonce_str = f"nonce-server-{uuid.uuid4()}"
+    map_name = lobby_to_start['mapName']
+    full_map_path = f"/Game/Maps/{map_name}"
+    
+    # This is the game mode blueprint used by offline matches. We will use it too.
+    game_mode_blueprint = "/Game/Blueprints/GameMode/VictoryGameMode.VictoryGameMode_C"
+
+    # Count the number of real human players in the lobby.
+    num_real_players = sum(1 for member in lobby_to_start['members'] if 'FAKE_PLAYER' not in member['user'])
+
+    # Construct the magic URL for the HOST.
+    # It now includes the '?game=' parameter to ensure the correct rules are loaded.
+    # We are NOT enabling bots (?bEnableBots=false or just omit it).
+    listen_server_url = f"{full_map_path}?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
+    
+    logging.info(f"Starting match for lobby '{lobby_code}'. Host will open URL: {listen_server_url}")
+
+    for member in lobby_to_start['members']:
+        member_id = member['user']
+        if 'FAKE_PLAYER' in member_id: continue
+
+        player_info = connected_players.get(member_id)
+        if not player_info: continue
+        
+        member_sid = player_info['sid']
+
+        if member_id == host_user_id:
+            # --- SEND COMMAND TO HOST ---
+            host_match_data = {
+                "gameServer": listen_server_url,
+                "nonce": "host-client-nonce",
+                "serverNonce": server_nonce_str
+            }
+            socketio.emit('match-ready', host_match_data, room=member_sid)
+        
+        else:
+            # --- SEND COMMAND TO OTHER CLIENTS ---
+            client_nonce_str = f"nonce-client-{uuid.uuid4()}"
+            client_match_data = {
+                "gameServer": host_ip,
+                "nonce": client_nonce_str,
+                "serverNonce": server_nonce_str
+            }
+            socketio.emit('match-ready', client_match_data, room=member_sid)
+
+
+            
 @socketio.on('get-cards')
 def handle_get_cards(data):
     """Handles the client's request for player Culling Card information."""

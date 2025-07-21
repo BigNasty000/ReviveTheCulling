@@ -1,20 +1,13 @@
-# auto_patcher.py (v13 - Final with Exit Countdown)
-# This script waits for Victory.exe to launch, then automatically applies the
-# user-verified, bit-perfect memory patches to enable plaintext communication.
-
+# patcher.py v2
 import pymem
 import pymem.process
 import time
 import os
 import struct
-import msvcrt # Used for the "press any key" functionality
-from ctypes import windll, wintypes
+import msvcrt
 
+# ... (get_iat_memcpy_address function remains the same) ...
 def get_iat_memcpy_address(pm: pymem.Pymem, victory_base: int) -> int:
-    """
-    Scans the Import Address Table of Victory.exe to find the exact
-    address of memcpy as resolved by the Windows Loader for the game process.
-    """
     print("\n[*] Starting IAT scan for vcruntime140.dll!memcpy...")
     dos_header = pm.read_bytes(victory_base, 64)
     e_lfanew = struct.unpack('<I', dos_header[60:64])[0]
@@ -48,21 +41,33 @@ def get_iat_memcpy_address(pm: pymem.Pymem, victory_base: int) -> int:
         descriptor_addr += 20
     raise Exception("Failed to find memcpy in the IAT.")
 
+
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("===================================================")
-    print("=== The Culling Standalone Auto-Patcher v13     ===")
+    print("=== The Culling Standalone Auto-Patcher v18     ===")
+    print("===  - Plaintext & Correct Listen Server Patch  ===")
     print("===================================================")
 
-    OLD_BASE = 0x7FF722010000
-    OFFSET_SENDER_PATCH_POINT = 0x7FF72289E540 - OLD_BASE
-    OFFSET_RECEIVER_SIZE_PATCH = 0x7FF72289E439 - OLD_BASE
-    # The start of our NOP slide is AFTER our 5-byte mov instruction
-    OFFSET_RECEIVER_NOP_START = 0x7FF72289E43E - OLD_BASE
+    # --- Use the base address from the EXE where you found ALL your addresses ---
+    # This must be consistent for all calculations.
+    OLD_BASE = 0x7FF72D3B0000
     
+    # --- OFFSETS FOR LISTEN SERVER PATCHES ---
+    OFFSET_LISTEN_SERVER_CHECK_JUMP = 0x7FF72E9E2C02 - OLD_BASE
+    OFFSET_LISTEN_SUCCESS_JUMP = 0x7FF72E9E2C19 - OLD_BASE
+    OFFSET_SENDER_PATCH_POINT = 0x7FF72DC3E540 - OLD_BASE
+    OFFSET_RECEIVER_SIZE_PATCH = 0x7FF72DC3E439 - OLD_BASE
+    # The start of our NOP slide is AFTER our 5-byte mov instruction
+    OFFSET_RECEIVER_NOP_START = 0x7FF72DC3E43E - OLD_BASE
+
+    # The target of our NEW jump, as discovered by your manual patch.
+    ADDR_JUMP_TARGET = 0x7FF72E9E2CB0
+
     pm = None
     success = False
     try:
+        print("Waiting for Victory.exe to launch...")
         while True:
             try:
                 pm = pymem.Pymem("Victory.exe")
@@ -76,6 +81,10 @@ def main():
         time.sleep(5)
 
         base_victory = pymem.process.module_from_name(pm.process_handle, "Victory.exe").lpBaseOfDll
+        print(f"[*] Victory.exe dynamic base address: {hex(base_victory)}")
+        
+        # --- APPLY PLAINTEXT PATCHES ---
+        # print("\n--- Applying Plaintext Communication Patches ---")
         print(f"[*] Victory.exe base address in game: {hex(base_victory)}")
         addr_memcpy_target = get_iat_memcpy_address(pm, base_victory)
         
@@ -105,43 +114,60 @@ def main():
         pm.write_bytes(addr_receiver_nop, b'\x90' * 8, 8)
 
         print("\n[SUCCESS] Game has been patched for plaintext communication!")
+
+        # --- APPLY LISTEN SERVER PATCHES ---
+        print("\n--- Applying Listen Server Patches ---")
+        addr_listen_server_check_jump = base_victory + OFFSET_LISTEN_SERVER_CHECK_JUMP
+        addr_listen_success_jump = base_victory + OFFSET_LISTEN_SUCCESS_JUMP
+        
+        # Patch 1: Disable the jump that skips the "listen" check
+        print(f"[*] Patching IsServer check at {hex(addr_listen_server_check_jump)}...")
+        pm.write_bytes(addr_listen_server_check_jump, b'\x90' * 6, 6)
+
+        # Patch 2: Change the JNE to an unconditional JMP to the SAME destination
+        print(f"[*] Rerouting listen success jump at {hex(addr_listen_success_jump)}...")
+        dynamic_target_addr = base_victory + (ADDR_JUMP_TARGET - OLD_BASE)
+        jmp_offset = dynamic_target_addr - (addr_listen_success_jump + 5)
+        jmp_instruction = b'\xE9' + struct.pack('<i', jmp_offset)
+        pm.write_bytes(addr_listen_success_jump, jmp_instruction, 5)
+        pm.write_bytes(addr_listen_success_jump + 5, b'\x90', 1)
+
+        print("\n[SUCCESS] All patches have been applied!")
         success = True
 
     except pymem.exception.CouldNotOpenProcess:
         print("\n[FATAL ERROR] Could not open process. Please re-run this patcher as an Administrator.")
     except Exception as e:
-        print(f"\n[FATAL ERROR] An unexpected error occurred: {e}", exc_info=True)
+        print(f"\n[FATAL ERROR] An unexpected error occurred:")
+        import traceback
+        traceback.print_exc()
 
     finally:
+        # ... (exit logic remains the same) ...
         if pm and pm.process_handle:
             pm.close_process()
         
-        # --- NEW EXIT COUNTDOWN ---
         if success:
             print("\n===================================================")
             print("=== Patcher has finished successfully.            ===")
+            print("=== Press any key to exit, or wait for countdown. ===")
+            print("===================================================")
+            
+            print("Automatically exiting in ", end="", flush=True)
+            for i in range(5, 0, -1):
+                print(f"{i}... ", end="", flush=True)
+                if msvcrt.kbhit():
+                    msvcrt.getch()
+                    break
+                time.sleep(1)
+            print("\nExiting.")
         else:
             print("\n===================================================")
             print("=== Patcher has finished with an error.         ===")
-            
-        print("=== Press any key to exit, or wait for countdown. ===")
-        print("===================================================")
-        
-        print("Automatically exiting in ", end="", flush=True)
-
-        for i in range(3, 0, -1):
-            print(f"\n{i}... ", end="", flush=True)
-            # Check for a key press 10 times over one second for responsiveness
-            key_pressed = False
-            for _ in range(10): 
-                if msvcrt.kbhit():
-                    key_pressed = True
-                    break
-                time.sleep(0.1)
-            if key_pressed:
-                break
-        
-        print("\nExiting.")
+            print("=== Review the error message above.             ===")
+            print("=== Press any key to exit...                    ===")
+            print("===================================================")
+            msvcrt.getch()
 
 if __name__ == "__main__":
     main()

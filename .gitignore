@@ -4,4 +4,5 @@ certs/
 !certs/addcerts.md
 MaskClient/node_modules
 build/
-patch.spec
+/patcher/*.spec
+
