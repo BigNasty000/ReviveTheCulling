@@ -49,7 +49,6 @@ def find_pid_using_port(port):
     """Returns a list of PIDs using the given port"""
     try:
         result = subprocess.check_output(f'netstat -ano | findstr :{port}', shell=True, text=True)
-        print("HERE :", result.split("*:*"), flush=True)
         pids = set()
         for line in result.strip().splitlines():
             parts = line.split()
@@ -238,7 +237,7 @@ class MatchmakingService:
 
     def _create_match(self, queue_name):
         """Forms a match and sends the match-ready event."""
-        server_nonce_str = f"nonce-server-{uuid.uuid4()}"
+        server_nonce_str = f"nonce-server-123"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
         open_ports = find_pid_using_port("7777")
@@ -257,16 +256,27 @@ class MatchmakingService:
                 '--server-nonce', server_nonce_str
             ])
 
+        time.sleep(2)
+
         match_players = self.queues[queue_name][:self.MATCH_SIZE]
         self.queues[queue_name] = self.queues[queue_name][self.MATCH_SIZE:]
         
         player_ids = [p['user_id'] for p in match_players]
         logging.info(f"MATCH FOUND for queue '{queue_name}'! Players: {player_ids}")
+        # full_map_path = f"/Game/Maps/Jungle/Jungle_P"
+    
+        # This is the game mode blueprint used by offline matches. We will use it too.
+        # game_mode_blueprint = "/Game/Blueprints/GameMode/VictoryGameMode.VictoryGameMode_C"
+
+        # Construct the magic URL for the HOST.
+        # It now includes the '?game=' parameter to ensure the correct rules are loaded.
+        # We are NOT enabling bots (?bEnableBots=false or just omit it).
+        # listen_server_url = f"Jungle_P?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
         
         # --- The Player Loop: Generate a UNIQUE client nonce for each player ---
         for player in match_players:
             # Generate a unique ticket for this specific player.
-            client_nonce_str = f"aNonce"
+            client_nonce_str = f"nonce-client-123"
             
             logging.info(f"Assigning client_nonce {client_nonce_str} to player {player['user_id']}")
 
@@ -514,7 +524,6 @@ def handle_lobby_start_match():
     
     logging.info(f"--- Received 'lobby-start-match' from host {host_user_id} ---")
 
-    # ... (Find the lobby this user owns) ...
     lobby_to_start = None
     lobby_code = None
     with matchmaking_service.lock:
@@ -533,7 +542,7 @@ def handle_lobby_start_match():
     host_ip = "127.0.0.1:7777" 
     server_nonce_str = f"nonce-server-{uuid.uuid4()}"
     map_name = lobby_to_start['mapName']
-    full_map_path = f"/Game/Maps/{map_name}"
+    full_map_path = f"/Game/Maps/Jungle/Jungle_P"
     
     # This is the game mode blueprint used by offline matches. We will use it too.
     game_mode_blueprint = "/Game/Blueprints/GameMode/VictoryGameMode.VictoryGameMode_C"
@@ -544,10 +553,15 @@ def handle_lobby_start_match():
     # Construct the magic URL for the HOST.
     # It now includes the '?game=' parameter to ensure the correct rules are loaded.
     # We are NOT enabling bots (?bEnableBots=false or just omit it).
-    listen_server_url = f"{full_map_path}?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
-    
+    listen_server_url = f"Jungle_P?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
     logging.info(f"Starting match for lobby '{lobby_code}'. Host will open URL: {listen_server_url}")
+    subprocess.Popen([
+                'python', 
+                'dummy_server.py', 
+                '--server-nonce', server_nonce_str
+            ])
 
+    time.sleep(3)
     for member in lobby_to_start['members']:
         member_id = member['user']
         if 'FAKE_PLAYER' in member_id: continue

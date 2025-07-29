@@ -1,4 +1,3 @@
-# final_patcher_v3.py (Corrected Receiver, Proven Sender, Updated Addr)
 import pymem
 import pymem.process
 import time
@@ -7,7 +6,6 @@ import struct
 import msvcrt
 
 def get_iat_memcpy_address(pm: pymem.Pymem, victory_base: int) -> int:
-    """Scans the IAT to find the runtime address of memcpy."""
     print("\n[*] Starting IAT scan for vcruntime140.dll!memcpy...")
     dos_header = pm.read_bytes(victory_base, 64)
     e_lfanew = struct.unpack('<I', dos_header[60:64])[0]
@@ -43,8 +41,7 @@ def get_iat_memcpy_address(pm: pymem.Pymem, victory_base: int) -> int:
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("===================================================")
-    print("=== The Culling Final Patcher v3                ===")
-    print("===  - Corrected & Robust Receiver Patch        ===")
+    print("===           The Culling Patcher v4.3          ===")
     print("===================================================")
 
     pm = None
@@ -60,64 +57,61 @@ def main():
         base_victory = pymem.process.module_from_name(pm.process_handle, "Victory.exe").lpBaseOfDll
         print(f"[*] Victory.exe dynamic base address: {hex(base_victory)}")
 
-        # --- UPDATED ADDRESSES ---
-        CURRENT_BASE = 0x7FF748210000
+        # --- ADDRESSES ---
+        # Using the base from your last successful debugging session
+        CURRENT_BASE = 0x7FF678AA0000
         
-        ADDR_LISTEN_SERVER_CHECK_JUMP = base_victory + (0x7FF749842C02 - CURRENT_BASE)
-        ADDR_LISTEN_SUCCESS_JUMP      = base_victory + (0x7FF749842C19 - CURRENT_BASE)
-        ADDR_SENDER_PATCH_POINT       = base_victory + (0x7FF748A9E540 - CURRENT_BASE)
-        ADDR_RECEIVER_PATCH_POINT     = base_victory + (0x7FF748A9C750 - CURRENT_BASE)
-        ADDR_JUMP_TARGET              = base_victory + (0x7FF749842CB0 - CURRENT_BASE)
-        
-        addr_memcpy_target = get_iat_memcpy_address(pm, base_victory)
-        
-        # --- 1. APPLY YOUR PROVEN SENDER PATCH ---
-        print("\n--- Applying Your Proven Sender Patch ---")
-        sender_patch_code = bytearray()
-        sender_patch_code.extend(b'\x48\x8D\x4C\x24\x40')
-        sender_patch_code.extend(b'\x48\x89\xD2')
-        sender_patch_code.extend(b'\x4D\x89\xC0')
-        sender_patch_code.extend(b'\x48\xB8')
-        sender_patch_code.extend(addr_memcpy_target.to_bytes(8, 'little'))
-        sender_patch_code.extend(b'\xFF\xD0')
-        sender_patch_code.extend(b'\x44\x89\x44\x24\x2C')
-        
-        pm.write_bytes(ADDR_SENDER_PATCH_POINT, bytes(sender_patch_code), len(sender_patch_code))
-        print(f"[*] Sender patched at {hex(ADDR_SENDER_PATCH_POINT)}")
+        # --- Addresses for YOUR new Surgical Sender Patch (inside CC70) ---
+        ADDR_SENDER_ENCRYPTION_CALL   = base_victory + (0x7FF67932CE43 - CURRENT_BASE)
+        ADDR_SENDER_LOOP_CALL         = base_victory + (0x7FF67932CE5D - CURRENT_BASE)
+        ADDR_SENDER_FINAL_LOAD_1      = base_victory + (0x7FF67932CE6F - CURRENT_BASE)
+        ADDR_SENDER_FINAL_LOAD_2      = base_victory + (0x7FF67932CE78 - CURRENT_BASE)
 
-        # --- 2. APPLY CORRECTED INTELLIGENT RECEIVER PATCH ---
-        print("\n--- Applying Corrected Intelligent Receiver Patch ---")
+         # --- 1. YOUR DEFINITIVE SURGICAL SENDER PATCH ---
+        print("\n--- Applying Your Proven Surgical Sender Patch ---")
         
-        # This shellcode is a robust, direct translation of the original function's success path.
-        # It correctly preserves registers and will not crash.
-        # Args: RCX=output, RDX=input, R8=size
-        receiver_shellcode = bytearray([
-            0x57,                    # push rdi                      ; Save rdi (non-volatile)
-            0x48, 0x8B, 0xF9,        # mov rdi, rcx                  ; Move output struct ptr to safe register rdi
-            0x8B, 0x02,              # mov eax, dword ptr [rdx]      ; Get header/size from input buffer
-            0x89, 0x47, 0x04,        # mov dword ptr [rdi+4], eax    ; Store header in output struct
-            0x48, 0x8D, 0x4F, 0x08,  # lea rcx, [rdi+8]              ; Arg1 (dest) for memcpy = output payload buffer
-            0x48, 0x8D, 0x52, 0x04,  # lea rdx, [rdx+4]              ; Arg2 (src) for memcpy = input payload
-                                     # Arg3 (size) for memcpy is already in R8, no instruction needed.
-            0x48, 0xB8, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, # mov rax, <memcpy_addr>
-            0xFF, 0xD0,              # call rax
-            0xC6, 0x07, 0x00,        # mov byte ptr [rdi], 0         ; Set success flag in output struct
-            0x5F,                    # pop rdi                       ; Restore rdi
-            0xC3                     # ret
-        ])
+        # NOP out the main AES encryption call
+        print(f"[*] Neutralizing main encryption call at {hex(ADDR_SENDER_ENCRYPTION_CALL)}")
+        pm.write_bytes(ADDR_SENDER_ENCRYPTION_CALL, b'\x90' * 5, 5)
         
-        # Dynamically insert the 64-bit absolute address of memcpy
-        struct.pack_into('<Q', receiver_shellcode, 19, addr_memcpy_target)
+        # NOP out the encryption call inside the loop
+        print(f"[*] Neutralizing loop encryption call at {hex(ADDR_SENDER_LOOP_CALL)}")
+        pm.write_bytes(ADDR_SENDER_LOOP_CALL, b'\x90' * 5, 5)
+        
+        # Reroute the final data pointers to copy the plaintext
+        # print(f"[*] Rerouting final data pointer 1 at {hex(ADDR_SENDER_FINAL_LOAD_1)}")
+        # pm.write_bytes(ADDR_SENDER_FINAL_LOAD_1, b'\x0F\x10\x45\x00', 4) # movups xmm0, [rbp]
+        
+        # print(f"[*] Rerouting final data pointer 2 at {hex(ADDR_SENDER_FINAL_LOAD_2)}")
+        # pm.write_bytes(ADDR_SENDER_FINAL_LOAD_2, b'\x0F\x10\x4D\x10', 4) # movups xmm1, [rbp+10] -- Mistake in your notes, should be +16 (0x10) for the next block
+        
+        # --- ADDRESSES for the SURGICAL RECEIVER patch inside C750 ---
+        C750_OFFSET      = (0x7FF67932C750 - CURRENT_BASE)
 
-        pm.write_bytes(ADDR_RECEIVER_PATCH_POINT, bytes(receiver_shellcode), len(receiver_shellcode))
-        print(f"[*] Corrected receiver shellcode injected at {hex(ADDR_RECEIVER_PATCH_POINT)}")
-
-        # NOP out the rest of the original function to be safe
-        nop_padding = b'\x90' * 500
-        pm.write_bytes(ADDR_RECEIVER_PATCH_POINT + len(receiver_shellcode), nop_padding, len(nop_padding))
-        print("[*] Remainder of original receiver function neutralized.")
         
-        # --- 3. APPLY LISTEN SERVER PATCHES ---
+        ADDR_RECEIVER_BASE = base_victory + C750_OFFSET
+        ADDR_RECEIVER_DECRYPTION_START = ADDR_RECEIVER_BASE + 0x36 # Offset of decryption block from C750 start
+        ADDR_RECEIVER_CHECKSUM_JUMP    = ADDR_RECEIVER_BASE + 0x1A9 # Offset of checksum jump from C750 start
+        
+
+        # Addresses for Listen Server patches
+        ADDR_LISTEN_SERVER_CHECK_JUMP = base_victory + (0x7FF67A0D2C02 - CURRENT_BASE)
+        ADDR_LISTEN_SUCCESS_JUMP      = base_victory + (0x7FF67A0D2C19 - CURRENT_BASE)
+        ADDR_JUMP_TARGET              = base_victory + (0x7FF67A0D2CB0 - CURRENT_BASE)
+        
+        # --- SURGICAL RECEIVER PATCH ---
+        print("\n--- Applying Surgical Receiver Patch ---")
+        
+        nop_start = ADDR_RECEIVER_DECRYPTION_START
+        nop_end = ADDR_RECEIVER_CHECKSUM_JUMP
+        nop_size = nop_end - nop_start
+        print(f"[*] Neutralizing decryption/HMAC code from {hex(nop_start)} to {hex(nop_end)}")
+        pm.write_bytes(nop_start, b'\x90' * nop_size, nop_size)
+        
+        print(f"[*] Forcing validation to succeed at {hex(ADDR_RECEIVER_CHECKSUM_JUMP)}")
+        pm.write_bytes(ADDR_RECEIVER_CHECKSUM_JUMP, b'\xEB', 1) # Change JE to JMP
+        
+        # --- 3. LISTEN SERVER PATCHES ---
         print("\n--- Applying Listen Server Patches ---")
         print(f"[*] Patching IsServer check at {hex(ADDR_LISTEN_SERVER_CHECK_JUMP)}...")
         pm.write_bytes(ADDR_LISTEN_SERVER_CHECK_JUMP, b'\x90' * 6, 6)
@@ -127,7 +121,8 @@ def main():
         pm.write_bytes(ADDR_LISTEN_SUCCESS_JUMP, jmp_instruction, 5)
         pm.write_bytes(ADDR_LISTEN_SUCCESS_JUMP + 5, b'\x90', 1)
 
-        print("\n[SUCCESS] All patches have been applied!")
+        print("\n[SUCCESS] All surgical and spy patches have been applied!")
+        print("!!! The game will now send FORMATTED, UNENCRYPTED packets. !!!")
         success = True
 
     except Exception as e:

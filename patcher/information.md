@@ -13,7 +13,7 @@ then run in the root (where patcher.py is):
 
 NOTE: If the .exe already exists before running this, you may need to delete it.
 
-- python -m PyInstaller --onefile --distpath patcher\ --name "patch" patcher.py
+- python -m PyInstaller --onefile --distpath exe\ --name "patch" patcher.py
 
 This will build the executable for you. 
 
