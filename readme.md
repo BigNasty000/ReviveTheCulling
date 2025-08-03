@@ -2,6 +2,12 @@
 
 This project is a mock backend server for **The Culling**, designed to intercept and simulate the game’s expected API and WebSocket behavior. It allows you to spoof authentication and matchmaking processes for testing or reverse engineering.
 
+Please note that this project is not affiliated with Xaviant or any other company.
+
+This project is for educational purposes only!
+
+
+
 ---
 
 ## Current Progress
