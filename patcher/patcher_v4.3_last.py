@@ -58,16 +58,15 @@ def main():
         print(f"[*] Victory.exe dynamic base address: {hex(base_victory)}")
 
         # --- ADDRESSES ---
-        # Using the base from your last successful debugging session
         CURRENT_BASE = 0x7FF678AA0000
         
-        # --- Addresses for YOUR new Surgical Sender Patch (inside CC70) ---
+        # --- Addresses for Surgical Sender Patch (inside CC70) ---
         ADDR_SENDER_ENCRYPTION_CALL   = base_victory + (0x7FF67932CE43 - CURRENT_BASE)
         ADDR_SENDER_LOOP_CALL         = base_victory + (0x7FF67932CE5D - CURRENT_BASE)
         ADDR_SENDER_FINAL_LOAD_1      = base_victory + (0x7FF67932CE6F - CURRENT_BASE)
         ADDR_SENDER_FINAL_LOAD_2      = base_victory + (0x7FF67932CE78 - CURRENT_BASE)
 
-         # --- 1. YOUR DEFINITIVE SURGICAL SENDER PATCH ---
+         # --- 1. DEFINITIVE SURGICAL SENDER PATCH ---
         print("\n--- Applying Your Proven Surgical Sender Patch ---")
         
         # NOP out the main AES encryption call
@@ -83,7 +82,7 @@ def main():
         # pm.write_bytes(ADDR_SENDER_FINAL_LOAD_1, b'\x0F\x10\x45\x00', 4) # movups xmm0, [rbp]
         
         # print(f"[*] Rerouting final data pointer 2 at {hex(ADDR_SENDER_FINAL_LOAD_2)}")
-        # pm.write_bytes(ADDR_SENDER_FINAL_LOAD_2, b'\x0F\x10\x4D\x10', 4) # movups xmm1, [rbp+10] -- Mistake in your notes, should be +16 (0x10) for the next block
+        # pm.write_bytes(ADDR_SENDER_FINAL_LOAD_2, b'\x0F\x10\x4D\x10', 4) # movups xmm1, [rbp+10]
         
         # --- ADDRESSES for the SURGICAL RECEIVER patch inside C750 ---
         C750_OFFSET      = (0x7FF67932C750 - CURRENT_BASE)
