@@ -6,4 +6,4 @@ MaskClient/node_modules
 build/
 /patcher/*.spec
 
-R&D/prompt/
+R&D/*/
