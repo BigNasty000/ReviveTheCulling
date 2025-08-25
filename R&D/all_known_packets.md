@@ -33,7 +33,7 @@ Two instances of the RAW:
 1. 03 - length of payload in hex (3 in int)
 2. 000000 - padding?
 3. 7881 - seqeuence number in payload (The packet ID/Number assigned to it)
-4. 01 - main payload (sequecne + payload = 3 int or '0x03' bytes long)
+4. 01 - main payload (sequence + payload = 3 int or '0x03' bytes long)
 5. 000000000000000000 - more padding?
 6. 6e105737.......00 - unsure of the rest, may be HMAC encryption stuff. 
 
@@ -48,7 +48,7 @@ Two instances of the RAW:
 1. 0f - length of payload in hex (15 in int)
 2. 000000 - padding?
 3. 0a00 - seqeuence number in payload (The packet ID/Number assigned to it)
-4. 1300400081018080b1fe01e601 - main payload (sequecne + payload = 15 int or '0x0f' bytes long)
+4. 1300400081018080b1fe01e601 - main payload (sequence + payload = 15 int or '0x0f' bytes long)
 5. 00 - more padding?
 6. 52dc8e84439.......00 - unsure of the rest, may be HMAC encryption stuff. 
 
@@ -64,7 +64,7 @@ Data: 3e001300400081018080b1fe01661300400081018080b1fe01e601
 1. 1b - length of payload in hex (15 in int)
 2. 000000 - padding?
 3. 0400 - seqeuence number (The packet ID/Number assigned to it)
-4. 1300400081018080b1fe01661300400081018080b1fe01e601 - main payload  (sequecne + payload = 27 int or '0x1b' bytes long)
+4. 1300400081018080b1fe01661300400081018080b1fe01e601 - main payload  (sequence + payload = 27 int or '0x1b' bytes long)
 5. 00 - more padding?
 6. 52dc8e84439.......00 - unsure of the rest, may be HMAC encryption stuff. 
 
@@ -80,7 +80,7 @@ Raw:
 1. 15 - length of payload in hex (21 in int)
 2. 000000 - padding?
 3. 0200 - seqeuence number in payload (The packet ID/Number assigned to it)
-4. 1300400081018080b1fe016625000001020003 - main payload (sequecne + payload = 21 or '0x15' bytes long)
+4. 1300400081018080b1fe016625000001020003 - main payload (sequence + payload = 21 or '0x15' bytes long)
 5. 00000000000000 - more padding?
 6. 0b28db74a4.......00 - unsure of the rest, may be HMAC encryption stuff. 
 
@@ -96,6 +96,6 @@ Two instances of the RAW:
 1. 21 - length of payload in hex (33 in int)
 2. 000000 - padding?
 3. 0200 - seqeuence number in payload (The packet ID/Number assigned to it)
-4. 1300400081018080b1fe01661300400081018080b1fe016625000001020003 - main payload (sequecne + payload = 33 or '0x15' bytes long)
+4. 1300400081018080b1fe01661300400081018080b1fe016625000001020003 - main payload (sequence + payload = 33 or '0x15' bytes long)
 5. 0000000000000000000000 - more padding?
 6. c765d7e5.......00 - unsure of the rest, may be HMAC encryption stuff. 
