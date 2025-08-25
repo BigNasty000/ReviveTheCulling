@@ -237,7 +237,7 @@ class MatchmakingService:
 
     def _create_match(self, queue_name):
         """Forms a match and sends the match-ready event."""
-        server_nonce_str = f"nonce-server-123"
+        server_nonce_str = f"nonce-server-1234567"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
         open_ports = find_pid_using_port("7777")
@@ -271,12 +271,12 @@ class MatchmakingService:
         # Construct the magic URL for the HOST.
         # It now includes the '?game=' parameter to ensure the correct rules are loaded.
         # We are NOT enabling bots (?bEnableBots=false or just omit it).
-        # listen_server_url = f"Jungle_P?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
+        # listen_server_url = f"Jungle_P?game={game_mode_blueprint}"
         
         # --- The Player Loop: Generate a UNIQUE client nonce for each player ---
         for player in match_players:
             # Generate a unique ticket for this specific player.
-            client_nonce_str = f"nonce-client-123"
+            client_nonce_str = f"nonce-client-1234567"
             
             logging.info(f"Assigning client_nonce {client_nonce_str} to player {player['user_id']}")
 
@@ -286,7 +286,9 @@ class MatchmakingService:
 
             # Construct the unique match data for this player.
             match_data = {
-                "gameServer": "127.0.0.1:7777",
+                "gameServer": f"127.0.0.1:7777/Jungle_P?listen?bEnableBots=true?",
+
+                # "gameServer": f"127.0.0.1:7777",
                 "nonce": client_nonce_str,       # The unique client nonce
                 "serverNonce": server_nonce_str  # The shared server nonce
             }
