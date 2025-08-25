@@ -47,7 +47,7 @@ Two instances of the RAW:
 ## Breakdown:
 1. 0f - length of payload in hex (15 in int)
 2. 000000 - padding?
-3. 0400 - seqeuence number in payload (The packet ID/Number assigned to it)
+3. 0a00 - seqeuence number in payload (The packet ID/Number assigned to it)
 4. 1300400081018080b1fe01e601 - main payload (sequecne + payload = 15 int or '0x0f' bytes long)
 5. 00 - more padding?
 6. 52dc8e84439.......00 - unsure of the rest, may be HMAC encryption stuff. 
