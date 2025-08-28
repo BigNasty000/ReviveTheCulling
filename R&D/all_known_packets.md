@@ -61,7 +61,7 @@ Two instances of the RAW:
 Data: 3e001300400081018080b1fe01661300400081018080b1fe01e601
 
 ## Breakdown:
-1. 1b - length of payload in hex (15 in int)
+1. 1b - length of payload in hex (27 in int)
 2. 000000 - padding?
 3. 0400 - seqeuence number (The packet ID/Number assigned to it)
 4. 1300400081018080b1fe01661300400081018080b1fe01e601 - main payload  (sequence + payload = 27 int or '0x1b' bytes long)
