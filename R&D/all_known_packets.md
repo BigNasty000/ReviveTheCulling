@@ -96,6 +96,6 @@ Two instances of the RAW:
 1. 21 - length of payload in hex (33 in int)
 2. 000000 - padding?
 3. 0200 - seqeuence number in payload (The packet ID/Number assigned to it)
-4. 1300400081018080b1fe01661300400081018080b1fe016625000001020003 - main payload (sequence + payload = 33 or '0x15' bytes long)
+4. 1300400081018080b1fe01661300400081018080b1fe016625000001020003 - main payload (sequence + payload = 33 or '0x21' bytes long)
 5. 0000000000000000000000 - more padding?
 6. c765d7e5.......00 - unsure of the rest, may be HMAC encryption stuff. 
