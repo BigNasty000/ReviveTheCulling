@@ -39,10 +39,15 @@ def run_server():
             if (len(packet) == 25 and packet == challenge_token ) or packet[4:29] == challenge_token:
                 logging.info("[CHALLENGE OK] Received correct challenge response. Waiting for Login packet.")
                 # We don't need to send anything here, the client will immediately send Login.
-                sock.sendto(bytes.fromhex("02001300400081018080b1fe01e601001300400081018080b1fe01"), client_addr)
-
+                sock.sendto(bytes.fromhex("02001300400081018080b1fe01e61300400081018080b1fe0166818201"), client_addr)
+                # Data: 04 8000008001
+                # "Data: 02001300400081018080b1fe016625000001020003"
+                # Data: 02001300400081018080b1fe01661300400081018080b1fe01e601
+                # Data: 02001300400081018080b1fe01e600008001
                 continue
-
+            
+            if (len(packet) == 27) or packet.startswith(b'\x1b'):
+                sock.sendto(bytes.fromhex("04001300400081018080b1fe01e61300400081018080b1fe016600000001010001"), client_addr)
             # # --- Step 3: Receive Login and SEND THE WELCOME PACKET ---
             # if login_packet_signature in packet:
 
@@ -63,6 +68,8 @@ def run_server():
             # Log any other packets we receive post-handshake
             logging.info(f"[POST-HANDSHAKE] Received packet: {packet.hex()}")
 
+            if (len(packet) == 6):
+                sock.sendto(bytes.fromhex("04001300400081018080b1fe01e68100008101"), client_addr)
 
     except Exception as e:
         # This will catch ANY crash and print it, so we know why the server died.
