@@ -5,5 +5,5 @@ certs/
 MaskClient/node_modules
 build/
 /patcher/*.spec
-
+/patcher/*
 R&D/*/
