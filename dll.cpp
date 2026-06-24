@@ -4,7 +4,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define WM_DO_HOST (WM_APP + 1)
 #define NET_TICK_TIMER_ID 0x7777
-
+ 
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
