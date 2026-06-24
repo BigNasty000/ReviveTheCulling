@@ -240,21 +240,13 @@ class MatchmakingService:
         server_nonce_str = f"nonce-server-1234567"
         # --- KEY CHANGE: Launch the UDP server with the correct nonces ---
         # Assuming your server script is named 'game_server.py'
-        open_ports = find_pid_using_port("7777")
-        if open_ports:
-            kill_pids(open_ports)
-        if queue_name in ["ffa"]:
-            subprocess.Popen([
-            'python', 
-            'dummy_old_server.py', 
-            '--server-nonce', server_nonce_str
-        ])
-        else:
-            subprocess.Popen([
-                'python', 
-                'dummy_server.py', 
-                '--server-nonce', server_nonce_str
-            ])
+        # open_ports = find_pid_using_port("7777")
+        # if open_ports:
+        #     kill_pids(open_ports)
+        # if queue_name in ["ffa"]:
+            
+        # else:
+            
 
         time.sleep(2)
 
@@ -286,7 +278,7 @@ class MatchmakingService:
 
             # Construct the unique match data for this player.
             match_data = {
-                "gameServer": f"127.0.0.1:7777/Jungle_P?listen?bEnableBots=true?",
+                "gameServer": f"127.0.0.1:7777",
 
                 # "gameServer": f"127.0.0.1:7777",
                 "nonce": client_nonce_str,       # The unique client nonce
@@ -557,13 +549,8 @@ def handle_lobby_start_match():
     # We are NOT enabling bots (?bEnableBots=false or just omit it).
     listen_server_url = f"Jungle_P?listen?bEnableBots=true?servernonce={server_nonce_str}?game={game_mode_blueprint}"
     logging.info(f"Starting match for lobby '{lobby_code}'. Host will open URL: {listen_server_url}")
-    subprocess.Popen([
-                'python', 
-                'dummy_server.py', 
-                '--server-nonce', server_nonce_str
-            ])
+    
 
-    time.sleep(3)
     for member in lobby_to_start['members']:
         member_id = member['user']
         if 'FAKE_PLAYER' in member_id: continue
@@ -670,18 +657,15 @@ if __name__ == "__main__":
     matchmaking_service.start()
 
     cert_file = 'certs/clientweb2.us-east-1.production.theculling.net+7.pem'
-    key_file = 'certs/clientweb2.us-east-1.production.theculling.net+7-key.pem'
+    key_file  = 'certs/clientweb2.us-east-1.production.theculling.net+7-key.pem'
 
-    listener = eventlet.listen(('0.0.0.0', 443))
-    ssl_listener = eventlet.wrap_ssl(
-        listener,
+    socketio.run(
+        app,
+        host="0.0.0.0",
+        port=443,
         certfile=cert_file,
-        keyfile=key_file,
-        server_side=True
+        keyfile=key_file
     )
-
-    # ✅ Pass the Flask app to eventlet.wsgi.server directly
-    eventlet.wsgi.server(ssl_listener, app)
 
 
 
